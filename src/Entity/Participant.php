@@ -3,120 +3,245 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
-class Participant implements UserInterface, PasswordAuthenticatedUserInterface
+class Participant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'no_participant', type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'pseudo', length: 30)]
-    private ?string $username = null;
+    #[ORM\Column]
+    private ?int $idParticipant = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $pseudo = null;
+
+    #[ORM\Column(length: 40)]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 40)]
+    private ?string $prenom = null;
+
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $mail = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $motDePasse = null;
+
+    #[ORM\Column]
+    private ?bool $administrateur = null;
+
+    #[ORM\Column]
+    private ?bool $actif = null;
 
     /**
-     * @var bool The user roles
+     * @var Collection<int, Sortie>
      */
-    #[ORM\Column(name: 'administrateur', type: 'boolean')]
-    private bool $roles = 0;
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur', orphanRemoval: true)]
+    private Collection $sortiesOrganiseesParMoi;
 
     /**
-     * @var string The hashed password
+     * @var Collection<int, Sortie>
      */
-    #[ORM\Column(name: 'mot_de_passe')] 
-    private ?string $password = null;
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'participants')]
+    private Collection $sorties;
 
-    #[ORM\Column(name:'email', length: 60)]
-    private ?string $email = null;
+    #[ORM\ManyToOne(inversedBy: 'stagiaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site = null;
+
+    public function __construct()
+    {
+        $this->sortiesOrganiseesParMoi = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getIdParticipant(): ?int
     {
-        return $this->username;
+        return $this->idParticipant;
     }
 
-    public function setUsername(string $username): static
+    public function setIdParticipant(int $idParticipant): static
     {
-        $this->username = $username;
+        $this->idParticipant = $idParticipant;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+
+    public function setMail(string $mail): static
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function setMotDePasse(string $motDePasse): static
+    {
+        $this->motDePasse = $motDePasse;
+
+        return $this;
+    }
+
+    public function isAdministrateur(): ?bool
+    {
+        return $this->administrateur;
+    }
+
+    public function setAdministrateur(bool $administrateur): static
+    {
+        $this->administrateur = $administrateur;
+
+        return $this;
+    }
+
+    public function isActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(bool $actif): static
+    {
+        $this->actif = $actif;
 
         return $this;
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
+     * @return Collection<int, Sortie>
      */
-    public function getUserIdentifier(): string
+    public function getSortiesOrganiseesParMoi(): Collection
     {
-        return (string) $this->username;
+        return $this->sortiesOrganiseesParMoi;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return bool
-     */
-    public function getRoles(): array
+    public function addSortiesOrganiseesParMoi(Sortie $sortiesOrganiseesParMoi): static
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (!$this->sortiesOrganiseesParMoi->contains($sortiesOrganiseesParMoi)) {
+            $this->sortiesOrganiseesParMoi->add($sortiesOrganiseesParMoi);
+            $sortiesOrganiseesParMoi->setOrganisateur($this);
+        }
 
-        return array_unique($roles);
+        return $this;
     }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
+    public function removeSortiesOrganiseesParMoi(Sortie $sortiesOrganiseesParMoi): static
     {
-        $this->roles = $roles;
+        if ($this->sortiesOrganiseesParMoi->removeElement($sortiesOrganiseesParMoi)) {
+            // set the owning side to null (unless already changed)
+            if ($sortiesOrganiseesParMoi->getOrganisateur() === $this) {
+                $sortiesOrganiseesParMoi->setOrganisateur(null);
+            }
+        }
 
         return $this;
     }
 
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * @return Collection<int, Sortie>
      */
-    public function getPassword(): ?string
+    public function getSorties(): Collection
     {
-        return $this->password;
+        return $this->sorties;
     }
 
-    public function setPassword(string $password): static
+    public function addSorty(Sortie $sorty): static
     {
-        $this->password = $password;
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->addParticipant($this);
+        }
 
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(): void
+    public function removeSorty(Sortie $sorty): static
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        if ($this->sorties->removeElement($sorty)) {
+            $sorty->removeParticipant($this);
+        }
+
+        return $this;
     }
 
-    public function getEmail(): ?string
+    public function getSite(): ?Site
     {
-        return $this->email;
+        return $this->site;
     }
 
-    public function setEmail(string $email): static
+    public function setSite(?Site $site): static
     {
-        $this->email = $email;
+        $this->site = $site;
 
         return $this;
     }
