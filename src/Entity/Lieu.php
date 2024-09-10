@@ -35,9 +35,9 @@ class Lieu
     private ?villes $villes = null;
 
     /**
-     * @var Collection<int, Sorties>
+     * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'lieux', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieux', orphanRemoval: true)]
     private Collection $sorties;
 
     public function __construct()
@@ -130,7 +130,7 @@ class Lieu
         return $this->sorties;
     }
 
-    public function addSorty(Sorties $sorty): static
+    public function addSorty(Sortie $sorty): static
     {
         if (!$this->sorties->contains($sorty)) {
             $this->sorties->add($sorty);
@@ -140,7 +140,7 @@ class Lieu
         return $this;
     }
 
-    public function removeSorty(Sorties $sorty): static
+    public function removeSorty(Sortie $sorty): static
     {
         if ($this->sorties->removeElement($sorty)) {
             // set the owning side to null (unless already changed)

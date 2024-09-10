@@ -25,9 +25,9 @@ class Ville
     private ?string $code_postal = null;
 
     /**
-     * @var Collection<int, Lieux>
+     * @var Collection<int, Lieu>
      */
-    #[ORM\OneToMany(targetEntity: Lieux::class, mappedBy: 'villes', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'villes', orphanRemoval: true)]
     private Collection $lieux;
 
     public function __construct()
@@ -77,14 +77,14 @@ class Ville
     }
 
     /**
-     * @return Collection<int, Lieux>
+     * @return Collection<int, Lieu>
      */
     public function getLieux(): Collection
     {
         return $this->lieux;
     }
 
-    public function addLieux(Lieux $lieux): static
+    public function addLieux(Lieu $lieux): static
     {
         if (!$this->lieux->contains($lieux)) {
             $this->lieux->add($lieux);
@@ -94,7 +94,7 @@ class Ville
         return $this;
     }
 
-    public function removeLieux(Lieux $lieux): static
+    public function removeLieux(Lieu $lieux): static
     {
         if ($this->lieux->removeElement($lieux)) {
             // set the owning side to null (unless already changed)

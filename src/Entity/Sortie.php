@@ -45,20 +45,20 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sortiesOrganisateur')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?participants $organisateur = null;
+    private ?participant $organisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?lieux $lieux = null;
+    private ?lieu $lieux = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?etats $etats = null;
+    private ?etat $etats = null;
 
     /**
-     * @var Collection<int, Participants>
+     * @var Collection<int, Participant>
      */
-    #[ORM\ManyToMany(targetEntity: Participants::class, mappedBy: 'date_inscription')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'date_inscription')]
     private Collection $participants;
 
     public function __construct()
@@ -179,36 +179,36 @@ class Sortie
         return $this;
     }
 
-    public function getOrganisateur(): ?participants
+    public function getOrganisateur(): ?participant
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?participants $organisateur): static
+    public function setOrganisateur(?participant $organisateur): static
     {
         $this->organisateur = $organisateur;
 
         return $this;
     }
 
-    public function getLieux(): ?lieux
+    public function getLieux(): ?lieu
     {
         return $this->lieux;
     }
 
-    public function setLieux(?lieux $lieux): static
+    public function setLieux(?lieu $lieux): static
     {
         $this->lieux = $lieux;
 
         return $this;
     }
 
-    public function getEtats(): ?etats
+    public function getEtats(): ?etat
     {
         return $this->etats;
     }
 
-    public function setEtats(?etats $etats): static
+    public function setEtats(?etat $etats): static
     {
         $this->etats = $etats;
 
@@ -216,14 +216,14 @@ class Sortie
     }
 
     /**
-     * @return Collection<int, Participants>
+     * @return Collection<int, Participant>
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participants $participant): static
+    public function addParticipant(Participant $participant): static
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
@@ -233,7 +233,7 @@ class Sortie
         return $this;
     }
 
-    public function removeParticipant(Participants $participant): static
+    public function removeParticipant(Participant $participant): static
     {
         if ($this->participants->removeElement($participant)) {
             $participant->removeDateInscription($this);

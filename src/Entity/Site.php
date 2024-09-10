@@ -22,9 +22,9 @@ class Site
     private ?string $nom_site = null;
 
     /**
-     * @var Collection<int, Participants>
+     * @var Collection<int, Participant>
      */
-    #[ORM\OneToMany(targetEntity: Participants::class, mappedBy: 'sites')]
+    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'sites')]
     private Collection $participants;
 
     public function __construct()
@@ -62,14 +62,14 @@ class Site
     }
 
     /**
-     * @return Collection<int, Participants>
+     * @return Collection<int, Participant>
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participants $participant): static
+    public function addParticipant(Participant $participant): static
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
@@ -79,7 +79,7 @@ class Site
         return $this;
     }
 
-    public function removeParticipant(Participants $participant): static
+    public function removeParticipant(Participant $participant): static
     {
         if ($this->participants->removeElement($participant)) {
             // set the owning side to null (unless already changed)

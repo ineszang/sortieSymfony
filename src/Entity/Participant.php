@@ -44,18 +44,18 @@ class Participant
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?sites $sites = null;
+    private ?site $sites = null;
 
     /**
-     * @var Collection<int, Sorties>
+     * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'organisateur', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur', orphanRemoval: true)]
     private Collection $sortiesOrganisateur;
 
     /**
-     * @var Collection<int, sorties>
+     * @var Collection<int, sortie>
      */
-    #[ORM\ManyToMany(targetEntity: sorties::class, inversedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: sortie::class, inversedBy: 'participants')]
     private Collection $date_inscription;
 
     public function __construct()
@@ -177,12 +177,12 @@ class Participant
         return $this;
     }
 
-    public function getSites(): ?sites
+    public function getSites(): ?site
     {
         return $this->sites;
     }
 
-    public function setSites(?sites $sites): static
+    public function setSites(?site $sites): static
     {
         $this->sites = $sites;
 
@@ -190,14 +190,14 @@ class Participant
     }
 
     /**
-     * @return Collection<int, Sorties>
+     * @return Collection<int, Sortie>
      */
     public function getSortiesOrganisateur(): Collection
     {
         return $this->sortiesOrganisateur;
     }
 
-    public function addSortiesOrganisateur(Sorties $sortiesOrganisateur): static
+    public function addSortiesOrganisateur(Sortie $sortiesOrganisateur): static
     {
         if (!$this->sortiesOrganisateur->contains($sortiesOrganisateur)) {
             $this->sortiesOrganisateur->add($sortiesOrganisateur);
@@ -207,7 +207,7 @@ class Participant
         return $this;
     }
 
-    public function removeSortiesOrganisateur(Sorties $sortiesOrganisateur): static
+    public function removeSortiesOrganisateur(Sortie $sortiesOrganisateur): static
     {
         if ($this->sortiesOrganisateur->removeElement($sortiesOrganisateur)) {
             // set the owning side to null (unless already changed)
@@ -220,14 +220,14 @@ class Participant
     }
 
     /**
-     * @return Collection<int, sorties>
+     * @return Collection<int, sortie>
      */
     public function getDateInscription(): Collection
     {
         return $this->date_inscription;
     }
 
-    public function addDateInscription(sorties $dateInscription): static
+    public function addDateInscription(sortie $dateInscription): static
     {
         if (!$this->date_inscription->contains($dateInscription)) {
             $this->date_inscription->add($dateInscription);
@@ -236,7 +236,7 @@ class Participant
         return $this;
     }
 
-    public function removeDateInscription(sorties $dateInscription): static
+    public function removeDateInscription(sortie $dateInscription): static
     {
         $this->date_inscription->removeElement($dateInscription);
 
