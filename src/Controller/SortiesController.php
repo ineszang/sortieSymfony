@@ -15,4 +15,15 @@ class SortiesController extends AbstractController
             'controller_name' => 'SortiesController',
         ]);
     }
+
+
+    #[Route(['/allSorties'], name: 'app_home')]
+    public function indexSorties(): Response
+    {
+        $utilisateur = "Melaine F.";
+
+        return $this->render('sorties/allSorties.html.twig', [
+            'utilisateur' => $utilisateur,
+        ]);
+    }
 }
