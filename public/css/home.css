@@ -1,0 +1,16 @@
+.main-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pre-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+}
