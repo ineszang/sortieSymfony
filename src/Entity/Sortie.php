@@ -16,8 +16,6 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idSortie = null;
 
     #[ORM\Column(length: 60)]
     private ?string $nomSortie = null;

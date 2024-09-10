@@ -15,9 +15,6 @@ class Lieu
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idLieu = null;
-
     #[ORM\Column(length: 60)]
     private ?string $nomLieu = null;
 

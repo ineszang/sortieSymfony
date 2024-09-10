@@ -15,8 +15,6 @@ class Etat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idEtat = null;
 
     #[ORM\Column(length: 40)]
     private ?string $libelle = null;

@@ -15,8 +15,6 @@ class Site
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idSite = null;
 
     #[ORM\Column(length: 60)]
     private ?string $nomSite = null;
