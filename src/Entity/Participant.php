@@ -6,41 +6,47 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-class Participant
+#[UniqueEntity(fields: ['pseudo'], message: 'Nom d\'utilisateur déjà utilisé')]
+#[UniqueEntity(fields: ['mail'], message: 'E-mail déjà utilisé')]
+
+class Participant 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id_participant')]
     private ?int $idParticipant = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(name: 'pseudo', length: 30)]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(name:'nom', length: 40)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(name: 'prenom', length: 40)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 15, nullable: true)]
+    #[ORM\Column(name: 'telephone', length: 15, nullable: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: 'mot_de_passe', length: 255)]
     private ?string $motDePasse = null;
 
-    #[ORM\Column]
-    private ?bool $administrateur = null;
+    #[ORM\Column(name: 'administrateur', type: 'boolean')]
+    private ?bool $administrateur = false;
 
-    #[ORM\Column]
-    private ?bool $actif = null;
+    #[ORM\Column(name: 'actif', type: 'boolean')]
+    private ?bool $actif = true;
 
     /**
      * @var Collection<int, Sortie>
@@ -141,12 +147,12 @@ class Participant
         return $this;
     }
 
-    public function getMotDePasse(): ?string
+    public function getmotDePasse(): ?string
     {
         return $this->motDePasse;
     }
 
-    public function setMotDePasse(string $motDePasse): static
+    public function setmotDePasse(string $motDePasse): static
     {
         $this->motDePasse = $motDePasse;
 
