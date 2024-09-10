@@ -17,7 +17,7 @@ class SortiesController extends AbstractController
     }
 
 
-    #[Route(['/allSorties'], name: 'app_home')]
+    #[Route(['/allSorties'], name: 'app_allSorties')]
     public function indexSorties(): Response
     {
         $utilisateur = "Melaine F.";
