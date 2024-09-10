@@ -22,17 +22,29 @@ header {
     max-height: 100px;
 }
 .titlehome {
-    color: #F99F1E
+    color: #9c0b59
 }
 
 .titleDateHome {
-    color: #355296
+    color: #8ec640
 }
 
 .titleButton2Home {
-    background-color: #228D45
+    background-color: #c09cc7
+}
+
+.titleButton1Home {
+    background-color: #18bcf1;
+}
+
+.hoverheaderbuttons:hover {
+    color: #18bcf1;
+}
+
+.titleButton1Home:hover, .titleButton2Home:hover {
+    background-color: #9c0b59;
 }
 
 header {
-    background-color: #355296;
+    background-color: #9c0b59;
 }
