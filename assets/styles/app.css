@@ -1,3 +1,38 @@
+* {
+    font-family: "Gloria Hallelujah";
+}
+
 body {
-    background-color: skyblue;
+    background-color: WHITE;
+}
+
+header {
+    background-color: white;
+}
+ .team-member {
+     border: 1px solid #ccc;
+     padding: 10px;
+     margin: 10px;
+     border-radius: 5px;
+     text-align: center;
+ }
+.team-member img {
+    border-radius: 50%;
+    max-width: 100px;
+    max-height: 100px;
+}
+.titlehome {
+    color: #F99F1E
+}
+
+.titleDateHome {
+    color: #355296
+}
+
+.titleButton2Home {
+    background-color: #228D45
+}
+
+header {
+    background-color: #355296;
 }
