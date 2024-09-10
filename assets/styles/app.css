@@ -48,3 +48,18 @@ header {
 header {
     background-color: #9c0b59;
 }
+
+.colorborder:focus {
+    border-color: #9c0b59;
+}
+
+#lieu-results {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+}
+#lieu-results div:hover {
+    background-color: #f0f0f0;
+}

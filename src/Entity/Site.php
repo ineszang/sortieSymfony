@@ -15,9 +15,6 @@ class Site
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idSite = null;
-
     #[ORM\Column(length: 60)]
     private ?string $nomSite = null;
 
@@ -42,18 +39,6 @@ class Site
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdSite(): ?int
-    {
-        return $this->idSite;
-    }
-
-    public function setIdSite(int $idSite): static
-    {
-        $this->idSite = $idSite;
-
-        return $this;
     }
 
     public function getNomSite(): ?string

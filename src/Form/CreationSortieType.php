@@ -17,7 +17,6 @@ class CreationSortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('idSortie')
             ->add('nomSortie')
             ->add('dateHeureDebut', null, [
                 'widget' => 'single_text',

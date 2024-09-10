@@ -6,9 +6,6 @@ use App\Entity\Lieu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Lieu>
- */
 class LieuRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +13,19 @@ class LieuRepository extends ServiceEntityRepository
         parent::__construct($registry, Lieu::class);
     }
 
-    //    /**
-    //     * @return Lieu[] Returns an array of Lieu objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Lieu
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Rechercher les lieux par nom, rue, ville ou code postal.
+     *
+     * @param string $query La chaîne de recherche.
+     * @return Lieu[] Un tableau d'objets Lieu.
+     */
+    public function searchLieux(string $query): array
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.ville', 'v')
+            ->where('l.nomLieu LIKE :query OR l.rue LIKE :query OR v.nomVille LIKE :query OR v.codePostal LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+    }
 }
