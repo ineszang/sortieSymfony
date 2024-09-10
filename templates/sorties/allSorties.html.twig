@@ -6,8 +6,8 @@
 
 
 {% block body %}
+    <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 
 
 
@@ -22,14 +22,82 @@
                 <p>{{ 'Participant : ' ~ utilisateur }}</p>
             </div>
         </div>
-
         <div class="search-container">
+            <div class="search-container-part1">
+                <span class="title-search">Filtrer les sorties</span>
+                <div class="site-container">
+                    <label for="site">site :</label>
+                    <select id="sites" name="sites" class="sites">
+                        <option value="nantes">CAMPUS NANTES</option>
+                        <option value="vélo">Vélo</option>
+                        <option value="natation">Natation</option>
+                        <option value="escalade">Escalade</option>
+                    </select>
+                </div>
+                <div class="name-container">
+                    <label for="name">le nom de la sortie contient : </label>
+                    <div class="name-container-search">
+                        <img id="logo" class="img-icon h-4 w-4" src="{{ asset('images/search-icon.png') }}" alt="Mon Logo">
+                        <input type="text" id="name" class="name-input" placeholder="search" maxlength="30">
+                    </div>
+                </div>
+                <div class="date-container">
+                    <span>Entre </span>
+                    <input type="date" id="dateStart" name="dateStart" class="date-calendar">
+                    <span>et </span>
+                    <input type="date" id="dateEnd" name="dateEnd" class="date-calendar">
+                </div>
 
+            </div>
+            <div class="search-container-part2">
+                <div class="checkbox-container">
+                    <label>
+                        <input type="checkbox" name="option1" value="option1">
+                        Sorties dont je suis l'organisateur/trice
+                    </label>
+                    <label>
+                        <input type="checkbox" name="option2" value="option2">
+                        Sorties auxquelles je suis inscrit/e
+                    </label>
+                    <label>
+                        <input type="checkbox" name="option3" value="option3">
+                        Sorties auxquelles je ne suis pas inscrit/e
+                    </label>
+                    <label>
+                        <input type="checkbox" name="option4" value="option4">
+                        Sorties passées
+                    </label>
+                </div>
+                <div class="search-button-container">
+                    <button class="search-button">RECHERCHER</button>
+                </div>
+
+            </div>
         </div>
 
-        <div class="result-container">
-
+        <div class="cards-container">
+            {% if sorties is not empty %}
+                {% for sortie in sorties %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>{{ sortie.nomSortie }}</h2>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
+                            <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
+                            <p><strong>Clôture :</strong> {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('Y-m-d H:i') : 'Non définie' }}</p>
+                            <p><strong>Inscrits/Places :</strong> test</p>
+                            <p><strong>Etat :</strong> test</p>
+                            <p><strong>Organisateur :</strong> test</p>
+                        </div>
+                        <div class="card-footer">
+                           
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Aucune sortie disponible.</p>
+            {% endif %}
         </div>
-
     </div>
 {% endblock %}

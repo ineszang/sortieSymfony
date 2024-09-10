@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,12 +19,20 @@ class SortiesController extends AbstractController
 
 
     #[Route(['/allSorties'], name: 'app_allSorties')]
-    public function indexSorties(): Response
+    public function indexSorties(SortieRepository $sortieRepository): Response
     {
+        //TODO : trouver le user en ligne
         $utilisateur = "Melaine F.";
+
+
+        $sorties = $sortieRepository->findPublishedSorties();
+
+
+
 
         return $this->render('sorties/allSorties.html.twig', [
             'utilisateur' => $utilisateur,
+            'sorties' => $sorties,
         ]);
     }
 }

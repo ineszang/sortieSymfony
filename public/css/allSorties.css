@@ -1,0 +1,134 @@
+.main-container {
+    padding-right: 40px;
+    padding-left: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*
+    PRE CONTAINER
+ */
+
+.pre-container {
+    margin-top: 25px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+    SEARCH CONTAINER
+ */
+
+/*
+    PART1
+ */
+.search-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    height: 200px;
+}
+.search-container-part1 {
+    width: 50%;
+    height: 100%;
+}
+.search-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+}
+.title-search {
+    margin-bottom: 10px;
+    font-size: 25px;
+}
+/* site container*/
+.site-container {
+    margin-top: 25px;
+}
+.sites {
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+/* name container*/
+.name-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+}
+.name-input {
+    padding-left: 25px;
+    height: 25px;
+    width: 200px;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+.name-container-search {
+    display: flex;
+    flex-direction: row;
+    margin-left: 15px;
+}
+.img-icon {
+    margin-right: -20px;
+    align-self: center;
+    z-index: 1;
+}
+
+/* date container  */
+
+.date-calendar {
+    margin-top: 15px;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+/*
+    PART2
+ */
+.search-container-part2 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+
+}
+.checkbox-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.search-button-container{
+    display: flex;
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-button{
+    height: 50px;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+
+/*
+    RESULT CONTAINER
+ */
+
+
