@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ParticipantsRepository;
+use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ParticipantsRepository::class)]
+#[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant
 {
     #[ORM\Id]
@@ -16,15 +16,15 @@ class Participant
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_participant = null;
+    private ?int $idParticipant = null;
 
     #[ORM\Column(length: 30)]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 15, nullable: true)]
@@ -34,7 +34,7 @@ class Participant
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $mot_de_passe = null;
+    private ?string $motDePasse = null;
 
     #[ORM\Column]
     private ?bool $administrateur = null;
@@ -42,26 +42,26 @@ class Participant
     #[ORM\Column]
     private ?bool $actif = null;
 
-    #[ORM\ManyToOne(inversedBy: 'participants')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?site $sites = null;
-
     /**
      * @var Collection<int, Sortie>
      */
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur', orphanRemoval: true)]
-    private Collection $sortiesOrganisateur;
+    private Collection $sortiesOrganiseesParMoi;
 
     /**
-     * @var Collection<int, sortie>
+     * @var Collection<int, Sortie>
      */
-    #[ORM\ManyToMany(targetEntity: sortie::class, inversedBy: 'participants')]
-    private Collection $date_inscription;
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'participants')]
+    private Collection $sorties;
+
+    #[ORM\ManyToOne(inversedBy: 'stagiaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site = null;
 
     public function __construct()
     {
-        $this->sortiesOrganisateur = new ArrayCollection();
-        $this->date_inscription = new ArrayCollection();
+        $this->sortiesOrganiseesParMoi = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,14 +69,14 @@ class Participant
         return $this->id;
     }
 
-    public function getNoParticipant(): ?int
+    public function getIdParticipant(): ?int
     {
-        return $this->no_participant;
+        return $this->idParticipant;
     }
 
-    public function setNoParticipant(int $no_participant): static
+    public function setIdParticipant(int $idParticipant): static
     {
-        $this->no_participant = $no_participant;
+        $this->idParticipant = $idParticipant;
 
         return $this;
     }
@@ -143,12 +143,12 @@ class Participant
 
     public function getMotDePasse(): ?string
     {
-        return $this->mot_de_passe;
+        return $this->motDePasse;
     }
 
-    public function setMotDePasse(string $mot_de_passe): static
+    public function setMotDePasse(string $motDePasse): static
     {
-        $this->mot_de_passe = $mot_de_passe;
+        $this->motDePasse = $motDePasse;
 
         return $this;
     }
@@ -177,42 +177,30 @@ class Participant
         return $this;
     }
 
-    public function getSites(): ?site
-    {
-        return $this->sites;
-    }
-
-    public function setSites(?site $sites): static
-    {
-        $this->sites = $sites;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Sortie>
      */
-    public function getSortiesOrganisateur(): Collection
+    public function getSortiesOrganiseesParMoi(): Collection
     {
-        return $this->sortiesOrganisateur;
+        return $this->sortiesOrganiseesParMoi;
     }
 
-    public function addSortiesOrganisateur(Sortie $sortiesOrganisateur): static
+    public function addSortiesOrganiseesParMoi(Sortie $sortiesOrganiseesParMoi): static
     {
-        if (!$this->sortiesOrganisateur->contains($sortiesOrganisateur)) {
-            $this->sortiesOrganisateur->add($sortiesOrganisateur);
-            $sortiesOrganisateur->setOrganisateur($this);
+        if (!$this->sortiesOrganiseesParMoi->contains($sortiesOrganiseesParMoi)) {
+            $this->sortiesOrganiseesParMoi->add($sortiesOrganiseesParMoi);
+            $sortiesOrganiseesParMoi->setOrganisateur($this);
         }
 
         return $this;
     }
 
-    public function removeSortiesOrganisateur(Sortie $sortiesOrganisateur): static
+    public function removeSortiesOrganiseesParMoi(Sortie $sortiesOrganiseesParMoi): static
     {
-        if ($this->sortiesOrganisateur->removeElement($sortiesOrganisateur)) {
+        if ($this->sortiesOrganiseesParMoi->removeElement($sortiesOrganiseesParMoi)) {
             // set the owning side to null (unless already changed)
-            if ($sortiesOrganisateur->getOrganisateur() === $this) {
-                $sortiesOrganisateur->setOrganisateur(null);
+            if ($sortiesOrganiseesParMoi->getOrganisateur() === $this) {
+                $sortiesOrganiseesParMoi->setOrganisateur(null);
             }
         }
 
@@ -220,25 +208,40 @@ class Participant
     }
 
     /**
-     * @return Collection<int, sortie>
+     * @return Collection<int, Sortie>
      */
-    public function getDateInscription(): Collection
+    public function getSorties(): Collection
     {
-        return $this->date_inscription;
+        return $this->sorties;
     }
 
-    public function addDateInscription(sortie $dateInscription): static
+    public function addSorty(Sortie $sorty): static
     {
-        if (!$this->date_inscription->contains($dateInscription)) {
-            $this->date_inscription->add($dateInscription);
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->addParticipant($this);
         }
 
         return $this;
     }
 
-    public function removeDateInscription(sortie $dateInscription): static
+    public function removeSorty(Sortie $sorty): static
     {
-        $this->date_inscription->removeElement($dateInscription);
+        if ($this->sorties->removeElement($sorty)) {
+            $sorty->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): static
+    {
+        $this->site = $site;
 
         return $this;
     }

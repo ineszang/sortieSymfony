@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\LieuxRepository;
+use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LieuxRepository::class)]
+#[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
 {
     #[ORM\Id]
@@ -16,28 +16,28 @@ class Lieu
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_lieu = null;
+    private ?int $idLieu = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $nom_lieu = null;
+    #[ORM\Column(length: 60)]
+    private ?string $nomLieu = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(length: 60, nullable: true)]
     private ?string $rue = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $lognitude = null;
+    private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?villes $villes = null;
+    private ?Ville $ville = null;
 
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieux', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieu', orphanRemoval: true)]
     private Collection $sorties;
 
     public function __construct()
@@ -50,26 +50,26 @@ class Lieu
         return $this->id;
     }
 
-    public function getNoLieu(): ?int
+    public function getIdLieu(): ?int
     {
-        return $this->no_lieu;
+        return $this->idLieu;
     }
 
-    public function setNoLieu(int $no_lieu): static
+    public function setIdLieu(int $idLieu): static
     {
-        $this->no_lieu = $no_lieu;
+        $this->idLieu = $idLieu;
 
         return $this;
     }
 
     public function getNomLieu(): ?string
     {
-        return $this->nom_lieu;
+        return $this->nomLieu;
     }
 
-    public function setNomLieu(string $nom_lieu): static
+    public function setNomLieu(string $nomLieu): static
     {
-        $this->nom_lieu = $nom_lieu;
+        $this->nomLieu = $nomLieu;
 
         return $this;
     }
@@ -98,32 +98,32 @@ class Lieu
         return $this;
     }
 
-    public function getLognitude(): ?float
+    public function getLongitude(): ?float
     {
-        return $this->lognitude;
+        return $this->longitude;
     }
 
-    public function setLognitude(?float $lognitude): static
+    public function setLongitude(?float $longitude): static
     {
-        $this->lognitude = $lognitude;
+        $this->longitude = $longitude;
 
         return $this;
     }
 
-    public function getVilles(): ?villes
+    public function getVille(): ?Ville
     {
-        return $this->villes;
+        return $this->ville;
     }
 
-    public function setVilles(?villes $villes): static
+    public function setVille(?Ville $ville): static
     {
-        $this->villes = $villes;
+        $this->ville = $ville;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Sorties>
+     * @return Collection<int, Sortie>
      */
     public function getSorties(): Collection
     {
@@ -134,7 +134,7 @@ class Lieu
     {
         if (!$this->sorties->contains($sorty)) {
             $this->sorties->add($sorty);
-            $sorty->setLieux($this);
+            $sorty->setLieu($this);
         }
 
         return $this;
@@ -144,8 +144,8 @@ class Lieu
     {
         if ($this->sorties->removeElement($sorty)) {
             // set the owning side to null (unless already changed)
-            if ($sorty->getLieux() === $this) {
-                $sorty->setLieux(null);
+            if ($sorty->getLieu() === $this) {
+                $sorty->setLieu(null);
             }
         }
 

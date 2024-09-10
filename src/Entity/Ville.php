@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\VillesRepository;
+use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: VillesRepository::class)]
+#[ORM\Entity(repositoryClass: VilleRepository::class)]
 class Ville
 {
     #[ORM\Id]
@@ -16,18 +16,18 @@ class Ville
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_ville = null;
+    private ?int $idVille = null;
 
     #[ORM\Column(length: 30)]
-    private ?string $nom_ville = null;
+    private ?string $nomVille = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $code_postal = null;
+    private ?string $codePostal = null;
 
     /**
      * @var Collection<int, Lieu>
      */
-    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'villes', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'ville', orphanRemoval: true)]
     private Collection $lieux;
 
     public function __construct()
@@ -40,38 +40,38 @@ class Ville
         return $this->id;
     }
 
-    public function getNoVille(): ?int
+    public function getIdVille(): ?int
     {
-        return $this->no_ville;
+        return $this->idVille;
     }
 
-    public function setNoVille(int $no_ville): static
+    public function setIdVille(int $idVille): static
     {
-        $this->no_ville = $no_ville;
+        $this->idVille = $idVille;
 
         return $this;
     }
 
     public function getNomVille(): ?string
     {
-        return $this->nom_ville;
+        return $this->nomVille;
     }
 
-    public function setNomVille(string $nom_ville): static
+    public function setNomVille(string $nomVille): static
     {
-        $this->nom_ville = $nom_ville;
+        $this->nomVille = $nomVille;
 
         return $this;
     }
 
     public function getCodePostal(): ?string
     {
-        return $this->code_postal;
+        return $this->codePostal;
     }
 
-    public function setCodePostal(string $code_postal): static
+    public function setCodePostal(string $codePostal): static
     {
-        $this->code_postal = $code_postal;
+        $this->codePostal = $codePostal;
 
         return $this;
     }
@@ -88,7 +88,7 @@ class Ville
     {
         if (!$this->lieux->contains($lieux)) {
             $this->lieux->add($lieux);
-            $lieux->setVilles($this);
+            $lieux->setVille($this);
         }
 
         return $this;
@@ -98,8 +98,8 @@ class Ville
     {
         if ($this->lieux->removeElement($lieux)) {
             // set the owning side to null (unless already changed)
-            if ($lieux->getVilles() === $this) {
-                $lieux->setVilles(null);
+            if ($lieux->getVille() === $this) {
+                $lieux->setVille(null);
             }
         }
 

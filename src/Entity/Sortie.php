@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SortiesRepository;
+use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SortiesRepository::class)]
+#[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
 {
     #[ORM\Id]
@@ -17,49 +17,53 @@ class Sortie
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_sortie = null;
+    private ?int $idSortie = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $nom = null;
+    #[ORM\Column(length: 60)]
+    private ?string $nomSortie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datedebut = null;
+    private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datecloture = null;
+    private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column]
-    private ?int $nbinscriptionsmax = null;
+    private ?int $nbIncriptionsMax = null;
 
     #[ORM\Column(length: 500, nullable: true)]
-    private ?string $descriptioninfos = null;
+    private ?string $infosSortie = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $etatsortie = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateHeureFin = null;
 
-    #[ORM\Column(length: 250, nullable: true)]
+    #[ORM\Column(length: 400, nullable: true)]
     private ?string $urlPhoto = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sortiesOrganisateur')]
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?participant $organisateur = null;
+    private ?Lieu $lieu = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?lieu $lieux = null;
+    private ?Etat $etat = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\ManyToOne(inversedBy: 'sortiesOrganiseesParMoi')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?etat $etats = null;
+    private ?Participant $organisateur = null;
 
     /**
      * @var Collection<int, Participant>
      */
-    #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'date_inscription')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
     private Collection $participants;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $siteOrganisateur = null;
 
     public function __construct()
     {
@@ -71,38 +75,38 @@ class Sortie
         return $this->id;
     }
 
-    public function getNoSortie(): ?int
+    public function getIdSortie(): ?int
     {
-        return $this->no_sortie;
+        return $this->idSortie;
     }
 
-    public function setNoSortie(int $no_sortie): static
+    public function setIdSortie(int $idSortie): static
     {
-        $this->no_sortie = $no_sortie;
+        $this->idSortie = $idSortie;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getNomSortie(): ?string
     {
-        return $this->nom;
+        return $this->nomSortie;
     }
 
-    public function setNom(string $nom): static
+    public function setNomSortie(string $nomSortie): static
     {
-        $this->nom = $nom;
+        $this->nomSortie = $nomSortie;
 
         return $this;
     }
 
-    public function getDatedebut(): ?\DateTimeInterface
+    public function getDateHeureDebut(): ?\DateTimeInterface
     {
-        return $this->datedebut;
+        return $this->dateHeureDebut;
     }
 
-    public function setDatedebut(\DateTimeInterface $datedebut): static
+    public function setDateHeureDebut(\DateTimeInterface $dateHeureDebut): static
     {
-        $this->datedebut = $datedebut;
+        $this->dateHeureDebut = $dateHeureDebut;
 
         return $this;
     }
@@ -119,50 +123,50 @@ class Sortie
         return $this;
     }
 
-    public function getDatecloture(): ?\DateTimeInterface
+    public function getDateClotureInscription(): ?\DateTimeInterface
     {
-        return $this->datecloture;
+        return $this->dateClotureInscription;
     }
 
-    public function setDatecloture(\DateTimeInterface $datecloture): static
+    public function setDateClotureInscription(\DateTimeInterface $dateClotureInscription): static
     {
-        $this->datecloture = $datecloture;
+        $this->dateClotureInscription = $dateClotureInscription;
 
         return $this;
     }
 
-    public function getNbinscriptionsmax(): ?int
+    public function getNbIncriptionsMax(): ?int
     {
-        return $this->nbinscriptionsmax;
+        return $this->nbIncriptionsMax;
     }
 
-    public function setNbinscriptionsmax(int $nbinscriptionsmax): static
+    public function setNbIncriptionsMax(int $nbIncriptionsMax): static
     {
-        $this->nbinscriptionsmax = $nbinscriptionsmax;
+        $this->nbIncriptionsMax = $nbIncriptionsMax;
 
         return $this;
     }
 
-    public function getDescriptioninfos(): ?string
+    public function getInfosSortie(): ?string
     {
-        return $this->descriptioninfos;
+        return $this->infosSortie;
     }
 
-    public function setDescriptioninfos(?string $descriptioninfos): static
+    public function setInfosSortie(?string $infosSortie): static
     {
-        $this->descriptioninfos = $descriptioninfos;
+        $this->infosSortie = $infosSortie;
 
         return $this;
     }
 
-    public function getEtatsortie(): ?int
+    public function getDateHeureFin(): ?\DateTimeInterface
     {
-        return $this->etatsortie;
+        return $this->dateHeureFin;
     }
 
-    public function setEtatsortie(?int $etatsortie): static
+    public function setDateHeureFin(?\DateTimeInterface $dateHeureFin): static
     {
-        $this->etatsortie = $etatsortie;
+        $this->dateHeureFin = $dateHeureFin;
 
         return $this;
     }
@@ -179,38 +183,38 @@ class Sortie
         return $this;
     }
 
-    public function getOrganisateur(): ?participant
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): static
+    {
+        $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?Participant
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?participant $organisateur): static
+    public function setOrganisateur(?Participant $organisateur): static
     {
         $this->organisateur = $organisateur;
-
-        return $this;
-    }
-
-    public function getLieux(): ?lieu
-    {
-        return $this->lieux;
-    }
-
-    public function setLieux(?lieu $lieux): static
-    {
-        $this->lieux = $lieux;
-
-        return $this;
-    }
-
-    public function getEtats(): ?etat
-    {
-        return $this->etats;
-    }
-
-    public function setEtats(?etat $etats): static
-    {
-        $this->etats = $etats;
 
         return $this;
     }
@@ -227,7 +231,6 @@ class Sortie
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
-            $participant->addDateInscription($this);
         }
 
         return $this;
@@ -235,9 +238,19 @@ class Sortie
 
     public function removeParticipant(Participant $participant): static
     {
-        if ($this->participants->removeElement($participant)) {
-            $participant->removeDateInscription($this);
-        }
+        $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    public function getSiteOrganisateur(): ?Site
+    {
+        return $this->siteOrganisateur;
+    }
+
+    public function setSiteOrganisateur(?Site $siteOrganisateur): static
+    {
+        $this->siteOrganisateur = $siteOrganisateur;
 
         return $this;
     }

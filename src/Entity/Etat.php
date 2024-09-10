@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\EtatsRepository;
+use App\Repository\EtatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EtatsRepository::class)]
+#[ORM\Entity(repositoryClass: EtatRepository::class)]
 class Etat
 {
     #[ORM\Id]
@@ -16,15 +16,15 @@ class Etat
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_etat = null;
+    private ?int $idEtat = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $libelle = null;
 
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etats', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etat')]
     private Collection $sorties;
 
     public function __construct()
@@ -37,14 +37,14 @@ class Etat
         return $this->id;
     }
 
-    public function getNoEtat(): ?int
+    public function getIdEtat(): ?int
     {
-        return $this->no_etat;
+        return $this->idEtat;
     }
 
-    public function setNoEtat(int $no_etat): static
+    public function setIdEtat(int $idEtat): static
     {
-        $this->no_etat = $no_etat;
+        $this->idEtat = $idEtat;
 
         return $this;
     }
@@ -73,7 +73,7 @@ class Etat
     {
         if (!$this->sorties->contains($sorty)) {
             $this->sorties->add($sorty);
-            $sorty->setEtats($this);
+            $sorty->setEtat($this);
         }
 
         return $this;
@@ -83,8 +83,8 @@ class Etat
     {
         if ($this->sorties->removeElement($sorty)) {
             // set the owning side to null (unless already changed)
-            if ($sorty->getEtats() === $this) {
-                $sorty->setEtats(null);
+            if ($sorty->getEtat() === $this) {
+                $sorty->setEtat(null);
             }
         }
 

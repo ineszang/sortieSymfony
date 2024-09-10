@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\SitesRepository;
+use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SitesRepository::class)]
+#[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
 {
     #[ORM\Id]
@@ -16,20 +16,27 @@ class Site
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $no_site = null;
+    private ?int $idSite = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $nom_site = null;
+    #[ORM\Column(length: 60)]
+    private ?string $nomSite = null;
 
     /**
      * @var Collection<int, Participant>
      */
-    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'sites')]
-    private Collection $participants;
+    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'site', orphanRemoval: true)]
+    private Collection $stagiaires;
+
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'siteOrganisateur', orphanRemoval: true)]
+    private Collection $sorties;
 
     public function __construct()
     {
-        $this->participants = new ArrayCollection();
+        $this->stagiaires = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -37,26 +44,26 @@ class Site
         return $this->id;
     }
 
-    public function getNoSite(): ?int
+    public function getIdSite(): ?int
     {
-        return $this->no_site;
+        return $this->idSite;
     }
 
-    public function setNoSite(int $no_site): static
+    public function setIdSite(int $idSite): static
     {
-        $this->no_site = $no_site;
+        $this->idSite = $idSite;
 
         return $this;
     }
 
     public function getNomSite(): ?string
     {
-        return $this->nom_site;
+        return $this->nomSite;
     }
 
-    public function setNomSite(string $nom_site): static
+    public function setNomSite(string $nomSite): static
     {
-        $this->nom_site = $nom_site;
+        $this->nomSite = $nomSite;
 
         return $this;
     }
@@ -64,27 +71,57 @@ class Site
     /**
      * @return Collection<int, Participant>
      */
-    public function getParticipants(): Collection
+    public function getStagiaires(): Collection
     {
-        return $this->participants;
+        return $this->stagiaires;
     }
 
-    public function addParticipant(Participant $participant): static
+    public function addStagiaire(Participant $stagiaire): static
     {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            $participant->setSites($this);
+        if (!$this->stagiaires->contains($stagiaire)) {
+            $this->stagiaires->add($stagiaire);
+            $stagiaire->setSite($this);
         }
 
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): static
+    public function removeStagiaire(Participant $stagiaire): static
     {
-        if ($this->participants->removeElement($participant)) {
+        if ($this->stagiaires->removeElement($stagiaire)) {
             // set the owning side to null (unless already changed)
-            if ($participant->getSites() === $this) {
-                $participant->setSites(null);
+            if ($stagiaire->getSite() === $this) {
+                $stagiaire->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): static
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->setSiteOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): static
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            // set the owning side to null (unless already changed)
+            if ($sorty->getSiteOrganisateur() === $this) {
+                $sorty->setSiteOrganisateur(null);
             }
         }
 
