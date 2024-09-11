@@ -9,8 +9,10 @@ use App\Entity\Site;
 use App\Entity\Sortie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class CreationSortieType extends AbstractType
 {
@@ -30,23 +32,28 @@ class CreationSortieType extends AbstractType
             ->add('dateHeureFin', null, [
                 'widget' => 'single_text',
             ])
-            ->add('urlPhoto')
+            ->add('image', FileType::class, [
+                'label' => 'Image (JPEG, PNG)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image (JPEG or PNG)',
+                    ])
+                ],
+            ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'choice_label' => 'id',
-            ])
-            ->add('etat', EntityType::class, [
-                'class' => Etat::class,
                 'choice_label' => 'id',
             ])
             ->add('organisateur', EntityType::class, [
                 'class' => Participant::class,
                 'choice_label' => 'id',
-            ])
-            ->add('participants', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
-                'multiple' => true,
             ])
             ->add('siteOrganisateur', EntityType::class, [
                 'class' => Site::class,

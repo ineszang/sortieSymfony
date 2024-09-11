@@ -49,6 +49,9 @@ header {
     background-color: #9c0b59;
 }
 
+.colorChampsForm {
+    color: #9c0b59;
+}
 .colorborder:focus {
     border-color: #9c0b59;
 }
@@ -62,4 +65,13 @@ header {
 }
 #lieu-results div:hover {
     background-color: #f0f0f0;
+}
+
+.boutonCreer {
+    background-color: #9c0b59;
+    transition:1s;
+}
+.boutonCreer:hover {
+    background-color: #c09cc7;
+    transition:1s;
 }
