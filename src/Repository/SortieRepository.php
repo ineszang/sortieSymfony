@@ -16,6 +16,35 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    public function findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+
+        if ($site) {
+            $queryBuilder->andWhere('s.site = :site')
+                ->setParameter('site', $site);
+        }
+
+        if ($recherche) {
+            $queryBuilder->andWhere('s.nomSortie LIKE :recherche')
+                ->setParameter('recherche', '%'.$recherche.'%');
+        }
+
+        if ($dateStart) {
+            $queryBuilder->andWhere('s.dateHeureDebut >= :dateStart')
+                ->setParameter('dateStart', $dateStart);
+        }
+
+        if ($dateEnd) {
+            $queryBuilder->andWhere('s.dateHeureFin <= :dateEnd')
+                ->setParameter('dateEnd', $dateEnd);
+        }
+
+        // Ajoutez ici des conditions supplémentaires basées sur les autres paramètres si nécessaire
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     public function findPublishedSorties()
     {
         return $this->createQueryBuilder('w')

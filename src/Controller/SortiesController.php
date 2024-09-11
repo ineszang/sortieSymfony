@@ -40,7 +40,8 @@ class SortiesController extends AbstractController
 
 
 
-        //
+        //chercher dans la bdd
+        $sites = $siteRepository->findBySearchParameters();
 
 
 
