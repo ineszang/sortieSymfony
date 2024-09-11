@@ -12,11 +12,8 @@ class Ville
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $idVille = null;
 
     #[ORM\Column(length: 30)]
     private ?string $nomVille = null;

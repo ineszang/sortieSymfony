@@ -27,6 +27,7 @@ class RegistrationFormType extends AbstractType
             ->add('mail')
             ->add('nom')
             ->add('prenom')
+            ->add('telephone')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -52,16 +53,9 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('site', ChoiceType::class, [
-                'choices' => [
-               
-                'CHARTRES-DE-BRETAGNE' => 2,
-                'LA ROCHE SUR YON' => 3,
-
-                ]
-            ])
-        
+            
         ;}
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

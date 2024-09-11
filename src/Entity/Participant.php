@@ -20,10 +20,6 @@ class Participant
     #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id_participant')]
-    private ?int $idParticipant = null;
-
     #[ORM\Column(name: 'pseudo', length: 30)]
     private ?string $pseudo = null;
 

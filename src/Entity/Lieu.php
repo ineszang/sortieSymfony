@@ -12,11 +12,8 @@ class Lieu
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $idLieu = null;
 
     #[ORM\Column(length: 60)]
     private ?string $nomLieu = null;

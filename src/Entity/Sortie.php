@@ -13,11 +13,8 @@ class Sortie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $idSortie = null;
 
     #[ORM\Column(length: 60)]
     private ?string $nomSortie = null;

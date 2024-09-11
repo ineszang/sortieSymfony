@@ -13,11 +13,8 @@ class Site
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
-
-    #[ORM\Column(name: 'id_site', type: 'integer')]
-    private ?int $idSite = null;
 
     #[ORM\Column(name: 'nom_site', type: 'string', length: 60)]
     private ?string $nomSite = null;
