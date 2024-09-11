@@ -34,18 +34,6 @@ class Etat
         return $this->id;
     }
 
-    public function getIdEtat(): ?int
-    {
-        return $this->idEtat;
-    }
-
-    public function setIdEtat(int $idEtat): static
-    {
-        $this->idEtat = $idEtat;
-
-        return $this;
-    }
-
     public function getLibelle(): ?string
     {
         return $this->libelle;

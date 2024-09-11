@@ -1,3 +1,65 @@
+* {
+    font-family: "Gloria Hallelujah";
+}
+
 body {
-    background-color: skyblue;
+    background-color: WHITE;
+}
+
+header {
+    background-color: white;
+}
+ .team-member {
+     border: 1px solid #ccc;
+     padding: 10px;
+     margin: 10px;
+     border-radius: 5px;
+     text-align: center;
+ }
+.team-member img {
+    border-radius: 50%;
+    max-width: 100px;
+    max-height: 100px;
+}
+.titlehome {
+    color: #9c0b59
+}
+
+.titleDateHome {
+    color: #8ec640
+}
+
+.titleButton2Home {
+    background-color: #c09cc7
+}
+
+.titleButton1Home {
+    background-color: #18bcf1;
+}
+
+.hoverheaderbuttons:hover {
+    color: #18bcf1;
+}
+
+.titleButton1Home:hover, .titleButton2Home:hover {
+    background-color: #9c0b59;
+}
+
+header {
+    background-color: #9c0b59;
+}
+
+.colorborder:focus {
+    border-color: #9c0b59;
+}
+
+#lieu-results {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+}
+#lieu-results div:hover {
+    background-color: #f0f0f0;
 }

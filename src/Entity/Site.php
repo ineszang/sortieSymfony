@@ -42,18 +42,6 @@ class Site
         return $this->id;
     }
 
-    public function getIdSite(): ?int
-    {
-        return $this->idSite;
-    }
-
-    public function setIdSite(int $idSite): static
-    {
-        $this->idSite = $idSite;
-
-        return $this;
-    }
-
     public function getNomSite(): ?string
     {
         return $this->nomSite;

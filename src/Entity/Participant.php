@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 #[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
@@ -69,18 +71,6 @@ class Participant
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdParticipant(): ?int
-    {
-        return $this->idParticipant;
-    }
-
-    public function setIdParticipant(int $idParticipant): static
-    {
-        $this->idParticipant = $idParticipant;
-
-        return $this;
     }
 
     public function getPseudo(): ?string

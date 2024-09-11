@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() ~ title }}{% endblock %}
+
+{% block body %}
+    <section class="text-gray-600 body-font">
+        <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+            <img class="lg:w-1/6 md:w-3/12 w-5/12 mb-10 object-cover object-center rounded" alt="hero" src="{{ asset('images/logoSortir.png') }}">
+            <div class="text-center lg:w-2/3 w-full">
+                <h1 class="titlehome title-font sm:text-4xl text-3xl mb-4 font-medium text-E57D20">Retrouvez sur ce site, une liste d'activités proposés par les stagiaires provenant des différents sites de l'ENI. Vous pourrez aussi organiser votre propre activité !</h1>
+                <p class="titleDateHome mb-8 text-400 leading-relaxed">{{ 'now' | date }}</p>
+                <div class="flex justify-center">
+                    <button class="titleButton1Home inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg">lorem</button>
+                    <button class="titleButton2Home ml-4 inline-flex text-white bg-100 border-0 py-2 px-6 focus:outline-none rounded text-lg">Ipsum</button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

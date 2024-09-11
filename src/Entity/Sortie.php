@@ -72,18 +72,6 @@ class Sortie
         return $this->id;
     }
 
-    public function getIdSortie(): ?int
-    {
-        return $this->idSortie;
-    }
-
-    public function setIdSortie(int $idSortie): static
-    {
-        $this->idSortie = $idSortie;
-
-        return $this;
-    }
-
     public function getNomSortie(): ?string
     {
         return $this->nomSortie;
