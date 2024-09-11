@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block body %}
+    <button>  <a  class="hoverheaderbuttons text-gray mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Retour</a></button>
+    <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
+
+
+    {% if sortie is not empty %}
+        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
+    {% else %}
+        <p>Aucune sortie disponible.</p>
+    {% endif %}
+
+
+
+
+
+{% endblock %}

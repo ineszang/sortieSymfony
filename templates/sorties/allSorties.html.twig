@@ -9,12 +9,6 @@
     <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
 
 
-
-
-
-
-
-
     <div class="main-container">
         <div class="pre-container">
             <div class="details-container">
@@ -22,83 +16,104 @@
                 <p>{{ 'Participant : ' ~ utilisateur }}</p>
             </div>
         </div>
-        <div class="search-container">
-            <div class="search-container-part1">
-                <span class="title-search">Filtrer les sorties</span>
-                <div class="site-container">
-                    <label for="site">site :</label>
-                    <select id="sites" name="sites" class="sites">
-                        <option value="nantes">CAMPUS NANTES</option>
-                        <option value="vélo">Vélo</option>
-                        <option value="natation">Natation</option>
-                        <option value="escalade">Escalade</option>
-                    </select>
+
+        <form method="GET" action="{{ path('app_allSorties') }}">
+            <div class="search-container">
+                <div class="search-container-part1">
+                    <span class="title-search">Filtrer les sorties</span>
+                    <div class="site-container">
+                        <label for="site">Choix du site :</label>
+                        <select id="site" name="site" class="sites">
+                            <option value="">aucun</option>
+                            {% for site in sites %}
+                                <option value="{{ site.id }}">{{ site.nomSite  }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="name-container">
+                        <label for="name-title">le nom de la sortie contient : </label>
+                        <div class="name-container-search">
+                            <img id="logo" class="img-icon h-4 w-4" src="{{ asset('images/search-icon.png') }}" alt="Mon Logo">
+                            <input type="text" id="name" name="recherche" class="name-input" value="{{ recherche ? recherche : "" }}" placeholder="search" maxlength="30">
+                        </div>
+                    </div>
+
+                    <div class="date-container">
+                        <span>Entre </span>
+                        <input type="date" id="dateStart" name="dateStart" class="date-calendar">
+                        <span>et </span>
+                        <input type="date" id="dateEnd" name="dateEnd" class="date-calendar">
+                    </div>
+
                 </div>
-                <div class="name-container">
-                    <label for="name">le nom de la sortie contient : </label>
-                    <div class="name-container-search">
-                        <img id="logo" class="img-icon h-4 w-4" src="{{ asset('images/search-icon.png') }}" alt="Mon Logo">
-                        <input type="text" id="name" class="name-input" placeholder="search" maxlength="30">
+                <div class="search-container-part2">
+                    <div class="checkbox-container">
+                        <label>
+                            <input type="checkbox" name="mesSorties" value="1">
+                            Sorties dont je suis l'organisateur/trice
+                        </label>
+                        <label>
+                            <input type="checkbox" name="mesInscriptions" value="2">
+                            Sorties auxquelles je suis inscrit/e
+                        </label>
+                        <label>
+                            <input type="checkbox" name="pasMesInscriptions" value="3">
+                            Sorties auxquelles je ne suis pas inscrit/e
+                        </label>
+                        <label>
+                            <input type="checkbox" name="sortiesFinies" value="4">
+                            Sorties passées
+                        </label>
+                    </div>
+                    <div class="search-button-container">
+                        <button type="submit" class="search-button">RECHERCHER</button>
                     </div>
                 </div>
-                <div class="date-container">
-                    <span>Entre </span>
-                    <input type="date" id="dateStart" name="dateStart" class="date-calendar">
-                    <span>et </span>
-                    <input type="date" id="dateEnd" name="dateEnd" class="date-calendar">
-                </div>
-
             </div>
-            <div class="search-container-part2">
-                <div class="checkbox-container">
-                    <label>
-                        <input type="checkbox" name="option1" value="option1">
-                        Sorties dont je suis l'organisateur/trice
-                    </label>
-                    <label>
-                        <input type="checkbox" name="option2" value="option2">
-                        Sorties auxquelles je suis inscrit/e
-                    </label>
-                    <label>
-                        <input type="checkbox" name="option3" value="option3">
-                        Sorties auxquelles je ne suis pas inscrit/e
-                    </label>
-                    <label>
-                        <input type="checkbox" name="option4" value="option4">
-                        Sorties passées
-                    </label>
-                </div>
-                <div class="search-button-container">
-                    <button class="search-button">RECHERCHER</button>
-                </div>
-
-            </div>
-        </div>
+        </form>
         <div class="cards-container">
             {% if sorties is not empty %}
                 {% for sortie in sorties %}
                     <div class="card">
                         <div class="card-header">
                             <h2 class="card-title">{{ sortie.nomSortie }}</h2>
-                        </div>
+                            <div class="container-img">
+                                <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
+                            </div>
+                            </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
                                     <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
+                                    <p><strong>Durée :</strong> {{ sortie.duree ? sortie.duree ~' heure(s)': 'Non définie' }}</p>
                                     <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
                                 </div>
                                 <div class="col">
-                                    <p><strong>Clôture :</strong> {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('Y-m-d H:i') : 'Non définie' }}</p>
-                                    <p><strong>Inscrits/Places :</strong> test</p>
+                                    <p>
+                                        <strong>Clôture :</strong>
+                                        {% if sortie.dateClotureInscription %}
+                                            {% set now = "now"|date("Y-m-d H:i") %}
+                                            {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
+                                            {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
+
+                                            {{ diff > 0 ? 'dans ' ~ diff ~ ' jours' : 'Aujourd\'hui' }}
+                                            ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
+                                        {% else %}
+                                            Non définie
+                                        {% endif %}
+                                    </p>
+
+                                    <p><strong>Inscrits/Places : </strong>{{ sortie.nbIncriptionsMax ~ ' place(s)' }} </p>
                                 </div>
                             </div>
-                            <hr>
-                            <p><strong>État :</strong> test</p>
-                            <p><strong>Organisateur :</strong> test</p>
+                            <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
+                            <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
+                            <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
+                            <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
+
                         </div>
                         <div class="card-footer">
-                            <small>Publié le : test</small>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Voir les détails</a>
+                            <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
                     </div>
                 {% endfor %}
