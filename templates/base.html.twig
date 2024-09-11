@@ -8,9 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Shadows+Into+Light&display=swap" rel="stylesheet">
 
     {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
     {% endblock %}
 
     {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>

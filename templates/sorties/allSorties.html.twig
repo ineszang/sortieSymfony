@@ -74,24 +74,31 @@
 
             </div>
         </div>
-
         <div class="cards-container">
             {% if sorties is not empty %}
                 {% for sortie in sorties %}
                     <div class="card">
                         <div class="card-header">
-                            <h2>{{ sortie.nomSortie }}</h2>
+                            <h2 class="card-title">{{ sortie.nomSortie }}</h2>
                         </div>
                         <div class="card-body">
-                            <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
-                            <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
-                            <p><strong>Clôture :</strong> {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('Y-m-d H:i') : 'Non définie' }}</p>
-                            <p><strong>Inscrits/Places :</strong> test</p>
-                            <p><strong>Etat :</strong> test</p>
+                            <div class="row">
+                                <div class="col">
+                                    <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
+                                    <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Clôture :</strong> {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('Y-m-d H:i') : 'Non définie' }}</p>
+                                    <p><strong>Inscrits/Places :</strong> test</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <p><strong>État :</strong> test</p>
                             <p><strong>Organisateur :</strong> test</p>
                         </div>
                         <div class="card-footer">
-                           
+                            <small>Publié le : test</small>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
                     </div>
                 {% endfor %}

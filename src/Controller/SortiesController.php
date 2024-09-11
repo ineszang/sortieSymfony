@@ -28,6 +28,7 @@ class SortiesController extends AbstractController
         $sorties = $sortieRepository->findPublishedSorties();
 
 
+        var_dump("test");
 
 
         return $this->render('sorties/allSorties.html.twig', [
