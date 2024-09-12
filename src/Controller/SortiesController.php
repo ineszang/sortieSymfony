@@ -97,7 +97,6 @@ class SortiesController extends AbstractController
         $pasMesInscriptions = $request->query->get('pasMesInscriptions');
         $sortiesFinies = $request->query->get('sortiesFinies');
 
-        $sorties = $sortieRepository->findPublishedSorties();
         $sites = $siteRepository->findAll();
 
         $utilisateur = $this->getUser();
@@ -113,7 +112,7 @@ class SortiesController extends AbstractController
 
         //
         //chercher dans la bdd
-        //$sites = $siteRepository->findBySearchParameters();
+        $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, 1);
 
 
 
@@ -141,6 +140,8 @@ class SortiesController extends AbstractController
         $utilisateur = "Melaine F.";
 
         $sortie = $sortieRepository->findOneBySomeField($id);
+
+
 
 
 

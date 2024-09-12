@@ -8,14 +8,39 @@
 {% block body %}
     <button>  <a  class="hoverheaderbuttons text-gray mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Retour</a></button>
     <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+    <style>
+        #map { height: 400px; width: 400px; }
+    </style>
 
     {% if sortie is not empty %}
         <h2 class="card-title">{{ sortie.nomSortie }}</h2>
+        <p class="card-title">{{ sortie.lieu.latitude }}</p>
+        <p class="card-title">{{ sortie.lieu.longitude }}</p>
     {% else %}
         <p>Aucune sortie disponible.</p>
     {% endif %}
 
+
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialisation de la carte
+        var map = L.map('map').setView([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}], 13);
+
+        // Ajout du fond de carte OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Ajout d'un marqueur
+        L.marker([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}]).addTo(map)
+            .bindPopup('Votre sortie est ici !')
+            .openPopup();
+    </script>
 
 
 
