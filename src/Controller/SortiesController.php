@@ -11,6 +11,7 @@ use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,21 +23,19 @@ use function PHPUnit\Framework\throwException;
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
-    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator, Security $security): Response
     {
-        //mock pour la connexion
-        $violetteSiteId = 1;
-        $violetteId = 1;
-        $violette = $entityManager->getRepository(Participant::class)->find($violetteId);
-        $site = $entityManager->getRepository(Site::class)->find($violetteSiteId);
-
-        if (!$violette || !$site) {
-            throw $this->createNotFoundException('Utilisateur ou site non trouvé.');
+        $user = $security->getUser();
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+        $site = $entityManager->getRepository(Site::class)->find($user->getSite()->getId());
+        if (!$site) {
+            throw $this->createNotFoundException('Site non trouvé.');
         }
 
         $sortie = new Sortie();
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
@@ -62,11 +61,11 @@ class SortiesController extends AbstractController
             if (!$etatCree) {
                 throw $this->createNotFoundException("L'état 'créée' n'existe pas.");
             }
+
             $sortie->setEtat($etatCree);
-            $sortie->setOrganisateur($violette);
+            $sortie->setOrganisateur($user);
             $sortie->setSiteOrganisateur($site);
 
-            // Persister la sortie en base de données
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -79,7 +78,7 @@ class SortiesController extends AbstractController
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
             "sortieForm" => $sortieForm,
-            'user' => $violette,
+            'user' => $user,
             'error' => $error
         ]);
     }
