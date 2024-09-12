@@ -87,8 +87,7 @@ class SortiesController extends AbstractController
     #[Route(['/allSorties'], name: 'app_allSorties')]
     public function indexSorties(SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request): Response
     {
-        //TODO : trouver le user en ligne
-        $utilisateur = "Melaine F.";
+
 
         $site = $request->query->get('site');
         $recherche = $request->query->get('recherche');
@@ -102,6 +101,15 @@ class SortiesController extends AbstractController
         $sorties = $sortieRepository->findPublishedSorties();
         $sites = $siteRepository->findAll();
 
+        $utilisateur = $this->getUser();
+
+        if ($utilisateur) {
+
+            $username = $utilisateur->getUserIdentifier();
+        } else {
+            $username = "no user";
+        }
+
 
 
         //
@@ -112,7 +120,7 @@ class SortiesController extends AbstractController
 
 
         return $this->render('sorties/allSorties.html.twig', [
-            'utilisateur' => $utilisateur,
+            'utilisateur' => $username,
             'sorties' => $sorties,
             'sites' => $sites,
             'site' => $site,
