@@ -1,5 +1,5 @@
 <?php
-
+// src/Controller/RegistrationController.php
 namespace App\Controller;
 
 use App\Entity\Participant;
@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
@@ -18,7 +18,6 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new Participant();
-        $site = new Site();
 
         $repository = $entityManager->getRepository(Site::class);
         $sites = $repository->findAll();
@@ -26,32 +25,26 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('mot_de_passe')->getData();
             $siteId = $request->get('site_id');
-            $site = $repository->findOneBySomeField($siteId);
+            $site = $repository->find($siteId);
 
-            dump($site);
-
-
-            // encode the plain password
-
-            //$hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
-            $user->setmotDePasse($plainPassword);
+            // Hacher le mot de passe
+            $hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
+            $user->setMotDePasse($hashedPassword);
             $user->setSite($site);
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
-
+            // Rediriger vers la page d'accueil après l'inscription
             return $this->redirectToRoute('app_home');
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
+            'registrationForm' => $form->createView(),
             'sites' => $sites
         ]);
     }

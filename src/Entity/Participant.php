@@ -8,14 +8,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields: ['pseudo'], message: 'Nom d\'utilisateur déjà utilisé')]
 #[UniqueEntity(fields: ['mail'], message: 'E-mail déjà utilisé')]
-
-class Participant 
+class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -133,12 +132,12 @@ class Participant
         return $this;
     }
 
-    public function getmotDePasse(): ?string
+    public function getMotDePasse(): ?string
     {
         return $this->motDePasse;
     }
 
-    public function setmotDePasse(string $motDePasse): static
+    public function setMotDePasse(string $motDePasse): static
     {
         $this->motDePasse = $motDePasse;
 
@@ -236,5 +235,39 @@ class Participant
         $this->site = $site;
 
         return $this;
+    }
+
+    // Méthodes requises par UserInterface et PasswordAuthenticatedUserInterface
+
+    public function getPassword(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = [];
+        if ($this->administrateur) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function getSalt(): ?string
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->pseudo;
     }
 }
