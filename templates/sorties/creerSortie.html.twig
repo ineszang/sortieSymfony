@@ -65,6 +65,7 @@
                                name="{{ field_name(sortieForm.duree) }}"
                                value="{{ field_value(sortieForm.duree) }}"
                                placeholder="0"
+                               min="0"
                                class="w-20 bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                oninput="calculateEndDate()"
                                ><span> heures</span>
@@ -87,8 +88,9 @@
                                id="{{ field_name(sortieForm.nbIncriptionsMax) }}"
                                name="{{ field_name(sortieForm.nbIncriptionsMax) }}"
                                value="{{ field_value(sortieForm.nbIncriptionsMax) }}"
-                               placeholder="10 personnes.."
-                               class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               min="0"
+                               placeholder="0"
+                               class="w-20 bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                >
                         {% for error in field_errors(sortieForm.nbIncriptionsMax) %}
                             <div class="error">{{ error }}</div>
@@ -149,7 +151,8 @@
                         {% endfor %}
                     </div>
                 </div>
-                <button class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Envoyer !</button>
+                <button type="submit" name="action" value="creer" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Enregistrer la sortie</button>
+                <button type="submit" name="action" value="publier" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Publier la sortie</button>
                 {{ form_end(sortieForm) }}
             </div>
         </div>
@@ -178,13 +181,18 @@
             const endDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value);
             const registrationDeadline = new Date(document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value);
             const errorContainer = document.getElementById('date-cloture-error');
+            const today = new Date();
 
-            // Réinitialiser le message d'erreur
             errorContainer.textContent = '';
+
+            if (registrationDeadline && registrationDeadline < today) {
+                errorContainer.textContent = "La date de clôture des inscriptions ne peut pas être dans le passé.";
+                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = "";
+            }
 
             if (registrationDeadline && startDate && registrationDeadline > startDate) {
                 errorContainer.textContent = "La date de clôture des inscriptions ne peut pas être après la date de début de l'activité.";
-                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = ""; // Réinitialiser le champ
+                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = "";
             }
         }
 
@@ -204,7 +212,7 @@
 
                         data.forEach(lieu => {
                             const li = document.createElement('li');
-                            li.textContent = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nom} (${lieu.ville.codePostal})`;
+                            li.textContent = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nomVille} (${lieu.ville.codePostal})`;
                             li.classList.add('cursor-pointer', 'p-2', 'hover:bg-gray-200');
 
                             li.onclick = function() {

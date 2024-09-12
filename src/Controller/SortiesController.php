@@ -24,7 +24,7 @@ use function PHPUnit\Framework\throwException;
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
-    public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator, Security $security): Response
+    public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, SluggerInterface $slugger, Security $security, ValidatorInterface $validator): Response
     {
         $sortie = new Sortie();
 
@@ -43,12 +43,21 @@ class SortiesController extends AbstractController
             throw $this->createNotFoundException('Site non trouvé.');
         }
 
-        $etatCree = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'crée']);
-        if (!$etatCree) {
-            throw $this->createNotFoundException("L'état 'créée' n'existe pas.");
-        }
+        $action = $request->get('action');
 
-        $sortie->setEtat($etatCree);
+        if ($action === 'creer') {
+            $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'crée']);
+            $sortie->setEtat($etat);
+            if (!$etat) {
+                throw $this->createNotFoundException("L'état n'existe pas.");
+            }
+        } elseif ($action === 'publier') {
+            $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'ouverte']);
+            $sortie->setEtat($etat);
+            if (!$etat) {
+                throw $this->createNotFoundException("L'état n'existe pas.");
+            }
+        }
         $sortie->setOrganisateur($participant);
         $sortie->setSiteOrganisateur($site);
 
@@ -84,14 +93,15 @@ class SortiesController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $error = $validator->validate($sortie);
-        dump($error);
+
+        $errors = $validator->validate($sortie);
+        dump($errors);
 
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
-            "sortieForm" => $sortieForm->createView(),
+            "sortieForm" => $sortieForm,
             'user' => $user,
-            'error' => $error
+            'errors' => $errors
         ]);
     }
 
