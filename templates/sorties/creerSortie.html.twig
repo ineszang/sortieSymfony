@@ -8,22 +8,22 @@
             <div class="w-full bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10">
                 <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Proposer une activité</h2>
                 {{ form_start(sortieForm) }}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.nomSortie) }}" class="leading-7 text-sm colorChampsForm">Intitulé de la sortie</label>
+                        <label for="{{ field_name(sortieForm.nomSortie) }}" class="leading-7 colorChampsForm">Intitulé de la sortie</label>
                         <input type="text"
                                id="{{ field_name(sortieForm.nomSortie) }}"
                                name="{{ field_name(sortieForm.nomSortie) }}"
                                value="{{ field_value(sortieForm.nomSortie) }}"
                                placeholder="titre"
-                               class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               class="w-full rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                         >
                         {% for error in field_errors(sortieForm.nomSortie) %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.infosSortie) }}" class="leading-7 text-sm colorChampsForm">Informations sur la sortie</label>
+                        <label for="{{ field_name(sortieForm.infosSortie) }}" class="leading-7 colorChampsForm">Informations sur la sortie</label>
                         <input type="text"
                                id="{{ field_name(sortieForm.infosSortie) }}"
                                name="{{ field_name(sortieForm.infosSortie) }}"
@@ -40,9 +40,8 @@
                         <input type="datetime-local"
                                id="{{ field_name(sortieForm.dateHeureDebut) }}"
                                name="{{ field_name(sortieForm.dateHeureDebut) }}"
-                               value="{{ field_value(sortieForm.dateHeureDebut) }}"
-                               oninput="calculateEndDate()"
-                        >
+                               class="flatpickr"
+                               >
                         {% for error in field_errors(sortieForm.dateHeureDebut) %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
@@ -52,9 +51,9 @@
                         <input type="datetime-local"
                                id="{{ field_name(sortieForm.dateHeureFin) }}"
                                name="{{ field_name(sortieForm.dateHeureFin) }}"
-                               value="{{ field_value(sortieForm.dateHeureFin) }}"
+                               class="flatpickr"
                                readonly
-                        >
+                               >
                         {% for error in field_errors(sortieForm.dateHeureFin) %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
@@ -65,40 +64,38 @@
                                id="{{ field_name(sortieForm.duree) }}"
                                name="{{ field_name(sortieForm.duree) }}"
                                value="{{ field_value(sortieForm.duree) }}"
-                               placeholder="en heures"
-                               class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               placeholder="0"
+                               class="w-20 bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                oninput="calculateEndDate()"
-                        >
+                               ><span> heures</span>
                         {% for error in field_errors(sortieForm.duree) %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.dateClotureInscription) }}" class="leading-7 text-sm colorChampsForm">Date de <span class="font-bold">clôture des inscriptions</span></label>
+                        <label for="{{ field_name(sortieForm.dateClotureInscription) }}" class="leading-7 colorChampsForm">Date de <span class="font-bold">clôture des inscriptions</span></label>
                         <input type="datetime-local"
                                id="{{ field_name(sortieForm.dateClotureInscription) }}"
                                name="{{ field_name(sortieForm.dateClotureInscription) }}"
-                               value="{{ field_value(sortieForm.dateClotureInscription) }}"
-                        >
-                        {% for error in field_errors(sortieForm.dateClotureInscription) %}
-                            <div class="error">{{ error }}</div>
-                        {% endfor %}
+                               class="flatpickr"
+                               >
+                        <div id="date-cloture-error" class="text-red-500 text-sm mt-2"></div>
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.nbIncriptionsMax) }}" class="leading-7 text-sm colorChampsForm">Nombre maximum de participants</label>
+                        <label for="{{ field_name(sortieForm.nbIncriptionsMax) }}" class="leading-7 colorChampsForm">Nombre maximum de participants</label>
                         <input type="number"
                                id="{{ field_name(sortieForm.nbIncriptionsMax) }}"
                                name="{{ field_name(sortieForm.nbIncriptionsMax) }}"
                                value="{{ field_value(sortieForm.nbIncriptionsMax) }}"
                                placeholder="10 personnes.."
                                class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                        >
+                               >
                         {% for error in field_errors(sortieForm.nbIncriptionsMax) %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.image) }}" class="leading-7 text-sm colorChampsForm mb-10">Choisir une image pour illustrer mon activité</label>
+                        <label for="{{ field_name(sortieForm.image) }}" class="leading-7 colorChampsForm mb-10">Choisir une image pour illustrer mon activité</label>
                         <input type="file"
                                id="{{ field_name(sortieForm.image) }}"
                                name="{{ field_name(sortieForm.image) }}"
@@ -109,7 +106,7 @@
                         {% endfor %}
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.siteOrganisateur) }}" class="leading-7 text-sm colorChampsForm mb-10">
+                        <label for="{{ field_name(sortieForm.siteOrganisateur) }}" class="leading-7 colorChampsForm mb-10">
                             Le site organisateur de cette activité (ton campus)
                         </label>
                         <input type="text"
@@ -120,7 +117,7 @@
                         >
                     </div>
                     <div class="relative mb-4">
-                        <label for="{{ field_name(sortieForm.organisateur) }}" class="leading-7 text-sm colorChampsForm mb-10">
+                        <label for="{{ field_name(sortieForm.organisateur) }}" class="leading-7 colorChampsForm mb-10">
                             Organisateur de l'événement (vous)
                         </label>
                         <input type="text"
@@ -131,7 +128,7 @@
                         >
                     </div>
                     <div class="relative mb-4 col-span-2">
-                        <label for="search-lieu" class="leading-7 text-sm colorChampsForm">Rechercher un lieu</label>
+                        <label for="search-lieu" class="leading-7 colorChampsForm">Rechercher un lieu</label>
                         <input type="text"
                                id="search-lieu"
                                name="search-lieu"
@@ -139,10 +136,9 @@
                                class="w-full bg-white rounded border border-gray-300 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                oninput="searchLieu()"
                                autocomplete="off"
-                        >
+                               >
                         <ul id="lieu-results" class="bg-white border border-gray-300 mt-1 max-h-48 overflow-auto"></ul>
                     </div>
-
                     <div class="relative mb-4 col-span-2">
                         <input type="hidden"
                                id="{{ field_name(sortieForm.lieu) }}"
@@ -153,7 +149,6 @@
                         {% endfor %}
                     </div>
                 </div>
-
                 <button class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Envoyer !</button>
                 {{ form_end(sortieForm) }}
             </div>
@@ -178,35 +173,52 @@
             }
         }
 
-        // Fonction pour rechercher les lieux via une requête AJAX
+        function validateDates() {
+            const startDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value);
+            const endDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value);
+            const registrationDeadline = new Date(document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value);
+            const errorContainer = document.getElementById('date-cloture-error');
+
+            // Réinitialiser le message d'erreur
+            errorContainer.textContent = '';
+
+            if (registrationDeadline && startDate && registrationDeadline > startDate) {
+                errorContainer.textContent = "La date de clôture des inscriptions ne peut pas être après la date de début de l'activité.";
+                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = ""; // Réinitialiser le champ
+            }
+        }
+
+        document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').addEventListener('change', validateDates);
+        document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').addEventListener('change', validateDates);
+        document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').addEventListener('change', validateDates);
+
         function searchLieu() {
             const query = document.getElementById('search-lieu').value;
 
-            if (query.length >= 2) { // Ne pas envoyer de requêtes trop tôt
+            if (query.length >= 2) {
                 fetch(`/rechercher-lieu?q=${encodeURIComponent(query)}`)
                     .then(response => response.json())
                     .then(data => {
                         const results = document.getElementById('lieu-results');
                         results.innerHTML = '';
 
-                        // Afficher les résultats
                         data.forEach(lieu => {
                             const li = document.createElement('li');
                             li.textContent = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nom} (${lieu.ville.codePostal})`;
                             li.classList.add('cursor-pointer', 'p-2', 'hover:bg-gray-200');
 
-                            // Lorsqu'un lieu est sélectionné
                             li.onclick = function() {
                                 document.getElementById('search-lieu').value = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nom} (${lieu.ville.codePostal})`;
                                 document.getElementById('{{ field_name(sortieForm.lieu) }}').value = lieu.id;
-                                results.innerHTML = ''; // Efface les résultats
+                                results.innerHTML = '';
                             };
                             results.appendChild(li);
                         });
                     });
             } else {
-                document.getElementById('lieu-results').innerHTML = ''; // Vider les résultats si la requête est trop courte
+                document.getElementById('lieu-results').innerHTML = '';
             }
         }
     </script>
+
 {% endblock %}

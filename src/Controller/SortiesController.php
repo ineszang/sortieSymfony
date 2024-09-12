@@ -14,12 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function PHPUnit\Framework\throwException;
 
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
-    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator): Response
     {
         //mock pour la connexion
         $violetteSiteId = 1;
@@ -36,7 +37,7 @@ class SortiesController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $imageFile = $sortieForm->get('image')->getData();
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -70,10 +71,14 @@ class SortiesController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $error = $validator->validate($sortie);
+        dump($error);
+
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
-            "sortieForm" => $sortieForm->createView(),
-            'user' => $violette
+            "sortieForm" => $sortieForm,
+            'user' => $violette,
+            'error' => $error
         ]);
     }
 }
