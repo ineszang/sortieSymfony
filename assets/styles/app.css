@@ -14,7 +14,7 @@ header {
 }
 
 .titleDateHome {
-    color: #F2811D
+    color: #4EB3C3
 }
 
 .titleButton2Home {
@@ -70,7 +70,7 @@ header {
     transition:1s;
 }
 
-.error {
+.error, .titleForm {
     color: #BF4545;
 }
 
