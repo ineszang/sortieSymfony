@@ -7,7 +7,7 @@
 
 {% block body %}
     <button>  <a  class="hoverheaderbuttons text-gray mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Retour</a></button>
-    <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/detailsSortie.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -15,14 +15,78 @@
         #map { height: 400px; width: 400px; }
     </style>
 
-    {% if sortie is not empty %}
-        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
-        <p class="card-title">{{ sortie.lieu.latitude }}</p>
-        <p class="card-title">{{ sortie.lieu.longitude }}</p>
-    {% else %}
-        <p>Aucune sortie disponible.</p>
-    {% endif %}
+        {% if sortie is not empty %}
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
+                        <div class="container-img">
+                            <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
 
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
+                                <p><strong>Durée :</strong> {{ sortie.duree ? sortie.duree ~' heure(s)': 'Non définie' }}</p>
+                                <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
+                            </div>
+                            <div class="col">
+                                <p>
+                                    <strong>Clôture :</strong>
+                                    {% if sortie.dateClotureInscription %}
+                                        {% set now = "now"|date("Y-m-d H:i") %}
+                                        {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
+                                        {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
+
+                                        {{ diff > 0 ? 'dans ' ~ diff ~ ' jours' : 'Aujourd\'hui' }}
+                                        ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
+                                    {% else %}
+                                        Non définie
+                                    {% endif %}
+                                </p>
+
+                                <p><strong>Inscrits/Places : </strong>{{ sortie.nbIncriptionsMax ~ ' place(s)' }} </p>
+                            </div>
+                        </div>
+                        <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
+                        <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
+                        <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
+                        <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
+                        <p><strong>Etat : </strong> {{sortie.etat.libelle }}</p>
+
+                    </div>
+
+                    <div id="map"></div>
+                    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                    <script>
+                        // Initialisation de la carte
+                        var map = L.map('map').setView([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}], 13);
+
+                        // Ajout du fond de carte OpenStreetMap
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '© OpenStreetMap'
+                        }).addTo(map);
+
+                        // Ajout d'un marqueur
+                        L.marker([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}]).addTo(map)
+                            .bindPopup('Votre sortie est ici !')
+                            .openPopup();
+                    </script>
+
+                    {% if sortie.etat.libelle == "Ouvert" %}
+                        <p>Les participants : </p>
+                    {% else %}
+                        <p>rien</p>
+                    {% endif %}
+
+                </div>
+        {% else %}
+            <p>Aucune sortie disponible.</p>
+        {% endif %}
 
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -41,6 +105,9 @@
             .bindPopup('Votre sortie est ici !')
             .openPopup();
     </script>
+
+
+
 
 
 
