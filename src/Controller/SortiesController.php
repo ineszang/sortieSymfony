@@ -7,6 +7,7 @@ use App\Entity\Participant;
 use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,19 +24,39 @@ use function PHPUnit\Framework\throwException;
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
-    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator, Security $security): Response
+    public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, SluggerInterface $slugger, ValidatorInterface $validator, Security $security): Response
     {
+        $sortie = new Sortie();
+
         $user = $security->getUser();
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
-        $site = $entityManager->getRepository(Site::class)->find($user->getSite()->getId());
+
+        $participant = $participantRepository->findOneByPseudo($user->getUserIdentifier());
+        if (!$participant) {
+            throw $this->createNotFoundException('Participant non trouvé.');
+        }
+
+        $site = $participant->getSite();
         if (!$site) {
             throw $this->createNotFoundException('Site non trouvé.');
         }
 
-        $sortie = new Sortie();
-        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+        $etatCree = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'crée']);
+        if (!$etatCree) {
+            throw $this->createNotFoundException("L'état 'créée' n'existe pas.");
+        }
+
+        $sortie->setEtat($etatCree);
+        $sortie->setOrganisateur($participant);
+        $sortie->setSiteOrganisateur($site);
+
+        $sortieForm = $this->createForm(CreationSortieType::class, $sortie, [
+            'organisateur_pseudo' => $participant->getPseudo(),
+            'site_organisateur_nom' => $site->getNomSite()
+        ]);
+
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
@@ -57,15 +78,6 @@ class SortiesController extends AbstractController
                 $sortie->setUrlPhoto('/uploads/images/'.$newFilename);
             }
 
-            $etatCree = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'créée']);
-            if (!$etatCree) {
-                throw $this->createNotFoundException("L'état 'créée' n'existe pas.");
-            }
-
-            $sortie->setEtat($etatCree);
-            $sortie->setOrganisateur($user);
-            $sortie->setSiteOrganisateur($site);
-
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -77,7 +89,7 @@ class SortiesController extends AbstractController
 
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
-            "sortieForm" => $sortieForm,
+            "sortieForm" => $sortieForm->createView(),
             'user' => $user,
             'error' => $error
         ]);
