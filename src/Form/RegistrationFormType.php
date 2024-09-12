@@ -8,12 +8,17 @@ use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Blank;
+use Symfony\Component\Validator\Constraints\Text;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -24,68 +29,33 @@ class RegistrationFormType extends AbstractType
     {        
         $builder
             ->add('pseudo', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un pseudo',
-                    ]),
-                    new Length([
-                        'min' => 5,
-                        'minMessage' => 'Votre pseudo devrait avoir au moins {{ limit }} caractères',
-                        'max' => 30,
-                    ]),
-                ],
+                'required' => false,
             ])
             ->add('mail', EmailType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un e-mail',
-                    ]),
-                    new Email([
-                        'message' => 'Entrez un e-mail valide',
-                    ]),
-                ],
+                'required' => false,
             ])
             ->add('nom', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom',
-                    ]),
-                    new Length([
-                        'min' => 2,
-                        'minMessage' => 'Votre nom devrait avoir au moins {{ limit }} caractères',
-                        'max' => 40,
-                    ]),
-                ],
+                'required' => false,
             ])
             ->add('prenom', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre prénom',
-                    ]),
-                    new Length([
-                        'min' => 2,
-                        'minMessage' => 'Votre prénom devrait avoir au moins {{ limit }} caractères',
-                        'max' => 40,
-                    ]),
-                ],
+                'required' => false,
             ])
-            ->add('telephone')
+            ->add('telephone', TextType::class, [
+                'required' => false,
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
+                'required' => false,
             ])
             ->add('mot_de_passe', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'motDePasse'],
+                'required' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Entrez un mot de passe',
+                        'message' => 'Veuillez entrer un mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
@@ -96,7 +66,9 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             
-        ;}
+        ;
+    
+        $builder->get('pseudo')->setRequired(false);}
 
     public function configureOptions(OptionsResolver $resolver): void
     {

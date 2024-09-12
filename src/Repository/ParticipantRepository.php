@@ -56,6 +56,17 @@ class ParticipantRepository extends ServiceEntityRepository
             ;
         }
 
+        /**
+         * @return Participant[] Returns an array of Participant objects
+         */
+        public function findAndUpdateProfile($email): array {
+            return $this->createQueryBuilder('p')
+                ->andWhere('p.email = :email')
+                ->setParameter('email', $email)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
        /* public function findByUser($username, $password): Participant
         {
             return $this->createQueryBuilder('p')

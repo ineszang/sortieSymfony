@@ -5,12 +5,16 @@ namespace App\Entity;
 use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields: ['pseudo'], message: 'Nom d\'utilisateur déjà utilisé')]
@@ -22,21 +26,37 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
-
+    #[Assert\Length(min: 5, max: 30,
+        minMessage: 'Le pseudo doit contenir au moins 5 caractères.',
+        maxMessage: 'Le pseudo ne peut pas dépasser 30 caractères.'
+    )]
+    #[Assert\NotBlank(message: 'Le pseudo ne peut pas être vide.')]
     #[ORM\Column(name: 'pseudo', length: 30)]
     private ?string $pseudo = null;
 
-
+    #[Assert\Length(max: 40,
+        maxMessage: 'Le nom ne peut pas dépasser 40 caractères.'
+    )]
+    #[Assert\NotBlank(message: 'Le nom ne peut pas être vide.')]
     #[ORM\Column(name:'nom', length: 40)]
     private ?string $nom = null;
 
+    #[Assert\Length(max: 40,
+        maxMessage: 'Le prénom ne peut pas dépasser 40 caractères.'
+    )]
+    #[Assert\NotBlank(message: 'Le prénom ne peut pas être vide.')]
     #[ORM\Column(name: 'prenom', length: 40)]
     private ?string $prenom = null;
 
-
+    #[Assert\Length(max: 15,
+        maxMessage: 'Le numéro de téléphone ne peut pas dépasser 15 caractères.'
+    )]
+    #[Assert\NotBlank(message: 'Le numéro de téléphone ne peut pas être vide.')]
     #[ORM\Column(name: 'telephone', length: 15, nullable: true)]
     private ?string $telephone = null;
 
+    #[Assert\Email(message: 'Cet e-mail{{ value }} n\'est pas un e-mail valide.')]
+    #[Assert\NotBlank(message: 'L\'adresse e-mail ne peut pas être vide.')]
     #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;
 
@@ -65,6 +85,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'stagiaires')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site = null;
+
+    #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'imageNom', size: 'imageTaille')]
+    private $imageProfil = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageNom = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageTaille = null;
 
     public function __construct()
     {
@@ -274,5 +303,39 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->pseudo;
+    }
+
+    public function getImageProfil()
+    {
+        return $this->imageProfil;
+    }
+
+    public function setImageProfil(?File $imageProfil = null): void
+    {
+        $this->imageProfil = $imageProfil;
+    }
+
+    public function getImageNom(): ?string
+    {
+        return $this->imageNom;
+    }
+
+    public function setImageNom(?string $imageNom): static
+    {
+        $this->imageNom = $imageNom;
+
+        return $this;
+    }
+
+    public function getImageTaille(): ?int
+    {
+        return $this->imageTaille;
+    }
+
+    public function setImageTaille(?int $imageTaille): static
+    {
+        $this->imageTaille = $imageTaille;
+
+        return $this;
     }
 }
