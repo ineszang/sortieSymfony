@@ -37,18 +37,6 @@ class Ville
         return $this->id;
     }
 
-    public function getIdVille(): ?int
-    {
-        return $this->idVille;
-    }
-
-    public function setIdVille(int $idVille): static
-    {
-        $this->idVille = $idVille;
-
-        return $this;
-    }
-
     public function getNomVille(): ?string
     {
         return $this->nomVille;

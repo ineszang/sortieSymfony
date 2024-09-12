@@ -66,18 +66,6 @@ class Participant
         return $this->id;
     }
 
-    public function getIdParticipant(): ?int
-    {
-        return $this->idParticipant;
-    }
-
-    public function setIdParticipant(int $idParticipant): static
-    {
-        $this->idParticipant = $idParticipant;
-
-        return $this;
-    }
-
     public function getPseudo(): ?string
     {
         return $this->pseudo;

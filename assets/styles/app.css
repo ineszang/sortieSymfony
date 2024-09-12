@@ -48,3 +48,30 @@ header {
 header {
     background-color: #9c0b59;
 }
+
+.colorChampsForm {
+    color: #9c0b59;
+}
+.colorborder:focus {
+    border-color: #9c0b59;
+}
+
+#lieu-results {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+}
+#lieu-results div:hover {
+    background-color: #f0f0f0;
+}
+
+.boutonCreer {
+    background-color: #9c0b59;
+    transition:1s;
+}
+.boutonCreer:hover {
+    background-color: #c09cc7;
+    transition:1s;
+}
