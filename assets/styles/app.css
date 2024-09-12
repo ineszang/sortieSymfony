@@ -1,5 +1,5 @@
 * {
-    font-family: "Gloria Hallelujah";
+    font-family: "Bree Serif";
 }
 
 body {
@@ -7,53 +7,43 @@ body {
 }
 
 header {
-    background-color: white;
-}
- .team-member {
-     border: 1px solid #ccc;
-     padding: 10px;
-     margin: 10px;
-     border-radius: 5px;
-     text-align: center;
- }
-.team-member img {
-    border-radius: 50%;
-    max-width: 100px;
-    max-height: 100px;
+    background-color: #F2F2F2;
 }
 .titlehome {
-    color: #9c0b59
+    color: #304F8C
 }
 
 .titleDateHome {
-    color: #8ec640
+    color: #4EB3C3
 }
 
 .titleButton2Home {
-    background-color: #c09cc7
+    background-color: #BF4545;
+    transition: 1s;
 }
 
 .titleButton1Home {
-    background-color: #18bcf1;
+    background-color: #F2811D;
+    transition: 1s;
 }
 
+.hoverheaderbuttons {
+    color: #304F8C;
+}
 .hoverheaderbuttons:hover {
-    color: #18bcf1;
+    color: #66A3F2;
 }
 
 .titleButton1Home:hover, .titleButton2Home:hover {
-    background-color: #9c0b59;
-}
-
-header {
-    background-color: #9c0b59;
+    background-color: #66A3F2;
+    transition: 1s;
 }
 
 .colorChampsForm {
-    color: #9c0b59;
+    color: #304F8C;
 }
 .colorborder:focus {
-    border-color: #9c0b59;
+    border-color: #BF4545;
 }
 
 .colorborder {
@@ -72,14 +62,22 @@ header {
 }
 
 .boutonCreer {
-    background-color: #9c0b59;
+    background-color: #BF4545;
     transition:1s;
 }
 .boutonCreer:hover {
-    background-color: #c09cc7;
+    background-color: #66A3F2;
     transition:1s;
 }
 
-.error {
-    color: #e71c1c;
+.error, .titleForm {
+    color: #BF4545;
+}
+
+.HEADERlOGO {
+    width: 100px;
+}
+
+.boutonconnect {
+    color: #BF4545;
 }
