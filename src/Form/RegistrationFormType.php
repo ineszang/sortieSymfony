@@ -23,10 +23,52 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {        
         $builder
-            ->add('pseudo')
-            ->add('mail')
-            ->add('nom')
-            ->add('prenom')
+            ->add('pseudo', TextType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un pseudo',
+                    ]),
+                    new Length([
+                        'min' => 5,
+                        'minMessage' => 'Votre pseudo devrait avoir au moins {{ limit }} caractères',
+                        'max' => 30,
+                    ]),
+                ],
+            ])
+            ->add('mail', EmailType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un e-mail',
+                    ]),
+                    new Email([
+                        'message' => 'Entrez un e-mail valide',
+                    ]),
+                ],
+            ])
+            ->add('nom', TextType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre nom',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre nom devrait avoir au moins {{ limit }} caractères',
+                        'max' => 40,
+                    ]),
+                ],
+            ])
+            ->add('prenom', TextType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre prénom',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre prénom devrait avoir au moins {{ limit }} caractères',
+                        'max' => 40,
+                    ]),
+                ],
+            ])
             ->add('telephone')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,

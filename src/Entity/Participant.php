@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
@@ -21,8 +22,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
+
     #[ORM\Column(name: 'pseudo', length: 30)]
     private ?string $pseudo = null;
+
 
     #[ORM\Column(name:'nom', length: 40)]
     private ?string $nom = null;
@@ -30,11 +33,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'prenom', length: 40)]
     private ?string $prenom = null;
 
+
     #[ORM\Column(name: 'telephone', length: 15, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;
+
 
     #[ORM\Column(name: 'mot_de_passe', length: 255)]
     private ?string $motDePasse = null;
