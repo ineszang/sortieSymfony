@@ -112,7 +112,7 @@
                         <input type="text"
                                id="{{ field_name(sortieForm.siteOrganisateur) }}"
                                name="{{ field_name(sortieForm.siteOrganisateur) }}"
-                               value="{{ user.getSite().getNomSite() }}"
+                               value="{{ field_value(sortieForm.siteOrganisateur) }}"
                                readonly
                         >
                     </div>
@@ -123,7 +123,7 @@
                         <input type="text"
                                id="{{ field_name(sortieForm.organisateur) }}"
                                name="{{ field_name(sortieForm.organisateur) }}"
-                               value="{{ user.getPseudo() }}"
+                               value="{{ field_value(sortieForm.organisateur) }}"
                                readonly
                         >
                     </div>
