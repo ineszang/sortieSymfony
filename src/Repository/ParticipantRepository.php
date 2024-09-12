@@ -31,13 +31,42 @@ class ParticipantRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Participant
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function findOneByPseudo($value): Participant
+        {
+            return $this->createQueryBuilder('p')
+                ->andWhere('p.pseudo = :pseudo')
+                ->setParameter('pseudo', $value)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }
+
+        /**
+        * @return Participant[] Returns an array of Participant objects
+        */
+        public function findByUser($username, $password): array
+        {
+            return $this->createQueryBuilder('p')
+                ->andWhere('p.pseudo = :pseudo')
+                ->andWhere('p.motDePasse = :mdp')
+                ->setParameter('pseudo', $username)
+                ->setParameter('mdp', $password)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+       /* public function findByUser($username, $password): Participant
+        {
+            return $this->createQueryBuilder('p')
+                ->andWhere('p.pseudo = :pseudo')
+                ->andWhere('p.mot_de_passe = :mdp')
+                ->setParameter('pseudo', $username)
+                ->setParameter('mdp', $password)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        }*/
+
+
 }

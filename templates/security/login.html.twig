@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+        <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+            {% if app.user %}
+                <div class="alert alert-info text-center">
+                    Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}. <a href="{{ path('app_logout') }}" class="text-blue-500">Déconnexion</a>
+                </div>
+            {% else %}
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    <h1 class="text-2xl font-bold mb-6 text-center">Se connecter</h1>
+                    <div class="mb-4">
+                        <label for="username" class="block text-gray-700">Pseudo :</label>
+                        <input type="text" value="{{ last_username }}" name="username" id="username" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="username" required autofocus>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700">Mot de passe :</label>
+                        <input type="password" name="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="current-password" required>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="mb-4">
+                        <input type="checkbox" name="_remember_me" id="_remember_me" class="mr-2 leading-tight">
+                        <label for="_remember_me" class="text-gray-700">Se souvenir de moi</label>
+                    </div>
+
+                    <button class="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50" type="submit">Connexion</button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p>Pas de compte ? <a href="{{ path('app_register') }}" class="text-blue-500">Inscrivez-vous</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

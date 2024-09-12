@@ -7,15 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Table(name: 'site')]
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'id')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column(name: 'nom_site', type: 'string', length: 60)]
     private ?string $nomSite = null;
 
     /**

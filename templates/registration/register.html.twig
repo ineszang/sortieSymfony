@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+        <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">S'inscrire</h1>
+
+            {{ form_start(registrationForm, {'attr': {'data-turbo': 'false'}}) }}
+                <div class="mb-4">
+                    {{ form_label(registrationForm.pseudo, 'Pseudo :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.pseudo, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(registrationForm.mail, 'E-mail :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.mail, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(registrationForm.nom, 'Nom :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.nom, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(registrationForm.prenom, 'Prénom :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.prenom, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(registrationForm.telephone, 'Téléphone :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.telephone, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(registrationForm.mot_de_passe, 'Mot de passe :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.mot_de_passe, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <div class="mb-4">
+                    <label for="site_id" class="block text-gray-700">Site :</label>
+                    <select class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="site_id" name="site_id">
+                        {% for site in sites %}
+                            <option value="{{ site.id }}">{{ site.nomSite }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'mr-2 leading-tight'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'text-gray-700'}}) }}
+                </div>
+
+                <button type="submit" class="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">Inscription</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}
