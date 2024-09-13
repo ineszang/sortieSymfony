@@ -19,6 +19,13 @@ class SortiesService
 
     //affichage du bouton ouvrir
 
+    //se desister
+
+    //cloturer
+
+    //supprimer
+
+
 
 
 }

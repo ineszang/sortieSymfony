@@ -104,10 +104,10 @@ class SortiesController extends AbstractController
         $recherche = $request->query->get('recherche');
         $dateStart = $request->query->get('dateStart');
         $dateEnd = $request->query->get('dateEnd');
-        $mesSorties = $request->query->get('mesSorties');
-        $mesInscriptions = $request->query->get('mesInscriptions');
-        $pasMesInscriptions = $request->query->get('pasMesInscriptions');
-        $sortiesFinies = $request->query->get('sortiesFinies');
+        $mesSorties = $request->query->get('mesSorties') === '1';
+        $mesInscriptions = $request->query->get('mesInscriptions') === '1';
+        $pasMesInscriptions = $request->query->get('pasMesInscriptions') === '1';
+        $sortiesFinies = $request->query->get('sortiesFinies') === '1';
 
         $sites = $siteRepository->findAll();
 
@@ -121,9 +121,10 @@ class SortiesController extends AbstractController
         }
 
         $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
+        $idUtilisateur = $participant->getId();
+        var_dump("userid=",$idUtilisateur);
 
-
-        //
+        var_dump("mesInscriptions=", $mesInscriptions);
         //chercher dans la bdd
         $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
         //$sorties = $sortieRepository->findPublishedSorties();
@@ -142,6 +143,7 @@ class SortiesController extends AbstractController
             'mesInscriptions' => $mesInscriptions,
             'pasMesInscriptions' => $pasMesInscriptions,
             'sortiesFinies' => $sortiesFinies,
+            'idUtilisateur' => $idUtilisateur
         ]);
     }
 

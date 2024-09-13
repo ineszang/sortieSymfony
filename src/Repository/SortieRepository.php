@@ -53,23 +53,30 @@ class SortieRepository extends ServiceEntityRepository
         // Filtrer par les sorties auxquelles l'utilisateur est inscrit
         if ($mesInscriptions) {
             $queryBuilder->innerJoin('s.participants', 'p')
-                ->andWhere('p.user = :userId')
+                ->andWhere('p.id = :userId')
                 ->setParameter('userId', $userId);
         }
 
         // Filtrer par les sorties auxquelles l'utilisateur n'est pas inscrit
         if ($pasMesInscriptions) {
             $queryBuilder->leftJoin('s.participants', 'p')
-                ->andWhere('p.user IS NULL OR p.user != :userId')
+                ->andWhere('p.id != :userId OR p.id IS NULL')
                 ->setParameter('userId', $userId);
         }
 
+        // Date limite pour les sorties finies depuis plus d'un mois
+        $dateLimit = new \DateTime();
+        $dateLimit->modify('-1 month');
+
         // Filtrer par les sorties passées
         if ($sortiesFinies) {
-            $queryBuilder->andWhere('s.dateHeureFin < CURRENT_DATE()');
+            $queryBuilder->andWhere('s.dateHeureFin < CURRENT_DATE()')
+                ->andWhere('s.dateHeureFin >= :dateLimit')
+                ->setParameter('dateLimit', $dateLimit);
         } else {
-            // Si on ne veut pas les sorties passées, on inclut les futures et les en cours
-            $queryBuilder->andWhere('s.dateHeureFin >= CURRENT_DATE()');
+            // Inclure les futures et les en cours
+            $queryBuilder->andWhere('s.dateHeureFin >= :dateLimit')
+                ->setParameter('dateLimit', $dateLimit);
         }
 
         return $queryBuilder->getQuery()->getResult();

@@ -14,6 +14,7 @@
             <div class="details-container">
                 <p>{{  'Date du jour : ' ~ "now"|date("d/m/Y") }} </p>
                 <p>{{ 'Participant : ' ~ utilisateur }}</p>
+                <p>{{ 'Participant : ' ~ idUtilisateur }}</p>
             </div>
         </div>
 
@@ -53,15 +54,15 @@
                             Sorties dont je suis l'organisateur/trice
                         </label>
                         <label>
-                            <input type="checkbox" name="mesInscriptions" value="2">
+                            <input type="checkbox" name="mesInscriptions" value="1">
                             Sorties auxquelles je suis inscrit/e
                         </label>
                         <label>
-                            <input type="checkbox" name="pasMesInscriptions" value="3">
+                            <input type="checkbox" name="pasMesInscriptions" value="1">
                             Sorties auxquelles je ne suis pas inscrit/e
                         </label>
                         <label>
-                            <input type="checkbox" name="sortiesFinies" value="4">
+                            <input type="checkbox" name="sortiesFinies" value="1">
                             Sorties passées
                         </label>
                     </div>
@@ -96,7 +97,9 @@
                                             {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
                                             {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
 
-                                            {{ diff > 0 ? 'dans ' ~ diff ~ ' jours' : 'Aujourd\'hui' }}
+                                            {{ diff > 0 ? 'dans ' ~ diff ~ ' jours'  }}
+                                            {{ diff == 0 ? 'Aujourd\'hui' }}
+                                            {{ diff < 0 ? 'fini depuis ' ~  diff|abs ~ ' jours' }}
                                             ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
                                         {% else %}
                                             Non définie
@@ -108,7 +111,7 @@
                             </div>
                             <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
                             <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
-                            <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
+                            <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}</p>
                             <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
 
                         </div>
