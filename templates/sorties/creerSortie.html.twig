@@ -251,7 +251,7 @@
                             li.classList.add('cursor-pointer', 'p-2', 'hover:bg-gray-200');
 
                             li.onclick = function() {
-                                document.getElementById('search-lieu').value = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nom} (${lieu.ville.codePostal})`;
+                                document.getElementById('search-lieu').value = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nomVille} (${lieu.ville.codePostal})`;
                                 document.getElementById('{{ field_name(sortieForm.lieu) }}').value = lieu.id;
                                 results.innerHTML = '';
                             };
@@ -301,7 +301,8 @@
                         if (data.success) {
                             // Le lieu a été créé avec succès, on met à jour le formulaire principal
                             document.getElementById('{{ field_name(sortieForm.lieu) }}').value = data.lieuId;
-                            document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.villeNom} (${data.villeCodePostal})`;
+                            document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
+                            document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
 
                             // Masquer le formulaire de création du lieu
                             toggleLieuCreationForm();

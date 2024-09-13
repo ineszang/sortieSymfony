@@ -25,6 +25,9 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    App\Service\FileUploaderService:
+        arguments:
+            $targetDirectory: '%images_directory%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
