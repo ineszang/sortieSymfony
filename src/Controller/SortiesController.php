@@ -148,9 +148,6 @@ class SortiesController extends AbstractController
 
         $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
         $idUtilisateur = $participant->getId();
-        var_dump("userid=",$idUtilisateur);
-
-        var_dump("mesInscriptions=", $mesInscriptions);
         //chercher dans la bdd
         $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
         //$sorties = $sortieRepository->findPublishedSorties();

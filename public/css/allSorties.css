@@ -4,6 +4,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding-bottom: 25px;
 }
 
 body {
@@ -143,7 +144,6 @@ p {
     grid-template-columns: repeat(auto-fill, minmax(375px, 1fr)); /* Ajuste le nombre de colonnes en fonction de la taille de l'écran */
     gap: 16px; /* Espace entre les cartes */
     margin-top: 25px;
-
 }
 
 .card {
