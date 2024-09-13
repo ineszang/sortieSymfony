@@ -3,34 +3,27 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Lieu;
-use App\Entity\Participant;
-use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
-use App\Form\LieuType;
-use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
+use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function PHPUnit\Framework\throwException;
 
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
-    public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager,
-                           SluggerInterface $slugger, Security $security, ValidatorInterface $validator, VilleRepository $villeRepository, // Ajout du repository pour les villes
-                           LieuRepository $lieuRepository): Response
+    public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, FileUploaderService $fileUploaderService,
+                           SluggerInterface $slugger, Security $security, ValidatorInterface $validator, VilleRepository $villeRepository): Response
     {
         $sortie = new Sortie();
 
@@ -77,34 +70,15 @@ class SortiesController extends AbstractController
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $imageFile = $sortieForm->get('image')->getData();
             if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = $fileUploaderService->upload($imageFile);
 
-                try {
-                    $imageFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    throw $e;
-                }
-
-                $sortie->setUrlPhoto('/uploads/images/'.$newFilename);
+                $sortie->setUrlPhoto('/uploads/images/' . $newFilename);
             }
 
             $entityManager->persist($sortie);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_home');
-        }
-
-        $newLieu = new Lieu();
-        $formLieu = $this->createForm(LieuType::class, $newLieu);
-        $formLieu->handleRequest($request);
-
-        if ($formLieu->isSubmitted()) {//si c'est le cas je set plutot le lieu qu'il a crée
-            $sortie->setLieu($newLieu);
         }
 
         $villes = $villeRepository->findAll();
@@ -114,7 +88,6 @@ class SortiesController extends AbstractController
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
             "sortieForm" => $sortieForm,
-            "lieuForm" => $formLieu,
             'user' => $user,
             'errors' => $errors,
             'villes' => $villes
