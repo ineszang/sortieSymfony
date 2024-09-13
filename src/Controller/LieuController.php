@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,5 +48,42 @@ class LieuController extends AbstractController
             ];
         }
         return new JsonResponse($results);
+    }
+
+    #[Route('/creer-lieu', name: 'creer_lieu', methods: ['POST'])]
+    public function creerLieu(Request $request, EntityManagerInterface $em, VilleRepository $villeRepo): JsonResponse
+    {
+        // Vérifiez que la requête est bien AJAX
+        if ($request->isXmlHttpRequest()) {
+            $data = json_decode($request->getContent(), true);
+
+            // Recherchez la ville par son ID
+            $ville = $villeRepo->find($data['villeId']);
+
+            if ($ville) {
+                // Créez le lieu et enregistrez en base de données
+                $lieu = new Lieu();
+                $lieu->setNomLieu($data['nomLieu']);
+                $lieu->setRue($data['rue']);
+                $lieu->setVille($ville);
+                $lieu->setLatitude($data['latitude']);
+                $lieu->setLongitude($data['longitude']);
+
+                // Persistez le lieu dans la base de données
+                $em->persist($lieu);
+                $em->flush();
+
+                // Réponse JSON avec les détails du lieu créé
+                return $this->json([
+                    'success' => true,
+                    'lieuId' => $lieu->getId(),
+                    'villeNom' => $lieu->getVille()->getNomVille(),
+                    'villeCodePostal' => $lieu->getVille()->getCodePostal()
+                ]);
+            }
+        }
+
+        // En cas d'erreur, renvoyer une réponse JSON d'échec
+        return $this->json(['success' => false], 400);
     }
 }

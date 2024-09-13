@@ -81,3 +81,20 @@ header {
 .boutonconnect {
     color: #BF4545;
 }
+
+.form-container {
+    width: 50%;
+}
+
+.map-container {
+    width: 50%;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
