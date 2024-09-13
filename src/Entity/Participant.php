@@ -60,7 +60,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;
 
-
     #[ORM\Column(name: 'mot_de_passe', length: 255)]
     private ?string $motDePasse = null;
 
@@ -68,7 +67,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $administrateur = false;
 
     #[ORM\Column(name: 'actif', type: 'boolean')]
-    private ?bool $actif = true;
+    private ?bool $actif = false;
 
     /**
      * @var Collection<int, Sortie>
@@ -313,6 +312,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImageProfil(?File $imageProfil = null): void
     {
         $this->imageProfil = $imageProfil;
+        if (null !== $imageProfil) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
     public function getImageNom(): ?string

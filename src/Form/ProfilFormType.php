@@ -47,15 +47,18 @@ class ProfilFormType extends AbstractType
         ])
         ->add('mot_de_passe', RepeatedType::class, [
             'type' => PasswordType::class,
+            'required' => false,
             'invalid_message' => 'Les saisies pour le mot de passe doivent être identiques.',
             'options' => ['attr' => ['class' => 'password-field']],
-            'required' => false,
-            'first_options'  => ['label' => 'Mot de passe : '],
-            'second_options' => ['label' => 'Confirmez le mot de passe : '],
+            
+            
+            'first_options'  => ['label' => 'Mot de passe : ', 'empty_data' => ''],
+            'second_options' => ['label' => 'Confirmez le mot de passe : ', 'empty_data' => ''],
         ])
         ->add('site', EntityType::class, [
             'class' => Site::class,
             'choice_label' => 'nom_site',
+            'empty_data' => '---------------',
             'required' => false,
         ])
         ->add('imageProfil', VichImageType::class, [
