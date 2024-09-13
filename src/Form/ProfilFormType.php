@@ -9,12 +9,14 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -61,18 +63,21 @@ class ProfilFormType extends AbstractType
             'empty_data' => '---------------',
             'required' => false,
         ])
-        ->add('imageProfil', VichImageType::class, [
-            'label' => 'Photo de profil : ',
-            'required' => false,
-            'allow_delete' => true,
-            'delete_label' => 'Supprimer la photo de profil',
-            'download_label' => '...',
-            'download_uri' => true,
-            'image_uri' => true,
-            'imagine_pattern' => '...',
-            'asset_helper' => true,
-        ]);
-        ;
+            ->add('image', FileType::class, [
+                'label' => 'Image (JPEG, PNG)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image (JPEG or PNG)',
+                    ])
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

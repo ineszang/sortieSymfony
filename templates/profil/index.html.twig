@@ -64,14 +64,15 @@
                         focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
                 </div>
 
-                <div class="error">
-                    {{form_errors(ProfilForm.imageProfil)}}
-                </div>
-                <div class="mb-4">
-                    {{ form_label(ProfilForm.imageProfil, 'Image de profil : ', {'label_attr': {'class': 'block text-gray-700'}}) }}
-                    {{ form_widget(ProfilForm.imageProfil, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg 
-                        focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
-                </div>
+
+            <div class="relative mb-4">
+                <label for="{{ field_name(ProfilForm.image) }}" class="leading-7 colorChampsForm mb-10">Photo de profil</label>
+                <input type="file"
+                       id="{{ field_name(ProfilForm.image) }}"
+                       name="{{ field_name(ProfilForm.image) }}"
+                       value="{{ field_value(ProfilForm.image) }}"
+                >
+            </div>
                 <div class="mb-4">
                     {{form_label(ProfilForm.site, 'Site : ', {'label_attr': {'class': 'block text-gray-700'}} )}}
                     {{form_widget(ProfilForm.site, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg 

@@ -69,6 +69,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'actif', type: 'boolean')]
     private ?bool $actif = false;
 
+
     /**
      * @var Collection<int, Sortie>
      */
@@ -85,14 +86,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site = null;
 
-    #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'imageNom', size: 'imageTaille')]
-    private $imageProfil = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $imageNom = null;
+    #[ORM\Column(length: 400, nullable: true)]
+    private ?string $urlPhoto = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $imageTaille = null;
+
 
     public function __construct()
     {
@@ -137,6 +135,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): static
+    {
+        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }
@@ -302,44 +312,5 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->pseudo;
-    }
-
-    public function getImageProfil()
-    {
-        return $this->imageProfil;
-    }
-
-    public function setImageProfil(?File $imageProfil = null): void
-    {
-        $this->imageProfil = $imageProfil;
-        if (null !== $imageProfil) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getImageNom(): ?string
-    {
-        return $this->imageNom;
-    }
-
-    public function setImageNom(?string $imageNom): static
-    {
-        $this->imageNom = $imageNom;
-
-        return $this;
-    }
-
-    public function getImageTaille(): ?int
-    {
-        return $this->imageTaille;
-    }
-
-    public function setImageTaille(?int $imageTaille): static
-    {
-        $this->imageTaille = $imageTaille;
-
-        return $this;
     }
 }
