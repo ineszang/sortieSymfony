@@ -7,9 +7,12 @@ use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Site;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -51,13 +54,15 @@ class CreationSortieType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'id',
             ])
-            ->add('organisateur', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
+            ->add('organisateur', TextType::class, [
+                'data' => $options['organisateur_pseudo'],
+                'disabled' => true,
+                'label' => 'Organisateur',
             ])
-            ->add('siteOrganisateur', EntityType::class, [
-                'class' => Site::class,
-                'choice_label' => 'id',
+            ->add('siteOrganisateur', TextType::class, [
+                'data' => $options['site_organisateur_nom'],
+                'disabled' => true,
+                'label' => 'Site Organisateur',
             ])
         ;
     }
@@ -66,6 +71,8 @@ class CreationSortieType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Sortie::class,
+            'organisateur_pseudo' => null,
+            'site_organisateur_nom' => null,
         ]);
     }
 }

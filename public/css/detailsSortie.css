@@ -4,11 +4,10 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding-bottom: 25px;
 }
 
 body {
-    background-color: WHITE;
+    background-color: #f8f3dc;
 }
 
 p {
@@ -139,21 +138,21 @@ p {
     RESULT CONTAINER
  */
 
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(375px, 1fr)); /* Ajuste le nombre de colonnes en fonction de la taille de l'écran */
-    gap: 16px; /* Espace entre les cartes */
-    margin-top: 25px;
-}
+
 
 .card {
-
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
     border-radius: 0.575rem;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
     transition: box-shadow 0.15s ease-in-out;
-    max-height: 600px;
-    background-color: rgb(243 244 246);
+    min-height: 600px;
+    margin-top: 35px;
+    margin-left: 35px;
+    margin-right: 35px;
 }
 
 .card-title {
@@ -165,7 +164,7 @@ p {
 }
 
 .card-header {
-    background-color: rgb(243 244 246);
+    background-color: #ffffff; /* Couleur de fond du header */
     color: #000000; /* Couleur du texte */
     padding: 10px;
 }
@@ -175,7 +174,7 @@ p {
 }
 
 .card-footer {
-    background-color: rgb(243 244 246);
+    background-color: #ffffff; /* Couleur de fond du footer */
     padding: 10px;
     text-align: right;
 }
