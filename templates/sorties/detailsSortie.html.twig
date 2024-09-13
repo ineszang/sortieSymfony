@@ -83,31 +83,17 @@
                         <p>rien</p>
                     {% endif %}
 
+
+                    {% if sortie.etat.libelle == "Ouvert" %}
+                        <button>S'inscrire</button>
+                    {% else %}
+                        <p>rien</p>
+                    {% endif %}
+
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>
         {% endif %}
-
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Initialisation de la carte
-        var map = L.map('map').setView([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}], 13);
-
-        // Ajout du fond de carte OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-        // Ajout d'un marqueur
-        L.marker([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}]).addTo(map)
-            .bindPopup('Votre sortie est ici !')
-            .openPopup();
-    </script>
-
-
-
 
 
 

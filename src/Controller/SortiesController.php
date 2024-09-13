@@ -96,7 +96,7 @@ class SortiesController extends AbstractController
     }
 
     #[Route(['/allSorties'], name: 'app_allSorties')]
-    public function indexSorties(SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request): Response
+    public function indexSorties(ParticipantRepository $p,SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request): Response
     {
 
 
@@ -120,12 +120,13 @@ class SortiesController extends AbstractController
             $username = "no user";
         }
 
+        $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
 
 
         //
         //chercher dans la bdd
-        $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, 1);
-
+        $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
+        //$sorties = $sortieRepository->findPublishedSorties();
 
 
 
@@ -146,12 +147,21 @@ class SortiesController extends AbstractController
 
 
     #[Route(['/detailsSorties/{id}'], name: 'app_details_sorties')]
-    public function indexDetailsSortie(int $id,SortieRepository $sortieRepository): Response
+    public function indexDetailsSortie(ParticipantRepository $p,int $id,SortieRepository $sortieRepository): Response
     {
         //TODO : trouver le user en ligne
         $utilisateur = "Melaine F.";
 
         $sortie = $sortieRepository->findOneBySomeField($id);
+
+        $utilisateur = $this->getUser();
+        $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
+
+        //todo : faire une requete
+        $nbDeParticpant = 2;
+
+
+        $isSubscrible = $sortie->getEtat() === "Ouvert" && $nbDeParticpant < $sortie->getNbIncriptionsMax() && $sortie->getOrganisateur()->getId() !== $participant->getId();
 
 
 
@@ -162,6 +172,7 @@ class SortiesController extends AbstractController
         return $this->render('sorties/detailsSortie.html.twig', [
             'utilisateur' => $utilisateur,
             'sortie' => $sortie,
+            'isSubscrible' => $isSubscrible
 
         ]);
     }

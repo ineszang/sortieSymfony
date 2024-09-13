@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #f8f3dc;
+    background-color: WHITE;
 }
 
 p {
@@ -143,6 +143,7 @@ p {
     grid-template-columns: repeat(auto-fill, minmax(375px, 1fr)); /* Ajuste le nombre de colonnes en fonction de la taille de l'écran */
     gap: 16px; /* Espace entre les cartes */
     margin-top: 25px;
+
 }
 
 .card {
@@ -150,9 +151,9 @@ p {
     border-radius: 0.575rem;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
     transition: box-shadow 0.15s ease-in-out;
     max-height: 600px;
+    background-color: rgb(243 244 246);
 }
 
 .card-title {
@@ -164,7 +165,7 @@ p {
 }
 
 .card-header {
-    background-color: #ffffff; /* Couleur de fond du header */
+    background-color: rgb(243 244 246);
     color: #000000; /* Couleur du texte */
     padding: 10px;
 }
@@ -174,7 +175,7 @@ p {
 }
 
 .card-footer {
-    background-color: #ffffff; /* Couleur de fond du footer */
+    background-color: rgb(243 244 246);
     padding: 10px;
     text-align: right;
 }
