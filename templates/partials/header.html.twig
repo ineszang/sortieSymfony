@@ -8,9 +8,7 @@
             <a href="{{ path('app_home') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Home</a>
             <a  class="hoverheaderbuttons mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Liste d'activités</a>
             <a href="{{ path('sortie_form') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Proposer une activité</a>
-            <!---{% if app.user.roles == 'ROLE_ADMIN' %}-->
                 <a href="{{ path('ville_form') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Creer une ville</a>
-            <!---{% endif %}-->
             <a class="hoverheaderbuttons mr-10" style="font-size: 20px">Profil</a>
         </nav>
         {% if app.user %}
