@@ -103,3 +103,7 @@ header {
 .hidden {
     display: none;
 }
+
+.container-img-previsualisation {
+    width: 20%;
+}

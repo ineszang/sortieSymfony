@@ -18,12 +18,8 @@
         {% if sortie is not empty %}
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
-                        <div class="container-img">
+                            <h1 class="card-title">{{ sortie.nomSortie }}</h1>
                             <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
-
-                        </div>
-
                     </div>
 
                     <div class="card-body">
@@ -52,7 +48,7 @@
                             </div>
                         </div>
                         <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
-                        <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
+                        <p><strong>lieu : </strong> {{sortie.lieu}}</p>
                         <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
                         <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
                         <p><strong>Etat : </strong> {{sortie.etat.libelle }}</p>
@@ -76,20 +72,10 @@
                             .bindPopup('Votre sortie est ici !')
                             .openPopup();
                     </script>
-
-                    {% if sortie.etat.libelle == "Ouvert" %}
-                        <p>Les participants : </p>
-                    {% else %}
-                        <p>rien</p>
-                    {% endif %}
-
-
-                    {% if sortie.etat.libelle == "Ouvert" %}
-                        <button>S'inscrire</button>
-                    {% else %}
-                        <p>rien</p>
-                    {% endif %}
-
+                    <p>Les participants : </p>
+                    {% for participant in participants %}
+                        <p>{{ participant.nom }}</p>
+                    {% endfor %}
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>

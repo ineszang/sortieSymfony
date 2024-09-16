@@ -1,0 +1,366 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() ~ title }}{% endblock %}
+
+{% block body %}
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-5 mx-auto flex flex-wrap items-center">
+            <div class="w-full bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10">
+                <h2 class="titleForm text-lg font-medium title-font mb-5">Modifier l'activité</h2>
+                {{ form_start(sortieForm) }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.nomSortie) }}" class="leading-7 colorChampsForm">Intitulé de la sortie</label>
+                        <input type="text"
+                               id="{{ field_name(sortieForm.nomSortie) }}"
+                               name="{{ field_name(sortieForm.nomSortie) }}"
+                               value="{{ field_value(sortieForm.nomSortie) }}"
+                               placeholder="titre"
+                               class="w-full rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        >
+                        {% for error in field_errors(sortieForm.nomSortie) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.infosSortie) }}" class="leading-7 colorChampsForm">Informations sur la sortie</label>
+                        <input type="text"
+                               id="{{ field_name(sortieForm.infosSortie) }}"
+                               name="{{ field_name(sortieForm.infosSortie) }}"
+                               value="{{ field_value(sortieForm.infosSortie) }}"
+                               placeholder="description"
+                               class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        >
+                        {% for error in field_errors(sortieForm.infosSortie) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.dateHeureDebut) }}" class="leading-7 colorChampsForm">Date du <span class="font-bold">début</span> de la sortie</label>
+                        <input type="datetime-local"
+                               id="{{ field_name(sortieForm.dateHeureDebut) }}"
+                               name="{{ field_name(sortieForm.dateHeureDebut) }}"
+                               value="{{ sortieForm.dateHeureDebut.vars.value }}"
+                               class="flatpickr"
+                               >
+                        {% for error in field_errors(sortieForm.dateHeureDebut) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.dateHeureFin) }}" class="leading-7 colorChampsForm">Date de la <span class="font-bold">fin</span> de l'activité</label>
+                        <input type="datetime-local"
+                               id="{{ field_name(sortieForm.dateHeureFin) }}"
+                               name="{{ field_name(sortieForm.dateHeureFin) }}"
+                               value="{{ sortieForm.dateHeureDebut.vars.value }}"
+                               class="flatpickr"
+                               readonly
+                               >
+                        {% for error in field_errors(sortieForm.dateHeureFin) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.duree) }}" class="leading-7 colorChampsForm"><span class="font-bold">Durée</span> de l'activité</label>
+                        <input type="number"
+                               id="{{ field_name(sortieForm.duree) }}"
+                               name="{{ field_name(sortieForm.duree) }}"
+                               value="{{ field_value(sortieForm.duree) }}"
+                               placeholder="0"
+                               min="0"
+                               class="w-20 bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               oninput="calculateEndDate()"
+                               ><span> heures</span>
+                        {% for error in field_errors(sortieForm.duree) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.dateClotureInscription) }}" class="leading-7 colorChampsForm">Date de <span class="font-bold">clôture des inscriptions</span></label>
+                        <input type="datetime-local"
+                               id="{{ field_name(sortieForm.dateClotureInscription) }}"
+                               name="{{ field_name(sortieForm.dateClotureInscription) }}"
+                               value="{{ sortieForm.dateHeureDebut.vars.value }}"
+                               class="flatpickr"
+                               >
+                        <div id="date-cloture-error" class="text-red-500 text-sm mt-2"></div>
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.nbIncriptionsMax) }}" class="leading-7 colorChampsForm">Nombre maximum de participants</label>
+                        <input type="number"
+                               id="{{ field_name(sortieForm.nbIncriptionsMax) }}"
+                               name="{{ field_name(sortieForm.nbIncriptionsMax) }}"
+                               value="{{ field_value(sortieForm.nbIncriptionsMax) }}"
+                               min="0"
+                               placeholder="0"
+                               class="w-20 bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               >
+                        {% for error in field_errors(sortieForm.nbIncriptionsMax) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.image) }}" class="leading-7 colorChampsForm mb-10">Choisir une image pour illustrer mon activité</label>
+                        <input type="file"
+                               id="{{ field_name(sortieForm.image) }}"
+                               name="{{ field_name(sortieForm.image) }}"
+                               value="{{ field_value(sortieForm.image) }}"
+                        >
+                        {% for error in field_errors(sortieForm.image) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                        <p>Images actuelle:</p><div class="container-img-previsualisation">
+                            <img id="image-sortie" class="img-sortie " src="{{ photoPrevisualisation ?  asset(photoPrevisualisation) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ field_value(sortieForm.image) }}">
+                        </div>
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.siteOrganisateur) }}" class="leading-7 colorChampsForm mb-10">
+                            Le site organisateur de cette activité (ton campus)
+                        </label>
+                        <input type="text"
+                               id="{{ field_name(sortieForm.siteOrganisateur) }}"
+                               name="{{ field_name(sortieForm.siteOrganisateur) }}"
+                               value="{{ field_value(sortieForm.siteOrganisateur) }}"
+                               readonly
+                        >
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(sortieForm.organisateur) }}" class="leading-7 colorChampsForm mb-10">
+                            Organisateur de l'événement (vous)
+                        </label>
+                        <input type="text"
+                               id="{{ field_name(sortieForm.organisateur) }}"
+                               name="{{ field_name(sortieForm.organisateur) }}"
+                               value="{{ field_value(sortieForm.organisateur) }}"
+                               readonly
+                        >
+                    </div>
+                    <div class="relative mb-4 col-span-2">
+                        <label for="search-lieu" class="leading-7 colorChampsForm">Rechercher un lieu</label>
+                        <input type="text"
+                               id="search-lieu"
+                               name="search-lieu"
+                               placeholder="Rechercher par nom, rue, ville ou code postal"
+                               class="w-full bg-white rounded border border-gray-300 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                               value=" {{ lieuNomComplet }}"
+                               oninput="searchLieu()"
+                               autocomplete="off"
+                        >
+                        <ul id="lieu-results" class="bg-white border border-gray-300 mt-1 max-h-48 overflow-auto"></ul>
+                        <button type="button" class="mt-2 text-blue-500" onclick="toggleLieuCreationForm()">Créer un lieu</button>
+                    </div>
+                    <div class="flex justify-between toggle-section hidden">
+                        <div class="form-container w-1/2 pr-4">
+                            <div id="lieu-creation-form">
+                                <div class="relative mb-4">
+                                    <label for="new-lieu-nom" class="leading-7 colorChampsForm">Nom du nouveau lieu</label>
+                                    <input type="text" id="new-lieu-nom" name="newLieuNom" placeholder="Nom du lieu" class="w-full bg-white rounded border border-gray-300 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                </div>
+                                <div class="relative mb-4">
+                                    <label for="new-lieu-rue" class="leading-7 colorChampsForm">Rue</label>
+                                    <input type="text" id="new-lieu-rue" name="newLieuRue" placeholder="Rue" class="w-full bg-white rounded border border-gray-300 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                </div>
+                                <div class="relative mb-4">
+                                    <label for="new-lieu-ville" class="leading-7 colorChampsForm">Ville</label>
+                                    <select id="new-lieu-ville" name="newLieuVille" class="w-full bg-white rounded border border-gray-300 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                        {% for ville in villes %}
+                                            <option value="{{ ville.id }}">{{ ville.nomVille }} ({{ ville.codePostal }})</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <input type="hidden" id="latitude" name="latitude">
+                                <input type="hidden" id="longitude" name="longitude">
+                                <div class="relative mb-4 col-span-2">
+                                    <button type="button" class="mt-2 text-blue-500" onclick="saveNewLieu()">Enregistrer ce lieu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-container w-1/2 pl-4">
+                            <div id="map" class="h-96 w-full"></div>
+                            <p id="coordinates"></p>
+                        </div>
+                    </div>
+                    <div class="relative mb-4 col-span-2">
+                        <input type="hidden"
+                               id="{{ field_name(sortieForm.lieu) }}"
+                               name="{{ field_name(sortieForm.lieu) }}"
+                               value="{{ field_value(sortieForm.lieu) }}">
+                        {% for error in field_errors(sortieForm.lieu) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <div class="flex justify-start">
+                        <a href="{{ path('app_modifier_sortie', {id: field_value(sortieForm.lieu)}) }}" class="boutonReinit inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Réinitialiser</a>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="submit" name="action" value="creer" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Enregistrer la sortie</button>
+                        <button type="submit" name="action" value="publier" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Publier la sortie</button>
+                    </div>
+                </div>
+                {{ form_end(sortieForm) }}
+            </div>
+        </div>
+    </section>
+    <script>
+        document.querySelector('button[type="reset"]').addEventListener('click', function () {
+            // Réinitialiser les champs calculés
+            document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value = '';
+            document.getElementById('lieu-results').innerHTML = '';  // Vider les suggestions de lieu
+            document.getElementById('coordinates').innerHTML = '';  // Réinitialiser l'affichage des coordonnées
+            document.getElementById('search-lieu').value = ''; // Effacer la recherche de lieu
+
+            // Réinitialiser le champ du lieu caché
+            document.getElementById('{{ field_name(sortieForm.lieu) }}').value = '';
+        }});
+        function calculateEndDate() {
+            const startDate = document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value;
+            const duration = document.getElementById('{{ field_name(sortieForm.duree) }}').value;
+
+            if (startDate && duration) {
+                const startDateTime = new Date(startDate);
+                startDateTime.setHours(startDateTime.getHours() + parseInt(duration));
+
+                const year = startDateTime.getFullYear();
+                const month = String(startDateTime.getMonth() + 1).padStart(2, '0');
+                const day = String(startDateTime.getDate()).padStart(2, '0');
+                const hours = String(startDateTime.getHours()).padStart(2, '0');
+                const minutes = String(startDateTime.getMinutes()).padStart(2, '0');
+                const endDateFormatted = `${year}-${month}-${day}T${hours}:${minutes}`;
+                document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value = endDateFormatted;
+            }
+        }
+        document.getElementById('{{ field_name(sortieForm.duree) }}').addEventListener('input', calculateEndDate);
+        document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').addEventListener('input', calculateEndDate);
+
+
+        function validateDates() {
+            const startDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value);
+            const endDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value);
+            const registrationDeadline = new Date(document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value);
+            const errorContainer = document.getElementById('date-cloture-error');
+            const today = new Date();
+
+            errorContainer.textContent = '';
+
+            if (registrationDeadline && registrationDeadline < today) {
+                errorContainer.textContent = "La date de clôture des inscriptions ne peut pas être dans le passé.";
+                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = "";
+            }
+
+            if (registrationDeadline && startDate && registrationDeadline > startDate) {
+                errorContainer.textContent = "La date de clôture des inscriptions ne peut pas être après la date de début de l'activité.";
+                document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').value = "";
+            }
+        }
+
+        document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').addEventListener('change', validateDates);
+        document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').addEventListener('change', validateDates);
+        document.getElementById('{{ field_name(sortieForm.dateClotureInscription) }}').addEventListener('change', validateDates);
+
+        function searchLieu() {
+            const query = document.getElementById('search-lieu').value;
+
+            if (query.length >= 2) {
+                fetch(`/rechercher-lieu?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const results = document.getElementById('lieu-results');
+                        results.innerHTML = '';
+
+                        data.forEach(lieu => {
+                            const li = document.createElement('li');
+                            li.textContent = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nomVille} (${lieu.ville.codePostal})`;
+                            li.classList.add('cursor-pointer', 'p-2', 'hover:bg-gray-200');
+
+                            li.onclick = function() {
+                                document.getElementById('search-lieu').value = `${lieu.nomLieu}, ${lieu.rue}, ${lieu.ville.nomVille} (${lieu.ville.codePostal})`;
+                                document.getElementById('{{ field_name(sortieForm.lieu) }}').value = lieu.id;
+                                results.innerHTML = '';
+                            };
+                            results.appendChild(li);
+                        });
+                    });
+            } else {
+                document.getElementById('lieu-results').innerHTML = '';
+            }
+        }
+        function toggleLieuCreationForm() {
+            var section = document.querySelector('.toggle-section');
+            section.classList.toggle('hidden');
+
+            if (!section.classList.contains('hidden')) {
+                setTimeout(function() {
+                    map.invalidateSize();
+                }, 400);
+            }
+
+        }
+
+        function saveNewLieu() {
+            const nom = document.getElementById('new-lieu-nom').value;
+            const rue = document.getElementById('new-lieu-rue').value;
+            const villeId = document.getElementById('new-lieu-ville').value;
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+
+            if (nom && rue && villeId && latitude && longitude) {
+                fetch('/creer-lieu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        nomLieu: nom,
+                        rue: rue,
+                        villeId: villeId,
+                        latitude: latitude,
+                        longitude: longitude
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('{{ field_name(sortieForm.lieu) }}').value = data.lieuId;
+                            document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
+                            document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
+
+                            toggleLieuCreationForm();
+                        } else {
+                            alert('Erreur lors de la création du lieu.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la requête :', error);
+                    });
+            } else {
+                alert('Veuillez remplir tous les champs.');
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialisation de la carte
+        var map = L.map('map').setView([48.8566, 2.3522], 13);
+
+        // Ajout du fond de carte OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        map.on('click', function(e) {
+            var latlng = e.latlng;
+            var latitude = latlng.lat;
+            var longitude = latlng.lng;
+
+            document.getElementById('latitude').value = latitude.toFixed(6);
+            document.getElementById('longitude').value = longitude.toFixed(6);
+
+            document.getElementById('coordinates').innerHTML = 'Coordonnées: ' + latitude.toFixed(6) + ', ' + longitude.toFixed(6);
+        });
+    </script>
+
+{% endblock %}
