@@ -3,10 +3,15 @@
 {% block title %}Mon profil{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+    <div class="container mx-auto flex px-5 py-24 items-center">
+        <div class="static top-4 left-0 pe-8">
+          <!--  <img src='{{ asset(app.user.urlPhoto) }}'  class="w-32 h-32 rounded-full mx-auto"> -->
+          <picture>
+            <source srcset="{{ asset(app.user.urlPhoto) }}" type="image/webp">
+            <img src="{{ asset(app.user.urlPhoto) }}" class="w-32 h-32 rounded-full mx-auto" alt="photo de profil">
+        </div>
         <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
             <h1 class="text-2xl font-bold mb-6 text-center">Mon profil</h1>
-
             {{ form_start(ProfilForm, {'attr': {'data-turbo': 'false'}}) }}
             
                 <div class="error">
@@ -92,5 +97,7 @@
                      hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-25">Annuler</a>
             </div>
         </div>
+    </div>
+        
     </div>
 {% endblock %}

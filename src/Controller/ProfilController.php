@@ -36,13 +36,15 @@ class ProfilController extends AbstractController
         $form = $this->createForm(ProfilFormType::class, $user);
         $form->handleRequest($request);
 
+        $userPfp = $participant->getUrlPhoto();
+
         //Enregistrement des modifications du profil
         if ($form->isSubmitted() && $form->get('mot_de_passe')->getData() != null) {
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $participant->setUrlPhoto('/images/user' . $newFilename);
+                $participant->setUrlPhoto('/images/user/' . $newFilename);
             }
             /** @var string $plainPassword */
             $plainPassword = $form->get('mot_de_passe')->getData();
@@ -63,7 +65,7 @@ class ProfilController extends AbstractController
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $participant->setUrlPhoto('/images/user' . $newFilename);
+                $participant->setUrlPhoto('/images/user/' . $newFilename);
             }
             $siteId = $request->get('site_id');
             $site = $siteRepository->find($siteId);
@@ -75,11 +77,12 @@ class ProfilController extends AbstractController
 
         }
 
-        
+        var_dump($userPfp);
 
         return $this->render('profil/index.html.twig', [
             'ProfilForm' => $form->createView(),
             'sites' => $sites,
+            'userPfp' => $userPfp,
             'user' => $user,
         ]);
     }
