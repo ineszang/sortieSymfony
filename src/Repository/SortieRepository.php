@@ -60,7 +60,8 @@ class SortieRepository extends ServiceEntityRepository
         // Filtrer par les sorties auxquelles l'utilisateur n'est pas inscrit
         if ($pasMesInscriptions) {
             $queryBuilder->leftJoin('s.participants', 'p')
-                ->andWhere('p.id != :userId OR p.id IS NULL')
+                ->andWhere('(p.id != :userId OR p.id IS NULL)')
+                ->andWhere('s.organisateur != :userId')
                 ->setParameter('userId', $userId);
         }
 

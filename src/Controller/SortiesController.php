@@ -123,7 +123,7 @@ class SortiesController extends AbstractController
         $idUtilisateur = $participant->getId();
         //chercher dans la bdd
         $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
-        //$sorties = $sortieRepository->findPublishedSorties();
+
 
 
 
