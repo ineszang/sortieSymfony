@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() ~ title }}{% endblock %}
+
+{% block body %}
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-5 mx-auto flex flex-wrap items-center">
+            <div class="w-full bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10">
+                <h2 class="titleForm text-lg font-medium title-font mb-5">Formulaire de création d'une nouvelle ville</h2>
+                <h3 class="titleForm text-lg font-medium title-font mb-5">Les étudiants pourrons désormais organiser des sorties dans cette ville</h3>
+                {{ form_start(villeForm) }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(villeForm.nomVille) }}" class="leading-7 colorChampsForm">Intitulé de la ville</label>
+                        <input type="text"
+                               id="{{ field_name(villeForm.nomVille) }}"
+                               name="{{ field_name(villeForm.nomVille) }}"
+                               value="{{ field_value(villeForm.nomVille) }}"
+                               placeholder="nom de ville"
+                               class="w-full rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        >
+                        {% for error in field_errors(villeForm.nomVille) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="{{ field_name(villeForm.codePostal) }}" class="leading-7 colorChampsForm">Code Postal de la ville</label>
+                        <input type="text"
+                               id="{{ field_name(villeForm.codePostal) }}"
+                               name="{{ field_name(villeForm.codePostal) }}"
+                               value="{{ field_value(villeForm.codePostal) }}"
+                               maxlength="5"
+                               placeholder="code postal"
+                               class="w-full bg-white rounded border border-gray-300 colorborder text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        >
+                        {% for error in field_errors(villeForm.codePostal) %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="flex justify-end mt-4 gap-3">
+                        <button class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Créer la ville</button>
+                    </div>
+                    {{ form_end(villeForm) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
