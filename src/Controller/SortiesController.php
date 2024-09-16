@@ -10,6 +10,7 @@ use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use App\Service\FileUploaderService;
+use App\Service\SortiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -95,7 +96,7 @@ class SortiesController extends AbstractController
     }
 
     #[Route(['/allSorties'], name: 'app_allSorties')]
-    public function indexSorties(ParticipantRepository $p,SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request): Response
+    public function indexSorties(ParticipantRepository $p,SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request, SortiesService $sortiesService): Response
     {
 
 
@@ -124,7 +125,9 @@ class SortiesController extends AbstractController
         //chercher dans la bdd
         $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
 
+        $sortiesSubscrible = $sortiesService->listInscription($sortieRepository,$idUtilisateur);
 
+        $sortiesSubscription = $sortieRepository->findBySearchParameters(null, null, null, null, false, true, false, false, $participant->getId());
 
 
         return $this->render('sorties/allSorties.html.twig', [
@@ -139,7 +142,9 @@ class SortiesController extends AbstractController
             'mesInscriptions' => $mesInscriptions,
             'pasMesInscriptions' => $pasMesInscriptions,
             'sortiesFinies' => $sortiesFinies,
-            'idUtilisateur' => $idUtilisateur
+            'idUtilisateur' => $idUtilisateur,
+            'sortiesSubscrible' => $sortiesSubscrible,
+            'sortiesSubscription' => $sortiesSubscription
         ]);
     }
 
@@ -147,8 +152,7 @@ class SortiesController extends AbstractController
     #[Route(['/detailsSorties/{id}'], name: 'app_details_sorties')]
     public function indexDetailsSortie(ParticipantRepository $p,int $id,SortieRepository $sortieRepository): Response
     {
-        //TODO : trouver le user en ligne
-        $utilisateur = "Melaine F.";
+
 
         $sortie = $sortieRepository->findOneBySomeField($id);
 
@@ -161,11 +165,31 @@ class SortiesController extends AbstractController
 
         $isSubscrible = $sortie->getEtat() === "Ouvert" && $nbDeParticpant < $sortie->getNbIncriptionsMax() && $sortie->getOrganisateur()->getId() !== $participant->getId();
 
+        return $this->render('sorties/detailsSortie.html.twig', [
+            'utilisateur' => $utilisateur,
+            'sortie' => $sortie,
+            'isSubscrible' => $isSubscrible
+
+        ]);
+    }
 
 
 
+    #[Route(['/inscription'], name: 'app_inscription')]
+    public function indexInscription(ParticipantRepository $p,int $id,SortieRepository $sortieRepository): Response
+    {
 
 
+        $sortie = $sortieRepository->findOneBySomeField($id);
+
+        $utilisateur = $this->getUser();
+        $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
+
+        //todo : faire une requete
+        $nbDeParticpant = 2;
+
+
+        $isSubscrible = $sortie->getEtat() === "Ouvert" && $nbDeParticpant < $sortie->getNbIncriptionsMax() && $sortie->getOrganisateur()->getId() !== $participant->getId();
 
         return $this->render('sorties/detailsSortie.html.twig', [
             'utilisateur' => $utilisateur,

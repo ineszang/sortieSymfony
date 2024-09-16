@@ -10,14 +10,6 @@
 
 
     <div class="main-container">
-        <div class="pre-container">
-            <div class="details-container">
-                <p>{{  'Date du jour : ' ~ "now"|date("d/m/Y") }} </p>
-                <p>{{ 'Participant : ' ~ utilisateur }}</p>
-                <p>{{ 'Participant : ' ~ idUtilisateur }}</p>
-            </div>
-        </div>
-
         <form method="GET" action="{{ path('app_allSorties') }}">
             <div class="search-container">
                 <div class="search-container-part1">
@@ -69,6 +61,11 @@
                     <div class="search-button-container">
                         <button type="submit" class="search-button">RECHERCHER</button>
                     </div>
+                    <div class="details-container">
+                        <p>{{  'Date du jour : ' ~ "now"|date("d/m/Y") }} </p>
+                        <p>{{ 'Participant : ' ~ utilisateur }}</p>
+                        <p>{{ 'Participant : ' ~ idUtilisateur }}</p>
+                    </div>
                 </div>
             </div>
             <a href="{{ path('app_allSorties') }}" class="reset-button">RÉINITIALISER</a>
@@ -119,7 +116,13 @@
                         <div class="card-footer">
                             <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
-                        <button href="{{ path('app_allSorties') }}" class="buttons">INSCRIPTION/ SE DESINSCRIRE</button>
+
+
+                        {% if sortie in sortiesSubscrible %}
+                            <a href="{{ path('app_allSorties') }}" class="buttons">S'INSCRIRE</a>
+                        {% elseif sortie in sortiesSubscription %}
+                            <a href="{{ path('app_allSorties') }}" class="buttons">SE DESINSCRIRE</a>
+                        {% endif %}
                         <button href="{{ path('app_allSorties') }}" class="buttons">MODIFIER</button>
                         <button href="{{ path('app_allSorties') }}" class="buttons">DELETE</button>
                     </div>

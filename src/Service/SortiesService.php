@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Repository\SortieRepository;
+
 class SortiesService
 {
 
@@ -9,11 +11,23 @@ class SortiesService
 
     //vérifier si l'on peut s'inscrire
     //affichage du bouton s'inscrire
-    public function doSomething()
+
+    //list des
+    public function listInscription(SortieRepository $sortieRepository, int $userId)
     {
-        //condition :
-        // - etat : ouvert
-        // -
+         $sorties = $sortieRepository->findBySearchParameters(null, null, null, null, false, false, true, false, $userId);
+        //état = ouvert
+        $sortiesOuvertes = [];
+        foreach ($sorties as $sortie) {
+            // Vérifiez si l'état de la sortie est "ouvert"
+            if ($sortie->getEtat() && $sortie->getEtat()->getLibelle() === 'Ouvert' && $sortie->getOrganisateur()->getId() !==$userId) {
+                $sortiesOuvertes[] = $sortie;
+            }
+        }
+
+
+
+        return $sortiesOuvertes;
     }
 
 
