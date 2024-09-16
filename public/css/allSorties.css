@@ -198,3 +198,12 @@ p {
     width: 100%; /* Ajuste la largeur à 100% du conteneur, si nécessaire */
 }
 
+.reset-button {
+    color: black;
+}
+
+
+.reset-button:hover {
+    color: #b90000;
+}
+

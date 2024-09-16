@@ -38,7 +38,6 @@ class SiteRepository extends ServiceEntityRepository
         {
            return $this->createQueryBuilder('s')
                 ->orderBy('s.id', 'ASC')
-                ->setMaxResults(3)
                ->getQuery()
                ->getResult()
             ;
