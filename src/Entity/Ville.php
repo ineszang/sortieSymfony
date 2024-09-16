@@ -6,6 +6,7 @@ use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 class Ville
@@ -16,9 +17,15 @@ class Ville
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
     private ?string $nomVille = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+    #[Assert\Length(
+        max: 5,
+        maxMessage: "Le code postal ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $codePostal = null;
 
     /**

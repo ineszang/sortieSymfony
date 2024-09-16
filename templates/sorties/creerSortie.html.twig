@@ -183,16 +183,30 @@
                         {% endfor %}
                     </div>
                 </div>
-
-                <div class="flex justify-end mt-4 gap-3">
-                <button type="submit" name="action" value="creer" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Enregistrer la sortie</button>
-                <button type="submit" name="action" value="publier" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Publier la sortie</button>
+                <div class="flex justify-between mt-4">
+                    <div class="flex justify-start">
+                        <button type="reset" class="boutonReinit inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Réinitialiser</button>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="submit" name="action" value="creer" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Enregistrer la sortie</button>
+                        <button type="submit" name="action" value="publier" class="boutonCreer inline-flex text-white border-0 py-2 px-6 focus:outline-none rounded text-lg mt-4">Publier la sortie</button>
+                    </div>
                 </div>
                 {{ form_end(sortieForm) }}
             </div>
         </div>
     </section>
     <script>
+        document.querySelector('button[type="reset"]').addEventListener('click', function () {
+            // Réinitialiser les champs calculés
+            document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value = '';
+            document.getElementById('lieu-results').innerHTML = '';  // Vider les suggestions de lieu
+            document.getElementById('coordinates').innerHTML = '';  // Réinitialiser l'affichage des coordonnées
+            document.getElementById('search-lieu').value = ''; // Effacer la recherche de lieu
+
+            // Réinitialiser le champ du lieu caché
+            document.getElementById('{{ field_name(sortieForm.lieu) }}').value = '';
+        });
         function calculateEndDate() {
             const startDate = document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value;
             const duration = document.getElementById('{{ field_name(sortieForm.duree) }}').value;
@@ -210,6 +224,9 @@
                 document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value = endDateFormatted;
             }
         }
+        document.getElementById('{{ field_name(sortieForm.duree) }}').addEventListener('input', calculateEndDate);
+        document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').addEventListener('input', calculateEndDate);
+
 
         function validateDates() {
             const startDate = new Date(document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value);
@@ -278,15 +295,15 @@
             const nom = document.getElementById('new-lieu-nom').value;
             const rue = document.getElementById('new-lieu-rue').value;
             const villeId = document.getElementById('new-lieu-ville').value;
-            const latitude = document.getElementById('latitude').value;  // Champs latitude
-            const longitude = document.getElementById('longitude').value; // Champs longitude
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
 
             if (nom && rue && villeId && latitude && longitude) {
                 fetch('/creer-lieu', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'  // Pour signaler une requête AJAX
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
                     body: JSON.stringify({
                         nomLieu: nom,
@@ -299,12 +316,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Le lieu a été créé avec succès, on met à jour le formulaire principal
                             document.getElementById('{{ field_name(sortieForm.lieu) }}').value = data.lieuId;
                             document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
                             document.getElementById('search-lieu').value = `${nom}, ${rue}, ${data.nomVille} (${data.villeCodePostal})`;
 
-                            // Masquer le formulaire de création du lieu
                             toggleLieuCreationForm();
                         } else {
                             alert('Erreur lors de la création du lieu.');

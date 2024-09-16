@@ -19,12 +19,12 @@ header {
 
 .titleButton2Home {
     background-color: #BF4545;
-    transition: 1s;
+    transition: 500ms;
 }
 
 .titleButton1Home {
     background-color: #F2811D;
-    transition: 1s;
+    transition: 500ms;
 }
 
 .hoverheaderbuttons {
@@ -36,7 +36,7 @@ header {
 
 .titleButton1Home:hover, .titleButton2Home:hover {
     background-color: #66A3F2;
-    transition: 1s;
+    transition: 500ms;
 }
 
 .colorChampsForm {
@@ -61,13 +61,18 @@ header {
     background-color: #f0f0f0;
 }
 
+.boutonReinit {
+    background-color: #F2811D;
+    transition: 500ms;
+}
+
 .boutonCreer {
     background-color: #BF4545;
-    transition:1s;
+    transition:500ms;
 }
-.boutonCreer:hover {
+.boutonCreer:hover, .boutonReinit:hover {
     background-color: #66A3F2;
-    transition:1s;
+    transition:500ms;
 }
 
 .error, .titleForm {
@@ -98,3 +103,5 @@ header {
 .hidden {
     display: none;
 }
+
+.
