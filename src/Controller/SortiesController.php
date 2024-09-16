@@ -131,7 +131,7 @@ class SortiesController extends AbstractController
             'utilisateur' => $username,
             'sorties' => $sorties,
             'sites' => $sites,
-            'site' => $site,
+            'site_selected' => $site,
             'recherche' => $recherche,
             'dateStart' => $dateStart,
             'dateEnd' => $dateEnd,

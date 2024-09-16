@@ -27,7 +27,7 @@
                         <select id="site" name="site" class="sites">
                             <option value="">aucun</option>
                             {% for site in sites %}
-                                <option value="{{ site.id }}">{{ site.nomSite }}</option>
+                                <option value="{{ site.id }}" {% if site.id == site_selected %} selected {% endif %}>{{ site.nomSite }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -41,28 +41,28 @@
 
                     <div class="date-container">
                         <span>Entre </span>
-                        <input type="date" id="dateStart" name="dateStart" class="date-calendar">
+                        <input type="date" id="dateStart" name="dateStart" class="date-calendar" value="{{ dateStart }}">
                         <span>et </span>
-                        <input type="date" id="dateEnd" name="dateEnd" class="date-calendar">
+                        <input type="date" id="dateEnd" name="dateEnd" class="date-calendar" value="{{ dateEnd }}">
                     </div>
 
                 </div>
                 <div class="search-container-part2">
                     <div class="checkbox-container">
                         <label>
-                            <input type="checkbox" name="mesSorties" value="1">
+                            <input type="checkbox" name="mesSorties" value="1" {% if mesSorties %}checked{% endif %}>
                             Sorties dont je suis l'organisateur/trice
                         </label>
                         <label>
-                            <input type="checkbox" name="mesInscriptions" value="1">
+                            <input type="checkbox" name="mesInscriptions" value="1" {% if mesInscriptions %}checked{% endif %}>
                             Sorties auxquelles je suis inscrit/e
                         </label>
                         <label>
-                            <input type="checkbox" name="pasMesInscriptions" value="1">
+                            <input type="checkbox" name="pasMesInscriptions" value="1" {% if pasMesInscriptions %}checked{% endif %}>
                             Sorties auxquelles je ne suis pas inscrit/e
                         </label>
                         <label>
-                            <input type="checkbox" name="sortiesFinies" value="1">
+                            <input type="checkbox" name="sortiesFinies" value="1" {% if sortiesFinies %}checked{% endif %}>
                             Sorties passées
                         </label>
                     </div>
@@ -71,6 +71,7 @@
                     </div>
                 </div>
             </div>
+            <a href="{{ path('app_allSorties') }}" class="reset-button">RÉINITIALISER</a>
         </form>
         <div class="cards-container">
             {% if sorties is not empty %}

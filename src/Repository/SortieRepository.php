@@ -38,13 +38,13 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateStart', $dateStart);
         }
 
-        // Filtrer par date de fin
+            // Filtrer par date de fin
         if ($dateEnd) {
             $queryBuilder->andWhere('s.dateHeureFin <= :dateEnd')
                 ->setParameter('dateEnd', $dateEnd);
         }
 
-        // Filtrer par les sorties dont l'utilisateur est l'organisateur
+            // Filtrer par les sorties dont l'utilisateur est l'organisateur
         if ($mesSorties) {
             $queryBuilder->andWhere('s.organisateur = :userId')
                 ->setParameter('userId', $userId);
@@ -52,24 +52,24 @@ class SortieRepository extends ServiceEntityRepository
 
         // Filtrer par les sorties auxquelles l'utilisateur est inscrit
         if ($mesInscriptions) {
-            $queryBuilder->innerJoin('s.participants', 'p')
-                ->andWhere('p.id = :userId')
+            $queryBuilder->innerJoin('s.participants', 'p1')
+                ->andWhere('p1.id = :userId')
                 ->setParameter('userId', $userId);
         }
 
         // Filtrer par les sorties auxquelles l'utilisateur n'est pas inscrit
         if ($pasMesInscriptions) {
-            $queryBuilder->leftJoin('s.participants', 'p')
-                ->andWhere('(p.id != :userId OR p.id IS NULL)')
+            $queryBuilder->leftJoin('s.participants', 'p2')
+                ->andWhere('(p2.id != :userId OR p2.id IS NULL)')
                 ->andWhere('s.organisateur != :userId')
                 ->setParameter('userId', $userId);
         }
 
-        // Date limite pour les sorties finies depuis plus d'un mois
+            // Date limite pour les sorties finies depuis plus d'un mois
         $dateLimit = new \DateTime();
         $dateLimit->modify('-1 month');
 
-        // Filtrer par les sorties passées
+            // Filtrer par les sorties passées
         if ($sortiesFinies) {
             $queryBuilder->andWhere('s.dateHeureFin < CURRENT_DATE()')
                 ->andWhere('s.dateHeureFin >= :dateLimit')
