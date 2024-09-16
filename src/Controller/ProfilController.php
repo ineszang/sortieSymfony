@@ -44,7 +44,7 @@ class ProfilController extends AbstractController
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $participant->setUrlPhoto('/images/user/' . $newFilename);
+                $participant->setUrlPhoto('uploads/images/' . $newFilename);
             }
             /** @var string $plainPassword */
             $plainPassword = $form->get('mot_de_passe')->getData();
@@ -65,7 +65,7 @@ class ProfilController extends AbstractController
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $participant->setUrlPhoto('/images/user/' . $newFilename);
+                $participant->setUrlPhoto('uploads/images/' . $newFilename);
             }
             $siteId = $request->get('site_id');
             $site = $siteRepository->find($siteId);
