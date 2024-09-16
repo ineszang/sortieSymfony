@@ -23,16 +23,16 @@ class Sortie
     private ?string $nomSortie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\Type(type:"\DateTimeInterface", message: "Ce champ ne peut pas être vide.")]
+    #[Assert\Type(type:"\DateTimeInterface", message: "Ce champ doit être une date valide.")]
     #[Assert\NotNull(message: "Ce champ ne peut pas être vide.")]
-    #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+    #[Assert\Type(type:"\DateTimeInterface", message: "Ce champ doit être une date valide.")]
+    #[Assert\NotNull(message: "Ce champ ne peut pas être vide.")]
     private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column]
@@ -44,6 +44,8 @@ class Sortie
     private ?string $infosSortie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\Type(type:"\DateTimeInterface", message: "Ce champ doit être une date valide.")]
+    #[Assert\NotNull(message: "Ce champ ne peut pas être vide.")]
     private ?\DateTimeInterface $dateHeureFin = null;
 
     #[ORM\Column(length: 400, nullable: true)]
@@ -98,7 +100,7 @@ class Sortie
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(\DateTimeInterface $dateHeureDebut): static
+    public function setDateHeureDebut(?\DateTimeInterface $dateHeureDebut): static
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
@@ -122,7 +124,7 @@ class Sortie
         return $this->dateClotureInscription;
     }
 
-    public function setDateClotureInscription(\DateTimeInterface $dateClotureInscription): static
+    public function setDateClotureInscription(?\DateTimeInterface $dateClotureInscription): static
     {
         $this->dateClotureInscription = $dateClotureInscription;
 
