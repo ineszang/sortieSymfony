@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Entity\Site;
 use App\Form\ProfilFormType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Security\Core\Security;
 class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
-    public function index(Request $request, Security $security,
+    public function index(Request $request,ParticipantRepository $participantRepository, Security $security,
         EntityManagerInterface $entityManager, FileUploaderService $fileUploaderService, SiteRepository $siteRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         //Changement de la liste des sites
@@ -26,10 +27,12 @@ class ProfilController extends AbstractController
 
         //Récupération des informations de l'utilisateur connecté
         $this->security = $security;
-        $userConnecte = $this->security->getUser();
+        $user = $this->security->getUser();
+        $participant = $participantRepository->findOneByPseudo($user->getUserIdentifier());
+        $motDePasse = $participant->getMotDePasse();
 
         //Création du formulaire
-        $form = $this->createForm(ProfilFormType::class, $userConnecte);
+        $form = $this->createForm(ProfilFormType::class, $user);
         $form->handleRequest($request);
 
         //Enregistrement des modifications du profil
@@ -38,24 +41,25 @@ class ProfilController extends AbstractController
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $userConnecte->setUrlPhoto('/uploads/images/' . $newFilename);
+                $participant->setUrlPhoto('/uploads/images/' . $newFilename);
             }
             /** @var string $plainPassword */
             $plainPassword = $form->get('mot_de_passe')->getData();
-            $siteId = $request->get('site_id');
-            $site = $siteRepository->findOneBySomeField($siteId);
+            $site = $request->get('site');
+            var_dump('test = ',$site);
+            $site = $siteRepository->findOneBySomeField($site);
 
             // Hachage du nouveau mot de passe
-            $hashedPassword = $userPasswordHasher->hashPassword($userConnecte, $plainPassword);
-            $userConnecte->setMotDePasse($hashedPassword);
-            $userConnecte->setSite($site);
+            $hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
+            $participant->setMotDePasse($hashedPassword);
+            $participant->setSite($site);
 
-            $entityManager->persist($userConnecte);
+            $entityManager->persist($participant);
             $entityManager->flush();
 
         } elseif ($form->isSubmitted()  && $form->get('mot_de_passe')->getData() == null) {
-
-            $entityManager->persist($userConnecte);
+            $participant->setMotDePasse($motDePasse);
+            $entityManager->persist($participant);
             $entityManager->flush();
         }
 
@@ -64,7 +68,7 @@ class ProfilController extends AbstractController
         return $this->render('profil/index.html.twig', [
             'ProfilForm' => $form->createView(),
             'sites' => $sites,
-            'user' => $userConnecte,
+            'user' => $user,
         ]);
     }
 }

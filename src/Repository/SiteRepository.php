@@ -16,10 +16,10 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
-   /* 
-    * @return Site Returns an ?Site of Site objects
-    */
-   /* public function findById($value): ?Site
+
+    //@return Site Returns an ?Site of Site objects
+
+    public function findById($value): ?Site
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.id = :val')
@@ -27,14 +27,14 @@ class SiteRepository extends ServiceEntityRepository
             ->orderBy('s.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
-    }*/
+    }
 
         /**
          * @return Site[] Returns an array of Site objects
          */
-      /*  public function findAll(): array
+       public function findAll(): array
         {
            return $this->createQueryBuilder('s')
                 ->orderBy('s.id', 'ASC')
@@ -42,7 +42,7 @@ class SiteRepository extends ServiceEntityRepository
                ->getQuery()
                ->getResult()
             ;
-        }*/
+        }
 
         public function findOneBySomeField($value): ?Site
         {
