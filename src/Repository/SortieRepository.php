@@ -5,15 +5,18 @@ namespace App\Repository;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $connection;
+    public function __construct(ManagerRegistry $registry, Connection $connection)
     {
         parent::__construct($registry, Sortie::class);
+        $this->connection = $connection;
     }
 
     public function findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $userId)
@@ -115,4 +118,22 @@ class SortieRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()
             ;
         }
+
+    public function addInscription(int $userId, int $sortieId): void
+    {
+        $sql = 'INSERT INTO sortie_participant (participant_id, sortie_id) VALUES (:user_id, :sortie_id)';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('user_id', $userId);
+        $stmt->bindValue('sortie_id', $sortieId);
+        $stmt->execute();
+    }
+
+    public function removeInscription(int $userId, int $sortieId): void
+    {
+        $sql = 'DELETE FROM sortie_participant WHERE participant_id = :user_id AND sortie_id = :sortie_id';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('user_id', $userId);
+        $stmt->bindValue('sortie_id', $sortieId);
+        $stmt->execute();
+    }
 }

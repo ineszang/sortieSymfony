@@ -119,9 +119,9 @@
 
 
                         {% if sortie in sortiesSubscrible %}
-                            <a href="{{ path('app_allSorties') }}" class="buttons">S'INSCRIRE</a>
+                            <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons">S'INSCRIRE</a>
                         {% elseif sortie in sortiesSubscription %}
-                            <a href="{{ path('app_allSorties') }}" class="buttons">SE DESINSCRIRE</a>
+                            <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons">SE DESINSCRIRE</a>
                         {% endif %}
                         <button href="{{ path('app_allSorties') }}" class="buttons">MODIFIER</button>
                         <button href="{{ path('app_allSorties') }}" class="buttons">DELETE</button>
