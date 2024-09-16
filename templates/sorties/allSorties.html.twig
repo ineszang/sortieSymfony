@@ -119,6 +119,9 @@
                         <div class="card-footer">
                             <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
+                        <button href="{{ path('app_allSorties') }}" class="buttons">INSCRIPTION/ SE DESINSCRIRE</button>
+                        <button href="{{ path('app_allSorties') }}" class="buttons">MODIFIER</button>
+                        <button href="{{ path('app_allSorties') }}" class="buttons">DELETE</button>
                     </div>
                 {% endfor %}
             {% else %}
