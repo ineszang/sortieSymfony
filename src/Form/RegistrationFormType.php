@@ -44,10 +44,6 @@ class RegistrationFormType extends AbstractType
             ->add('telephone', TextType::class, [
                 'required' => false,
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'required' => false,
-            ])
             ->add('mot_de_passe', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller

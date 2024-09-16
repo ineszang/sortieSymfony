@@ -31,6 +31,7 @@ class ProfilController extends AbstractController
         $participant = $participantRepository->findOneByPseudo($user->getUserIdentifier());
         $motDePasse = $participant->getMotDePasse();
 
+        $defaultSite = $participant->getSite()->getId();
         //Création du formulaire
         $form = $this->createForm(ProfilFormType::class, $user);
         $form->handleRequest($request);
@@ -41,15 +42,14 @@ class ProfilController extends AbstractController
             if ($imageFile) {
                 $newFilename = $fileUploaderService->upload($imageFile);
 
-                $participant->setUrlPhoto('/uploads/images/' . $newFilename);
+                $participant->setUrlPhoto('/images/user' . $newFilename);
             }
             /** @var string $plainPassword */
             $plainPassword = $form->get('mot_de_passe')->getData();
-            $site = $request->get('site');
-            var_dump('test = ',$site);
-            $site = $siteRepository->findOneBySomeField($site);
+            $siteId = $request->get('site_id');
+            $site = $siteRepository->find($siteId);
 
-            // Hachage du nouveau mot de passe
+            //Hachage du nouveau mot de passe
             $hashedPassword = $userPasswordHasher->hashPassword($user, $plainPassword);
             $participant->setMotDePasse($hashedPassword);
             $participant->setSite($site);
@@ -57,10 +57,22 @@ class ProfilController extends AbstractController
             $entityManager->persist($participant);
             $entityManager->flush();
 
+
         } elseif ($form->isSubmitted()  && $form->get('mot_de_passe')->getData() == null) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $newFilename = $fileUploaderService->upload($imageFile);
+
+                $participant->setUrlPhoto('/images/user' . $newFilename);
+            }
+            $siteId = $request->get('site_id');
+            $site = $siteRepository->find($siteId);
+            $participant->setSite($site);
+
             $participant->setMotDePasse($motDePasse);
             $entityManager->persist($participant);
             $entityManager->flush();
+
         }
 
         

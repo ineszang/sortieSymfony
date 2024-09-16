@@ -57,13 +57,7 @@ class ProfilFormType extends AbstractType
             'first_options'  => ['label' => 'Mot de passe : ', 'empty_data' => ''],
             'second_options' => ['label' => 'Confirmez le mot de passe : ', 'empty_data' => ''],
         ])
-        ->add('site', EntityType::class, [
-            'class' => Site::class,
-            'choice_label' => 'nom_site',
-            'empty_data' => '---------------',
-            'required' => false,
-        ])
-            ->add('image', FileType::class, [
+        ->add('image', FileType::class, [
                 'label' => 'Image (JPEG, PNG)',
                 'mapped' => false,
                 'required' => false,
