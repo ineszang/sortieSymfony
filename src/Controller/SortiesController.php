@@ -15,6 +15,7 @@ use App\Service\SortiesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -253,6 +254,7 @@ class SortiesController extends AbstractController
         $sorties = $sortieRepository->findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $participant->getId());
 
         $sortiesSubscrible = $sortiesService->listInscription($sortieRepository,$idUtilisateur);
+        $mesSortiesCreer = $sortiesService->listMySortieCree($sortieRepository, $idUtilisateur);
 
         $sortiesSubscription = $sortieRepository->findBySearchParameters(null, null, null, null, false, true, false, false, $participant->getId());
 
@@ -272,7 +274,8 @@ class SortiesController extends AbstractController
             'idUtilisateur' => $idUtilisateur,
             'sortiesSubscrible' => $sortiesSubscrible,
             'sortiesSubscription' => $sortiesSubscription,
-            'now' => new \DateTime(),
+            'mesSortiesCreer' => $mesSortiesCreer
+
         ]);
     }
 
@@ -352,20 +355,62 @@ class SortiesController extends AbstractController
 
     #[Route(['/inscription/{name}/{idSortie}'], name: 'app_inscription')]
     #[isGranted("ROLE_USER")]
-    public function indexInscription(string $name, $idSortie, ParticipantRepository $participantRepository, SortieRepository $sortieRepository ): Response
-    {
-
+    public function indexInscription(
+        string $name,
+        int $idSortie,
+        ParticipantRepository $participantRepository,
+        SortieRepository $sortieRepository
+    ): Response {
+        // Récupérer l'utilisateur et son id
         $utilisateur = $this->getUser();
         $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
         $idUtilisateur = $participant->getId();
-        var_dump($name);
-        if($name === "s'inscrire") {
+
+        // Vérifier si un chevauchement est détecté
+        if ($name === "s'inscrire") {
+            // Ajouter l'inscription si pas de chevauchement
             $sortieRepository->addInscription($idUtilisateur, $idSortie);
+            $chevauchement = $sortieRepository->checkSortie($idSortie, $idUtilisateur);
+            if ($chevauchement) {
+
+                // Rediriger vers une route qui affichera un message d'avertissement
+                return $this->redirectToRoute('app_inscription_chevauchement', [
+                    'idSortie' => $idSortie,
+                    'idUtilisateur' => $idUtilisateur
+                ]);
+            }
+
         } else if ($name === "se desinscrire") {
             $sortieRepository->removeInscription($idUtilisateur, $idSortie);
         }
+
+        // Rediriger vers la liste des sorties
+        return $this->redirectToRoute('app_allSorties');
+    }
+
+    #[Route('/inscription-chevauchement/{idSortie}/{idUtilisateur}', name: 'app_inscription_chevauchement')]
+    #[isGranted("ROLE_USER")]
+    public function inscriptionChevauchement(int $idSortie, int $idUtilisateur): Response
+    {
+        // Afficher un template où la pop-up sera affichée
+        return $this->render('sorties/chevauchement.html.twig', [
+            'idSortie' => $idSortie,
+            'idUtilisateur' => $idUtilisateur,
+        ]);
+    }
+
+
+
+    #[Route(['/app_publier_sortie/{idSortie}'], name: 'app_publier_sortie')]
+    #[isGranted("ROLE_USER")]
+    public function indexPublier(string $name, $idSortie, ParticipantRepository $participantRepository, SortieRepository $sortieRepository ): Response
+    {
+
+
 
 
         return $this->redirectToRoute('app_allSorties');
     }
 }
+
+

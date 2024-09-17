@@ -121,13 +121,16 @@
                             <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">SE DESINSCRIRE</a>
                         {% endif %}
                         <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
-    
+
                             {% if sortie.dateHeureDebut > now %}
                             <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
                                 <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
                                 <button type="submit" class="buttons boutonDelete">ANNULER</button>
                             </form>
                             {% endif %}
+                    {% if sortie in mesSortiesCreer %}
+                    <a href="{{ path('app_publier_sortie', { idSortie: sortie.id })  }}" class="buttons">PUBLIER</a>
+                    {% endif %}
 
 
                     </div>

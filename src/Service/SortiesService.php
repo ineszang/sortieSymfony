@@ -31,13 +31,25 @@ class SortiesService
     }
 
 
-    //affichage du bouton ouvrir
+    //affichage du bouton publier
+    public function listMySortieCree(SortieRepository $sortieRepository, int $userId)
+    {
+        $sorties = $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $userId);
 
-    //se desister
+        $sortiesCréées = [];
+        foreach ($sorties as $sortie) {
+            // Vérifiez si l'état de la sortie est "ouvert"
+            if ($sortie->getEtat() && mb_strtolower($sortie->getEtat()->getLibelle()) === 'créée' && $sortie->getOrganisateur()->getId()    ===$userId) {
+                $sortiesCréées[] = $sortie;
+            }
+        }
 
-    //cloturer
 
-    //supprimer
+
+        return $sortiesCréées;
+
+    }
+
 
 
 

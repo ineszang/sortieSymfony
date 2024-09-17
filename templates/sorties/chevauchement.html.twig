@@ -1,0 +1,18 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Affiche une pop-up d'avertissement
+        Swal.fire({
+            title: 'Chevauchement détecté !',
+            text: 'Cette sortie chevauche une autre sortie à laquelle vous êtes inscrit. Votre inscription est quand même validée',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            // Redirige l'utilisateur vers une autre page après avoir cliqué sur OK
+            if (result.isConfirmed) {
+                window.location.href = "{{ path('app_allSorties') }}";
+            }
+        });
+    });
+</script>

@@ -31,7 +31,7 @@ class ParticipantRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-        public function findOneByPseudo($value): Participant
+        public function findOneByPseudo($value): ?Participant
         {
             return $this->createQueryBuilder('p')
                 ->andWhere('p.pseudo = :pseudo')

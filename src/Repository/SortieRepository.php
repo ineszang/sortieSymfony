@@ -148,4 +148,36 @@ class SortieRepository extends ServiceEntityRepository
         $stmt->bindValue('sortie_id', $sortieId);
         $stmt->execute();
     }
+
+    public function checkSortie($idSortie, ?int $idUtilisateur)
+    {
+        // Récupère les informations de la sortie spécifiée
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.dateHeureDebut', 's.dateHeureFin')
+            ->where('s.id = :idSortie')
+            ->setParameter('idSortie', $idSortie);
+
+        $sortie = $qb->getQuery()->getOneOrNullResult();
+
+        if (!$sortie) {
+            // Si la sortie n'existe pas, retourner faux
+            return false;
+        }
+
+        $dateDebut = $sortie['dateHeureDebut'];
+        $dateFin = $sortie['dateHeureFin'];
+
+        // Récupérer toutes les sorties de l'utilisateur et vérifier les chevauchements
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.participants', 'p')
+            ->where('p.id = :idUtilisateur')
+            ->andWhere('s.dateHeureDebut < :dateFin')
+            ->andWhere('s.dateHeureFin > :dateDebut')
+            ->setParameter('idUtilisateur', $idUtilisateur)
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin);
+
+        // Si on trouve une sortie qui chevauche, on retourne true
+        return (bool) $qb->getQuery()->getResult();
+    }
 }
