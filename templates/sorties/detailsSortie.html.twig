@@ -72,25 +72,41 @@
                             .bindPopup('Votre sortie est ici !')
                             .openPopup();
                     </script>
-                    <h2>LES PARTICIPANTS : </h2>
+                    <div class="participantsSection">
+                        <h2>LES PARTICIPANTS : </h2>
                     {% if participants|length > 0 %}
-                        <form action="{{ path('app_desinscrire_participants') }}" method="post">
-                            <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
-                            <ul>
-                                {% for participant in participants %}
-                                    <li class="participant-item">
-                                        <input type="checkbox" id="participant_{{ participant.id }}" name="participants[]" value="{{ participant.id }}">
-                                        <label for="participant_{{ participant.id }}">
-                                            {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
-                                        </label>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                            <button type="submit" class="buttons boutonDeleteParticipants">Désinscrire les participants sélectionnés</button>
-                        </form>
+                        {% if maSortie %}
+                            <form action="{{ path('app_desinscrire_participants') }}" method="post">
+                                <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
+                                <ul>
+                                    {% for participant in participants %}
+                                        <li class="participant-item">
+                                            <input type="checkbox" id="participant_{{ participant.id }}" name="participants[]" value="{{ participant.id }}">
+                                            <label for="participant_{{ participant.id }}">
+                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <button type="submit" class="buttons boutonDeleteParticipants">Désinscrire les participants sélectionnés</button>
+
+                            </form>
+                        {% else %}
+                                <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
+                                <ul>
+                                    {% for participant in participants %}
+                                        <li class="participant-item">
+                                            <label for="participant_{{ participant.id }}">
+                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                        {% endif %}
                     {% else %}
                         <p>Aucun participant</p>
                     {% endif %}
+                    </div>
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>

@@ -331,6 +331,12 @@ class SortiesController extends AbstractController
         $participants = $sortieRepository->findParticipantsBySortieId($id);
         $nbDeParticipants = count($participants);
 
+        $maSortie = false;
+
+        if ($sortie->getOrganisateur()->getId() === $participant->getId()) {
+            $maSortie = true;
+        }
+
         $isSubscrible = $sortie->getEtat() === "Ouvert" && $nbDeParticipants < $sortie->getNbIncriptionsMax() && $sortie->getOrganisateur()->getId() !== $participant->getId();
 
         return $this->render('sorties/detailsSortie.html.twig', [
@@ -338,6 +344,7 @@ class SortiesController extends AbstractController
             'sortie' => $sortie,
             'isSubscrible' => $isSubscrible,
             'participants' => $participants,
+            'maSortie' => $maSortie
         ]);
     }
 
