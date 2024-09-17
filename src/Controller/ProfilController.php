@@ -77,8 +77,6 @@ class ProfilController extends AbstractController
 
         }
 
-        var_dump($userPfp);
-
         return $this->render('profil/index.html.twig', [
             'ProfilForm' => $form->createView(),
             'sites' => $sites,
