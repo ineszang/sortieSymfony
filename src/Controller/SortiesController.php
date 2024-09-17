@@ -175,27 +175,21 @@ class SortiesController extends AbstractController
 
 
 
-    #[Route(['/inscription'], name: 'app_inscription')]
-    public function indexInscription(ParticipantRepository $p,int $id,SortieRepository $sortieRepository): Response
+    #[Route(['/inscription/{name}/{idSortie}'], name: 'app_inscription')]
+    public function indexInscription(string $name, $idSortie, ParticipantRepository $participantRepository, SortieRepository $sortieRepository ): Response
     {
 
-
-        $sortie = $sortieRepository->findOneBySomeField($id);
-
         $utilisateur = $this->getUser();
-        $participant = $p->findOneByPseudo($utilisateur->getUserIdentifier());
+        $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
+        $idUtilisateur = $participant->getId();
+        var_dump($name);
+        if($name === "s'inscrire") {
+            $sortieRepository->addInscription($idUtilisateur, $idSortie);
+        } else if ($name === "se desinscrire") {
+            $sortieRepository->removeInscription($idUtilisateur, $idSortie);
+        }
 
-        //todo : faire une requete
-        $nbDeParticpant = 2;
 
-
-        $isSubscrible = $sortie->getEtat() === "Ouvert" && $nbDeParticpant < $sortie->getNbIncriptionsMax() && $sortie->getOrganisateur()->getId() !== $participant->getId();
-
-        return $this->render('sorties/detailsSortie.html.twig', [
-            'utilisateur' => $utilisateur,
-            'sortie' => $sortie,
-            'isSubscrible' => $isSubscrible
-
-        ]);
+        return $this->redirectToRoute('app_allSorties');
     }
 }
