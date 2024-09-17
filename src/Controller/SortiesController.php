@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
 use App\Repository\ParticipantRepository;
@@ -181,6 +182,41 @@ class SortiesController extends AbstractController
         ]);
     }
 
+    #[Route("/sortieAnnuler/{id}", name: "app_annuler_sortie", methods: ["POST"])]
+    public function annulerSortie(
+        int $id,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ): Response {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $now = new \DateTime();
+        if ($sortie->getDateHeureDebut() < $now) {
+            $this->addFlash('error', 'La sortie ne peut plus être annulée car la date de début est déjà passée.');
+            return $this->redirectToRoute('app_allSorties');
+        }
+
+        if ($this->isCsrfTokenValid('annuler' . $sortie->getId(), $request->request->get('_token'))) {
+            $etatAnnule = $entityManager->getRepository(Etat::class)->find(6);
+            if (!$etatAnnule) {
+                throw $this->createNotFoundException('État "annulé" non trouvé.');
+            }
+            $sortie->setEtat($etatAnnule);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La sortie a été annulée avec succès.');
+        } else {
+            $this->addFlash('error', 'Échec de la validation du token CSRF.');
+        }
+
+        return $this->redirectToRoute('app_allSorties');
+    }
+
 
     #[Route(['/allSorties'], name: 'app_allSorties')]
     public function indexSorties(ParticipantRepository $p,SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request, SortiesService $sortiesService): Response
@@ -231,8 +267,47 @@ class SortiesController extends AbstractController
             'sortiesFinies' => $sortiesFinies,
             'idUtilisateur' => $idUtilisateur,
             'sortiesSubscrible' => $sortiesSubscrible,
-            'sortiesSubscription' => $sortiesSubscription
+            'sortiesSubscription' => $sortiesSubscription,
+            'now' => new \DateTime(),
         ]);
+    }
+
+    #[Route("/desinscrire-participants", name: "app_desinscrire_participants", methods: ["POST"])]
+    public function desinscrireParticipants(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SortieRepository $sortieRepository
+    ): Response {
+        $postData = $request->request->all();
+
+        $sortieId = $postData['sortie_id'] ?? null;
+        $participantIds = $postData['participants'] ?? [];
+
+        dump($sortieId);
+        dump($participantIds);
+
+        $sortie = $sortieRepository->find($sortieId);
+        if (!$sortie) {
+            $this->addFlash('error', 'Sortie non trouvée.');
+            return $this->redirectToRoute('app_allSorties');
+        }
+
+        if (!empty($participantIds)) {
+            foreach ($participantIds as $id) {
+                $participant = $entityManager->getRepository(Participant::class)->find($id);
+                if ($participant) {
+                    $sortie->removeParticipant($participant);
+                }
+            }
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Les participants sélectionnés ont été désinscrits avec succès.');
+        } else {
+            $this->addFlash('error', 'Aucun participant sélectionné pour la désinscription.');
+        }
+
+        return $this->redirectToRoute('app_allSorties');
     }
 
 

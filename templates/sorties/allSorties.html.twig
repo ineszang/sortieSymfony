@@ -116,13 +116,23 @@
                         <div class="card-footer">
                             <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
-                        {% if sortie in sortiesSubscrible %}
-                            <a href="{{ path('app_allSorties') }}" class="buttons">S'INSCRIRE</a>
-                        {% elseif sortie in sortiesSubscription %}
-                            <a href="{{ path('app_allSorties') }}" class="buttons">SE DESINSCRIRE</a>
-                        {% endif %}
-                        <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
-                        <button href="{{ path('app_allSorties') }}" class="boutonDelete">DELETE</button>
+                        <div class="buttons-container">
+                            {% if sortie in sortiesSubscrible %}
+                                <a href="{{ path('app_allSorties') }}" class="buttons inscription">S'INSCRIRE</a>
+                            {% elseif sortie in sortiesSubscription %}
+                                <a href="{{ path('app_allSorties') }}" class="buttons desinscription">SE DESINSCRIRE</a>
+                            {% endif %}
+
+                            <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="buttons boutonModifier">MODIFIER</a>
+
+                            {% if sortie.dateHeureDebut > now %}
+                            <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
+                                <button type="submit" class="buttons boutonDelete">ANNULER</button>
+                            </form>
+                            {% endif %}
+                        </div>
+
                     </div>
                 {% endfor %}
             {% else %}
