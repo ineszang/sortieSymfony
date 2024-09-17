@@ -11,6 +11,7 @@
             <a href="{{ path('app_profil') }}" class="hoverheaderbuttons mr-10" style="font-size: 20px">Profil</a>
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('ville_form') }}" class="hoverheaderbuttons mr-10" style="font-size: 20px">Créer une ville</a>
+                <a href="{{ path('app_admin_view') }}" class="hoverheaderbuttons mr-10" style="font-size: 20px">Utilisateurs</a>
             {% endif %}
 
         </nav>

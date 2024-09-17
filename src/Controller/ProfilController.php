@@ -76,4 +76,54 @@ class ProfilController extends AbstractController
             'photoProfile' => $photoProfile
         ]);
     }
+
+    #[Route('/adminView', name: 'app_admin_view')]
+    #[isGranted("ROLE_ADMIN")]
+    public function users(Request $request, ParticipantRepository $participantRepository,
+                          EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer tous les participants avec les inactifs en premier
+        $participants = $participantRepository->findBy([], ['actif' => 'ASC']);
+
+        return $this->render('profil/adminView.html.twig', [
+            'participants' => $participants
+        ]);
+    }
+    #[Route('/admin/toggle-actif/{id}', name: 'app_admin_toggle_actif')]
+    #[isGranted("ROLE_ADMIN")]
+    public function toggleActif(int $id, ParticipantRepository $participantRepository,
+                                EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer le participant
+        $participant = $participantRepository->find($id);
+
+        if ($participant) {
+            // Inverser l'état actif/inactif
+            $participant->setActif(!$participant->isActif());
+
+            // Sauvegarder les modifications
+            $entityManager->flush();
+        }
+
+        // Redirection après action
+        return $this->redirectToRoute('app_admin_view');
+    }
+    #[Route('/admin/delete-participant/{id}', name: 'app_admin_delete_participant')]
+    #[isGranted("ROLE_ADMIN")]
+    public function deleteParticipant(int $id, ParticipantRepository $participantRepository,
+                                      EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer le participant
+        $participant = $participantRepository->find($id);
+
+        if ($participant) {
+            // Supprimer le participant
+            $entityManager->remove($participant);
+            $entityManager->flush();
+        }
+
+        // Redirection après action
+        return $this->redirectToRoute('app_admin_view');
+    }
+
 }
