@@ -30,13 +30,15 @@ class ProfilController extends AbstractController
         $user = $this->security->getUser();
         $participant = $participantRepository->findOneByPseudo($user->getUserIdentifier());
         $motDePasse = $participant->getMotDePasse();
+        $photoProfile = $participant->getUrlPhoto();
 
         $defaultSite = $participant->getSite()->getId();
         //Création du formulaire
         $form = $this->createForm(ProfilFormType::class, $user);
         $form->handleRequest($request);
 
-        $userPfp = $participant->getUrlPhoto();
+
+
 
         //Enregistrement des modifications du profil
         if ($form->isSubmitted() && $form->get('mot_de_passe')->getData() != null) {
@@ -77,13 +79,12 @@ class ProfilController extends AbstractController
 
         }
 
-        var_dump($userPfp);
 
         return $this->render('profil/index.html.twig', [
             'ProfilForm' => $form->createView(),
             'sites' => $sites,
-            'userPfp' => $userPfp,
             'user' => $user,
+            'photoProfile' => $photoProfile
         ]);
     }
 }
