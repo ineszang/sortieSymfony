@@ -47,7 +47,7 @@ class SortiesController extends AbstractController
         $action = $request->get('action');
 
         if ($action === 'creer') {
-            $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'crée']);
+            $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'créee']);
             $sortie->setEtat($etat);
             if (!$etat) {
                 throw $this->createNotFoundException("L'état n'existe pas.");

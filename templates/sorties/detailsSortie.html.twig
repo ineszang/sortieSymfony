@@ -73,27 +73,16 @@
                             .openPopup();
                     </script>
                     <h2>LES PARTICIPANTS : </h2>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const listItems = document.querySelectorAll('ul li.participant-item');
-
-                            listItems.forEach(item => {
-                                item.addEventListener('click', function() {
-                                    const checkbox = this.querySelector('input[type="checkbox"]');
-                                    checkbox.checked = !checkbox.checked;
-                                    this.classList.toggle('selected', checkbox.checked);
-                                });
-                            });
-                        });
-                    </script>
                     {% if participants|length > 0 %}
                         <form action="{{ path('app_desinscrire_participants') }}" method="post">
                             <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
                             <ul>
                                 {% for participant in participants %}
-                                    <li data-participant-id="{{ participant.id }}" class="participant-item">
-                                        <input type="checkbox" name="participants[]" value="{{ participant.id }}" id="participant_{{ participant.id }}" style="display: none;">
-                                        {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                    <li class="participant-item">
+                                        <input type="checkbox" id="participant_{{ participant.id }}" name="participants[]" value="{{ participant.id }}">
+                                        <label for="participant_{{ participant.id }}">
+                                            {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                        </label>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -102,8 +91,6 @@
                     {% else %}
                         <p>Aucun participant</p>
                     {% endif %}
-
-
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>

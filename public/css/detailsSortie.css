@@ -194,38 +194,57 @@ h2 {
     margin-left: 20px;
     color: #304F8C;
 }
-ul {
-    padding-left: 0; /* Supprime le padding gauche pour les puces */
-    margin: 0; /* Supprime les marges par défaut */
-    list-style-type: none;
+/* Styles généraux pour les éléments de la liste */
+
+input[type="checkbox"] {
+    display: none;
+    cursor:pointer;
+}
+/* Masquer les cases à cocher */
+input[type="checkbox"] {
+    display: none;
 }
 
+/* PAS TOUCHER SENSIBLE */
 li {
-    background-color: #f9f9f9; /* Couleur de fond légère pour chaque élément */
-    border: 1px solid #ddd; /* Bordure grise autour de chaque élément */
-    border-radius: 5px; /* Coins arrondis pour les éléments */
-    padding: 10px; /* Espacement interne autour du texte */
-    margin: 10px 0; /* Espacement vertical entre les éléments */
-    font-family: 'Verdana', sans-serif; /* Police pour les éléments de liste */
-    color: #333; /* Couleur du texte pour une bonne lisibilité */
-    list-style: none; /* Enlève les puces */
-    cursor: pointer; /* Changer le curseur pour indiquer que l'élément est cliquable */
-    position: relative; /* Pour positionner la croix rouge */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    color: #333;
+    position: relative;
+    cursor: pointer;
 }
 
-li.selected {
-    background-color: #fdd; /* Couleur de fond pour les éléments sélectionnés */
-    border-color: #f88; /* Couleur de la bordure pour les éléments sélectionnés */
+label {
+    display: block;
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
 }
 
-li.selected::before {
-    content: "✘"; /* Utilise une croix rouge */
-    color: #f00; /* Couleur rouge pour la croix */
-    font-size: 1.2em; /* Taille de la croix */
-    position: absolute; /* Positionne la croix par rapport au <li> */
-    top: 10px; /* Espacement depuis le haut */
-    right: 10px; /* Espacement depuis la droite */
+input[type="checkbox"]:checked + label {
+    background-color: #fdd;
+    border-color: #f88;
 }
+
+input[type="checkbox"]:checked + label::after {
+    content: "✘";
+    color: #f00;
+    font-size: 1.2em;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+ul {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+
 
 .boutonDeleteParticipants{
     background-color: #BF4545;
