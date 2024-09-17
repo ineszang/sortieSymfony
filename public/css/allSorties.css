@@ -230,8 +230,9 @@ h2{
     text-transform: uppercase;
 }
 
-.boutonModifier, .boutonDelete {
+.boutonModifier {
     background-color: #F2811D;
+    border: none;
     color: #ffffff;
     padding: 0.5rem 1.5rem;
     border-radius: 0.375rem; /* Arrondi des coins */
@@ -244,7 +245,7 @@ h2{
     transition: background-color 0.3s ease;
 }
 
-.boutonModifier:hover {
+.boutonModifier:hover{
     background-color: #4b5563; /* Couleur au survol, ajustez selon votre besoin */
 }
 
@@ -253,8 +254,26 @@ h2{
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Ajoutez une ombre pour le focus si souhaité */
 }
 
+.boutonDelete, .boutonModifier, .desinscription, .inscription {
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 .boutonDelete {
-    background-color: #BF4545;;
+    background-color: #BF4545;
+    color: #ffffff;
+    border: none;
+}
+
+.boutonDelete:hover {
+    background-color: #4b5563;
 }
 
 .search-button-container {
@@ -320,5 +339,43 @@ h2{
 
 .btn:hover {
     color: #0056b3; /* Changer la couleur du texte au survol si désiré */
+}
+
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.buttons {
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.delete-form {
+    display: inline;
+}
+
+.inscription {
+    border:none;
+    background-color: #0056b3;
+    color: #ffffff;
+}
+.inscription {
+    background-color: rgba(0, 86, 179, 0.78);
+}
+
+.desinscription {
+    border-color: #0056b3;
+    background-color: #ffffff;
+    color: #0056b3;
+    transition: transform 0.3s ease;
+}
+
+.desinscription:hover {
+    border-color: rgba(0, 86, 179, 0.44);
+    color: #0056b3;
 }
 

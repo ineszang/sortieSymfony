@@ -72,10 +72,38 @@
                             .bindPopup('Votre sortie est ici !')
                             .openPopup();
                     </script>
-                    <p>Les participants : </p>
-                    {% for participant in participants %}
-                        <p>{{ participant.nom }}</p>
-                    {% endfor %}
+                    <h2>LES PARTICIPANTS : </h2>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const listItems = document.querySelectorAll('ul li.participant-item');
+
+                            listItems.forEach(item => {
+                                item.addEventListener('click', function() {
+                                    const checkbox = this.querySelector('input[type="checkbox"]');
+                                    checkbox.checked = !checkbox.checked;
+                                    this.classList.toggle('selected', checkbox.checked);
+                                });
+                            });
+                        });
+                    </script>
+                    {% if participants|length > 0 %}
+                        <form action="{{ path('app_desinscrire_participants') }}" method="post">
+                            <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
+                            <ul>
+                                {% for participant in participants %}
+                                    <li data-participant-id="{{ participant.id }}" class="participant-item">
+                                        <input type="checkbox" name="participants[]" value="{{ participant.id }}" id="participant_{{ participant.id }}" style="display: none;">
+                                        {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <button type="submit" class="buttons boutonDeleteParticipants">Désinscrire les participants sélectionnés</button>
+                        </form>
+                    {% else %}
+                        <p>Aucun participant</p>
+                    {% endif %}
+
+
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>
