@@ -115,23 +115,16 @@
                         <div class="card-footer">
                             <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
-<<<<<<< HEAD
                         {% if sortie in sortiesSubscrible %}
-                            <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons">S'INSCRIRE</a>
+                            <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons inscription">S'INSCRIRE</a>
                         {% elseif sortie in sortiesSubscription %}
-                            <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons">SE DESINSCRIRE</a>
+                            <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">SE DESINSCRIRE</a>
                         {% endif %}
                         <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
                         <button href="{{ path('app_allSorties') }}" class="boutonDelete">DELETE</button>
-=======
-                        <div class="buttons-container">
-                            {% if sortie in sortiesSubscrible %}
-                                <a href="{{ path('app_allSorties') }}" class="buttons inscription">S'INSCRIRE</a>
-                            {% elseif sortie in sortiesSubscription %}
-                                <a href="{{ path('app_allSorties') }}" class="buttons desinscription">SE DESINSCRIRE</a>
-                            {% endif %}
 
-                            <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="buttons boutonModifier">MODIFIER</a>
+
+
 
                             {% if sortie.dateHeureDebut > now %}
                             <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
@@ -139,9 +132,8 @@
                                 <button type="submit" class="buttons boutonDelete">ANNULER</button>
                             </form>
                             {% endif %}
-                        </div>
 
->>>>>>> feature/createSortie
+
                     </div>
                 {% endfor %}
             {% else %}

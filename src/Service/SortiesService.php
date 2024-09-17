@@ -20,7 +20,7 @@ class SortiesService
         $sortiesOuvertes = [];
         foreach ($sorties as $sortie) {
             // Vérifiez si l'état de la sortie est "ouvert"
-            if ($sortie->getEtat() && $sortie->getEtat()->getLibelle() === 'Ouvert' && $sortie->getOrganisateur()->getId() !==$userId) {
+            if ($sortie->getEtat() && mb_strtolower($sortie->getEtat()->getLibelle()) === 'ouverte' && $sortie->getOrganisateur()->getId() !==$userId) {
                 $sortiesOuvertes[] = $sortie;
             }
         }
