@@ -78,6 +78,13 @@ class ParticipantRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()
             ;
         }*/
+    public function findAllOrderedByActif()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.actif', 'ASC') // Tri les inactifs en premier
+            ->getQuery()
+            ->getResult();
+    }
 
 
 }
