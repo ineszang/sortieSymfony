@@ -104,4 +104,6 @@ header {
     display: none;
 }
 
-.
+.container-img-previsualisation {
+    width: 20%;
+}

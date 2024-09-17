@@ -6,24 +6,19 @@
     flex-direction: column;
 }
 
-body {
-    background-color: #f8f3dc;
+p {
+    color: #304F8C;
 }
 
-p {
-    color: #9c0b59;
+h1 {
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 /*
     PRE CONTAINER
  */
 
-.pre-container {
-    margin-top: 25px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
 
 .details-container {
     display: flex;
@@ -146,8 +141,7 @@ p {
     flex-direction: row;
     border-radius: 0.575rem;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: rgb(243 244 246);
     transition: box-shadow 0.15s ease-in-out;
     min-height: 600px;
     margin-top: 35px;
@@ -164,7 +158,6 @@ p {
 }
 
 .card-header {
-    background-color: #ffffff; /* Couleur de fond du header */
     color: #000000; /* Couleur du texte */
     padding: 10px;
 }
@@ -196,4 +189,5 @@ p {
     border-radius: 4px; /* Coins arrondis de 4px *
     width: 100%; /* Ajuste la largeur à 100% du conteneur, si nécessaire */
 }
+
 

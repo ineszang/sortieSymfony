@@ -116,15 +116,13 @@
                         <div class="card-footer">
                             <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                         </div>
-
-
                         {% if sortie in sortiesSubscrible %}
                             <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons">S'INSCRIRE</a>
                         {% elseif sortie in sortiesSubscription %}
                             <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons">SE DESINSCRIRE</a>
                         {% endif %}
-                        <button href="{{ path('app_allSorties') }}" class="buttons">MODIFIER</button>
-                        <button href="{{ path('app_allSorties') }}" class="buttons">DELETE</button>
+                        <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
+                        <button href="{{ path('app_allSorties') }}" class="boutonDelete">DELETE</button>
                     </div>
                 {% endfor %}
             {% else %}
