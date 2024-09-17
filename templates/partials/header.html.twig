@@ -9,7 +9,9 @@
             <a  class="hoverheaderbuttons mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Liste d'activités</a>
             <a href="{{ path('sortie_form') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Proposer une activité</a>
             <a href="{{ path('app_profil') }}" class="hoverheaderbuttons mr-10" style="font-size: 20px">Profil</a>
-            <a href="{{ path('ville_form') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Creer une ville</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('ville_form') }}" class="hoverheaderbuttons mr-10" style="font-size: 20px">Créer une ville</a>
+            {% endif %}
 
         </nav>
         {% if app.user %}
