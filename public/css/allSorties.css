@@ -29,6 +29,7 @@ p {
 .details-container {
     display: flex;
     justify-content: center;
+
     flex-direction: column;
     width: 250px;
 }
@@ -47,8 +48,9 @@ p {
     height: 200px;
 }
 .search-container-part1 {
-    width: 50%;
+    max-width: 800px;
     height: 100%;
+    margin-right: 50px;
 }
 .search-container {
     margin-top: 25px;
@@ -114,12 +116,14 @@ p {
     flex-direction: row;
 
 
+
 }
 .checkbox-container {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    width: 500px;
 }
 .search-button-container{
     display: flex;
