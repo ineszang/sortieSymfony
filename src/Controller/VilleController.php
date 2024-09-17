@@ -10,11 +10,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class VilleController extends AbstractController
 {
     #[Route("/creationVilleForm", name: "ville_form")]
+    #[isGranted("ROLE_ADMIN")]
     public function create(Request $request, EntityManagerInterface $entityManager, Security $security, ValidatorInterface $validator): Response
     {
         $ville = new Ville();

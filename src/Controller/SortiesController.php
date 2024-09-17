@@ -17,12 +17,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class SortiesController extends AbstractController
 {
     #[Route("/sortieAjoutForm", name: "sortie_form")]
+    #[isGranted("ROLE_USER")]
     public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, FileUploaderService $fileUploaderService,
                            SluggerInterface $slugger, Security $security, ValidatorInterface $validator, VilleRepository $villeRepository): Response
     {
@@ -96,6 +98,7 @@ class SortiesController extends AbstractController
     }
 
     #[Route("/sortieUpdateForm/{id}", name: "app_modifier_sortie")]
+    #[isGranted("ROLE_USER")]
     public function update(
         int $id,
         Request $request,
@@ -183,6 +186,7 @@ class SortiesController extends AbstractController
 
 
     #[Route(['/allSorties'], name: 'app_allSorties')]
+    #[isGranted("ROLE_USER")]
     public function indexSorties(ParticipantRepository $p,SortieRepository $sortieRepository, SiteRepository $siteRepository, Request $request, SortiesService $sortiesService): Response
     {
 
@@ -237,6 +241,7 @@ class SortiesController extends AbstractController
 
 
     #[Route('/detailsSorties/{id}', name: 'app_details_sorties')]
+    #[isGranted("ROLE_USER")]
     public function indexDetailsSortie(int $id, SortieRepository $sortieRepository, ParticipantRepository $participantRepository): Response
     {
         $sortie = $sortieRepository->find($id);
@@ -264,6 +269,7 @@ class SortiesController extends AbstractController
 
 
     #[Route(['/inscription/{name}/{idSortie}'], name: 'app_inscription')]
+    #[isGranted("ROLE_USER")]
     public function indexInscription(string $name, $idSortie, ParticipantRepository $participantRepository, SortieRepository $sortieRepository ): Response
     {
 

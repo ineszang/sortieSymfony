@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class LieuController extends AbstractController
 {
@@ -22,6 +23,7 @@ class LieuController extends AbstractController
     }
 
     #[Route('/lieu', name: 'app_lieu')]
+    #[isGranted("ROLE_USER")]
     public function index(): Response
     {
         return $this->render('lieu/index.html.twig', [
@@ -30,6 +32,7 @@ class LieuController extends AbstractController
     }
 
     #[Route('/rechercher-lieu', name: 'rechercher_lieu', methods: ['GET'])]
+    #[isGranted("ROLE_USER")]
     public function searchLieu(Request $request): JsonResponse
     {
         $query = $request->query->get('q', '');
@@ -51,6 +54,7 @@ class LieuController extends AbstractController
     }
 
     #[Route('/creer-lieu', name: 'creer_lieu', methods: ['POST'])]
+    #[isGranted("ROLE_USER")]
     public function creerLieu(Request $request, EntityManagerInterface $em, VilleRepository $villeRepo): JsonResponse
     {
         // Vérifiez que la requête est bien AJAX

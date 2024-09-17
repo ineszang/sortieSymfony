@@ -15,10 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
+    #[isGranted("ROLE_USER")]
     public function index(Request $request,ParticipantRepository $participantRepository, Security $security,
         EntityManagerInterface $entityManager, FileUploaderService $fileUploaderService, SiteRepository $siteRepository,
                           UserPasswordHasherInterface $userPasswordHasher): Response
