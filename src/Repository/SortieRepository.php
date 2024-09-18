@@ -64,12 +64,14 @@ class SortieRepository extends ServiceEntityRepository
         // Filtrer par les sorties auxquelles l'utilisateur n'est pas inscrit
         if ($pasMesInscriptions) {
             $queryBuilder->leftJoin('s.participants', 'p2')
-                ->andWhere('(p2.id != :userId OR p2.id IS NULL)')
+                ->groupBy('s.id')
+                ->having('SUM(CASE WHEN p2.id = :userId THEN 1 ELSE 0 END) = 0')
                 ->andWhere('s.organisateur != :userId')
-                ->setParameter('userId', $userId);  
+                ->setParameter('userId', $userId);
         }
 
-            // Date limite pour les sorties finies depuis plus d'un mois
+
+        // Date limite pour les sorties finies depuis plus d'un mois
         $dateLimit = new \DateTime();
         $dateLimit->modify('-1 month');
 
@@ -191,7 +193,7 @@ class SortieRepository extends ServiceEntityRepository
         return !empty($result);
     }
 
-    public function publishSortie(int $idSortie, $etatLibelle): void
+    public function changeState(int $idSortie, $etatLibelle): void
     {
         // Récupérer l'état "Ouverte" à partir du libellé
         $etat = $this->getEntityManager()
@@ -211,5 +213,16 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('etat', $etat) // Paramètre pour l'objet Etat
             ->getQuery()
             ->execute(); // Exécuter la requête
+    }
+
+    public function getTotalParticipant(int $idSortie): int
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('COUNT(p.id)')
+            ->join('s.participants', 'p')
+            ->where('s.id = :idSortie')
+            ->setParameter('idSortie', $idSortie);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }

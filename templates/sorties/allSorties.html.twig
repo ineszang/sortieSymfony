@@ -90,13 +90,22 @@
                                     <p>
                                         <strong>Clôture :</strong>
                                         {% if sortie.dateClotureInscription %}
-                                            {% set now = "now"|date("Y-m-d H:i") %}
-                                            {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
-                                            {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
+                                            {% set now = "now"|date('U') %}
+                                            {% set closureDate = sortie.dateClotureInscription|date('U') %}
+                                            {% set diffSeconds = closureDate - now %}
+                                            {% set diffDays = (diffSeconds // 86400) %}
+                                            {% set diffHours = (diffSeconds % 86400) // 3600 %}
+                                            {% set diffMinutes = (diffSeconds % 3600) // 60 %}
 
-                                            {{ diff > 0 ? 'dans ' ~ diff ~ ' jours'  }}
-                                            {{ diff == 0 ? 'Aujourd\'hui' }}
-                                            {{ diff < 0 ? 'fini depuis ' ~  diff|abs ~ ' jours' }}
+                                            {% if diffDays > 0 %}
+                                                dans {{ diffDays }} jours
+                                            {% elseif diffDays == 0 and diffHours > 0 %}
+                                                Dans {{ diffHours }} heures et {{ diffMinutes }} minutes
+                                            {% elseif diffDays == 0 and diffHours == 0 and diffMinutes > 0 %}
+                                                Dans {{ diffMinutes }} minutes
+                                            {% else %}
+                                                fini depuis {{ diffDays|abs }} jours
+                                            {% endif %}
                                             ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
                                         {% else %}
                                             Non définie

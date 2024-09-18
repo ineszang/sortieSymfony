@@ -375,11 +375,18 @@ class SortiesController extends AbstractController
         $utilisateur = $this->getUser();
         $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
         $idUtilisateur = $participant->getId();
-
+        $sortie = $sortieRepository->findOneBySomeField($idSortie);
+        $chevauchement = false;
         // Vérifier si un chevauchement est détecté
         if ($name === "s'inscrire") {
             // Ajouter l'inscription si pas de chevauchement
             $sortieRepository->addInscription($idUtilisateur, $idSortie);
+            if($sortieRepository->getTotalParticipant($idSortie) === $sortie->getNbIncriptionsMax()) {
+                try {
+                    $sortieRepository->changeState($idSortie, "Clôturée");
+                } catch (\Exception $e) {
+                }
+            }
             $chevauchement = $sortieRepository->checkSortie($idSortie, $idUtilisateur);
             if ($chevauchement) {
 
@@ -391,6 +398,12 @@ class SortiesController extends AbstractController
             }
 
         } else if ($name === "se desinscrire") {
+            if($sortieRepository->getTotalParticipant($idSortie) === $sortie->getNbIncriptionsMax() && $sortie->getDateClotureInscription() > new \DateTime()) {
+                try {
+                    $sortieRepository->changeState($idSortie, "Ouverte");
+                } catch (\Exception $e) {
+                }
+            }
             $sortieRepository->removeInscription($idUtilisateur, $idSortie);
         }
 
@@ -415,7 +428,7 @@ class SortiesController extends AbstractController
     #[isGranted("ROLE_USER")]
     public function indexPublier($idSortie, SortieRepository $sortieRepository ): Response
     {
-        $sortieRepository->publishSortie($idSortie, "Ouverte");
+        $sortieRepository->changeState($idSortie, "Ouverte");
 
 
 

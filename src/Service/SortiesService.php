@@ -13,19 +13,19 @@ class SortiesService
     //affichage du bouton s'inscrire
 
     //list des
-    public function listInscription(SortieRepository $sortieRepository, int $userId)
+    public function listInscription(SortieRepository $sortieRepository, int $userId): array
     {
          $sorties = $sortieRepository->findBySearchParameters(null, null, null, null, false, false, true, false, $userId);
-        //état = ouvert
+
+         //état = ouvert
         $sortiesOuvertes = [];
         foreach ($sorties as $sortie) {
             // Vérifiez si l'état de la sortie est "ouvert"
-            if ($sortie->getEtat() && mb_strtolower($sortie->getEtat()->getLibelle()) === 'ouverte' && $sortie->getOrganisateur()->getId() !==$userId) {
+            $sortieNbParticipant = $sortieRepository->getTotalParticipant($sortie->getId());
+            if ($sortie->getEtat() && mb_strtolower($sortie->getEtat()->getLibelle()) === 'ouverte' && $sortie->getOrganisateur()->getId() !==$userId && $sortieNbParticipant < $sortie->getNbIncriptionsMax()) {
                 $sortiesOuvertes[] = $sortie;
             }
         }
-
-
 
         return $sortiesOuvertes;
     }
