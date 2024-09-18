@@ -181,7 +181,7 @@ class SortieRepository extends ServiceEntityRepository
         $qb->join('s.participants', 'p')
             ->where('p.id = :idUtilisateur')
             ->andWhere('s.dateHeureFin < :dateFin')
-            ->andWhere('s.dateHeureDebut > :dateDebut')
+            ->orWhere('s.dateHeureDebut > :dateDebut')
             ->setParameter('idUtilisateur', $idUtilisateur)
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin);
