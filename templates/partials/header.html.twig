@@ -7,8 +7,13 @@
                 {{ app.user.getPseudo() }}
             </span>
                 <span class="titleDateHome ml-1" style="margin-left: 10px;">
-                Rôle(s) : {{ app.user.getRoles() | join(', ') }}
-            </span>
+
+    {% if 'ROLE_ADMIN' in app.user.getRoles() %}
+        Administrateur
+    {% else %}
+        Stagiaire
+    {% endif %}
+</span>
             </div>
         </a>
         <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
