@@ -2,10 +2,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Construire le texte de la pop-up avec les détails des chevauchements
+        let chevauchementsHtml = `{{ chevauchementsHtml|raw }}`;
+
         // Affiche une pop-up d'avertissement
         Swal.fire({
             title: 'Chevauchement détecté !',
-            text: 'Cette sortie chevauche une autre sortie à laquelle vous êtes inscrit. Votre inscription est quand même validée',
+            html: 'Cette sortie chevauche une autre sortie à laquelle vous êtes inscrit. Votre inscription est quand même validée.<br>' + chevauchementsHtml,
             icon: 'warning',
             confirmButtonText: 'OK'
         }).then((result) => {
@@ -15,4 +18,4 @@
             }
         });
     });
-</script>
+</script>   

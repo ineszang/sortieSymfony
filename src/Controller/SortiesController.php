@@ -387,13 +387,13 @@ class SortiesController extends AbstractController
                 } catch (\Exception $e) {
                 }
             }
-            $chevauchement = $sortieRepository->checkSortie($idSortie, $idUtilisateur);
-            if ($chevauchement) {
+            $listchevauchement = $sortieRepository->getOverlappingSorties($idSortie, $idUtilisateur);
+            if (!empty($listchevauchement)) {
 
                 // Rediriger vers une route qui affichera un message d'avertissement
                 return $this->redirectToRoute('app_inscription_chevauchement', [
                     'idSortie' => $idSortie,
-                    'idUtilisateur' => $idUtilisateur
+                    'idUtilisateur' => $idUtilisateur,
                 ]);
             }
 
@@ -413,12 +413,24 @@ class SortiesController extends AbstractController
 
     #[Route('/inscription-chevauchement/{idSortie}/{idUtilisateur}', name: 'app_inscription_chevauchement')]
     #[isGranted("ROLE_USER")]
-    public function inscriptionChevauchement(int $idSortie, int $idUtilisateur): Response
+    public function inscriptionChevauchement(int $idSortie, int $idUtilisateur,SortieRepository $sortieRepository): Response
     {
+
+        $listchevauchement = $sortieRepository->getOverlappingSorties($idSortie, $idUtilisateur);
+
+        // Préparer la chaîne HTML pour la pop-up
+        $chevauchementsHtml = '';
+        foreach ($listchevauchement as $sortie) {
+            $dateDebut = $sortie->getDateHeureDebut()->format('Y-m-d H:i');
+            $dateFin = $sortie->getDateHeureFin()->format('Y-m-d H:i');
+            $organisateur = $sortie->getOrganisateur()->getNom() . ' ' . $sortie->getOrganisateur()->getPrenom();
+            $chevauchementsHtml .= "<p>{$sortie->getNomSortie()} - Début : {$dateDebut} - Fin : {$dateFin} - Organisateur : {$organisateur}</p>";
+        }
         // Afficher un template où la pop-up sera affichée
         return $this->render('sorties/chevauchement.html.twig', [
             'idSortie' => $idSortie,
             'idUtilisateur' => $idUtilisateur,
+            'chevauchementsHtml' => $chevauchementsHtml
         ]);
     }
 

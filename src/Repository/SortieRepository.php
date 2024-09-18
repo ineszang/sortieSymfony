@@ -158,7 +158,7 @@ class SortieRepository extends ServiceEntityRepository
         $stmt->execute();
     }
 
-    public function checkSortie($idSortie, ?int $idUtilisateur): bool
+    public function getOverlappingSorties(int $idSortie, ?int $idUtilisateur): ?array
     {
         // Récupère les informations de la sortie spécifiée
         $qb = $this->createQueryBuilder('s');
@@ -169,28 +169,30 @@ class SortieRepository extends ServiceEntityRepository
         $sortie = $qb->getQuery()->getOneOrNullResult();
 
         if (!$sortie) {
-            // Si la sortie n'existe pas, retourner faux
-            return false;
+            // Si la sortie n'existe pas, retourner un tableau vide
+            return [];
         }
 
         $dateDebut = $sortie['dateHeureDebut'];
         $dateFin = $sortie['dateHeureFin'];
 
         // Récupérer toutes les sorties de l'utilisateur et vérifier les chevauchements
-        $qb = $this->createQueryBuilder('s');
-        $qb->join('s.participants', 'p')
-            ->where('p.id = :idUtilisateur')
-            ->andWhere('s.dateHeureFin < :dateFin')
-            ->orWhere('s.dateHeureDebut > :dateDebut')
-            ->setParameter('idUtilisateur', $idUtilisateur)
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.participants', 'p')
+            ->where('s.dateHeureFin > :dateDebut')
+            ->andWhere('s.dateHeureDebut < :dateFin')
+            ->andWhere('s.id != :idSortie') // Exclure la sortie elle-même
             ->setParameter('dateDebut', $dateDebut)
-            ->setParameter('dateFin', $dateFin);
+            ->setParameter('dateFin', $dateFin)
+            ->setParameter('idSortie', $idSortie);
 
-        // Vérifie s'il y a des résultats
-        $result = $qb->getQuery()->getResult();
+        if ($idUtilisateur !== null) {
+            $qb->andWhere('p.id = :idUtilisateur')
+                ->setParameter('idUtilisateur', $idUtilisateur);
+        }
 
-        // Retourne true si des chevauchements sont trouvés, sinon false
-        return !empty($result);
+        // Récupère les sorties chevauchantes
+        return $qb->getQuery()->getResult();
     }
 
     public function changeState(int $idSortie, $etatLibelle): void
