@@ -108,8 +108,13 @@
                             </div>
                             <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
                             <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
-                            <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}</p>
+                            <p><strong>Organisateur :</strong>
+                                <a href="#" class="organisateur-link" onclick="openModal()">
+                                    {{ sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}
+                                </a>
+                            </p>
                             <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
+
 
                             </div>
                             <div class="bouton-container">
@@ -137,8 +142,19 @@
                             {% if sortie in mesSortiesCreer %}
                             <a href="{{ path('app_publier_sortie', { idSortie: sortie.id })  }}" class="buttons boutonPublier">PUBLIER</a>
                             {% endif %}
+
                         </div>
 
+                        <div id="organisateurModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModal()">&times;</span>
+                                <h2>Informations sur l'organisateur</h2>
+                                <p><strong>Nom :</strong> {{ sortie.organisateur.nom }}</p>
+                                <p><strong>Prénom :</strong> {{ sortie.organisateur.prenom }}</p>
+                                <p><strong>Email :</strong> {{ sortie.organisateur.mail }}</p>
+                                <p><strong>Téléphone :</strong> {{ sortie.organisateur.telephone }}</p>
+                            </div>
+                        </div>
 
                     </div>
                 {% endfor %}
@@ -147,4 +163,21 @@
             {% endif %}
         </div>
     </div>
+    <script>
+        function openModal() {
+            event.preventDefault();
+            document.getElementById("organisateurModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("organisateurModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("organisateurModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}
