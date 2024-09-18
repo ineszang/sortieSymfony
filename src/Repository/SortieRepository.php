@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,7 +20,7 @@ class SortieRepository extends ServiceEntityRepository
         $this->connection = $connection;
     }
 
-    public function findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $userId)
+    public function findBySearchParameters($site, $recherche, $dateStart, $dateEnd, $mesSorties, $mesInscriptions, $pasMesInscriptions, $sortiesFinies, $userId, ?string $etat = null )
     {
         $queryBuilder = $this->createQueryBuilder('s');
 
@@ -81,6 +82,12 @@ class SortieRepository extends ServiceEntityRepository
             // Inclure les futures et les en cours
             $queryBuilder->andWhere('s.dateHeureFin >= :dateLimit')
                 ->setParameter('dateLimit', $dateLimit);
+        }
+
+        if ($etat) {
+            $queryBuilder->join('s.etat', 'e') // Jointure sur l'état de la sortie
+            ->andWhere('e.libelle = :etat')
+                ->setParameter('etat', $etat);
         }
 
         return $queryBuilder->getQuery()->getResult();
@@ -149,7 +156,7 @@ class SortieRepository extends ServiceEntityRepository
         $stmt->execute();
     }
 
-    public function checkSortie($idSortie, ?int $idUtilisateur)
+    public function checkSortie($idSortie, ?int $idUtilisateur): bool
     {
         // Récupère les informations de la sortie spécifiée
         $qb = $this->createQueryBuilder('s');
@@ -179,5 +186,27 @@ class SortieRepository extends ServiceEntityRepository
 
         // Si on trouve une sortie qui chevauche, on retourne true
         return (bool) $qb->getQuery()->getResult();
+    }
+
+    public function publishSortie(int $idSortie, $etatLibelle): void
+    {
+        // Récupérer l'état "Ouverte" à partir du libellé
+        $etat = $this->getEntityManager()
+            ->getRepository(Etat::class)
+            ->findOneBy(['libelle' => $etatLibelle]);
+
+        if (!$etat) {
+            throw new \Exception('Etat non trouvé');
+        }
+
+        // Mettre à jour l'état de la sortie
+        $this->createQueryBuilder('s')
+            ->update() // Mise à jour de l'entité
+            ->set('s.etat', ':etat') // Assignation de l'objet Etat
+            ->where('s.id = :idSortie') // Condition sur l'id de la sortie
+            ->setParameter('idSortie', $idSortie)
+            ->setParameter('etat', $etat) // Paramètre pour l'objet Etat
+            ->getQuery()
+            ->execute(); // Exécuter la requête
     }
 }

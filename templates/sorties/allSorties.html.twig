@@ -111,26 +111,33 @@
                             <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}</p>
                             <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
 
-                        </div>
-                        <div class="card-footer">
-                            <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
-                        </div>
-                        {% if sortie in sortiesSubscrible %}
-                            <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons inscription">S'INSCRIRE</a>
-                        {% elseif sortie in sortiesSubscription %}
-                            <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">SE DESINSCRIRE</a>
-                        {% endif %}
-                        <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
+                            </div>
+                            <div class="bouton-container">
+                                <div class="card-footer">
+                                    <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
+                                </div>
+                                {% if sortie in sortiesSubscrible %}
+                                    <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons inscription">REJOINDRE</a>
+                                {% elseif sortie in sortiesSubscription %}
+                                    <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">QUITTER</a>
+                                {% endif %}
 
-                            {% if sortie.dateHeureDebut > now %}
-                            <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
-                                <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
-                                <button type="submit" class="buttons boutonDelete">ANNULER</button>
-                            </form>
+                                {% if sortie in sortiesModifiable %}
+                                <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
+                                {% endif %}
+
+                                    {% if sortie.dateHeureDebut > now %}
+                                        {% if sortie in sortiesAnnulable %}
+                                            <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
+                                                <button type="submit" class="buttons boutonDelete">ANNULER</button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                            {% if sortie in mesSortiesCreer %}
+                            <a href="{{ path('app_publier_sortie', { idSortie: sortie.id })  }}" class="buttons boutonPublier">PUBLIER</a>
                             {% endif %}
-                    {% if sortie in mesSortiesCreer %}
-                    <a href="{{ path('app_publier_sortie', { idSortie: sortie.id })  }}" class="buttons">PUBLIER</a>
-                    {% endif %}
+                        </div>
 
 
                     </div>

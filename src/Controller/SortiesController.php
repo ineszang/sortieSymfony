@@ -256,8 +256,16 @@ class SortiesController extends AbstractController
         $sortiesSubscrible = $sortiesService->listInscription($sortieRepository,$idUtilisateur);
         $mesSortiesCreer = $sortiesService->listMySortieCree($sortieRepository, $idUtilisateur);
 
-        $sortiesSubscription = $sortieRepository->findBySearchParameters(null, null, null, null, false, true, false, false, $participant->getId());
+        $sortiesSubscription = $sortiesService->listDesinscription($sortieRepository,$idUtilisateur);
 
+
+
+        $sortiesModifiable = $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Créée");
+
+        $sortiesAnnulable = array_merge(
+            $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Créée"),
+            $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Ouverte")
+        );
 
         return $this->render('sorties/allSorties.html.twig', [
             'utilisateur' => $username,
@@ -274,7 +282,9 @@ class SortiesController extends AbstractController
             'idUtilisateur' => $idUtilisateur,
             'sortiesSubscrible' => $sortiesSubscrible,
             'sortiesSubscription' => $sortiesSubscription,
-            'mesSortiesCreer' => $mesSortiesCreer
+            'mesSortiesCreer' => $mesSortiesCreer,
+            'sortiesModifiable' => $sortiesModifiable,
+            'sortiesAnnulable' => $sortiesAnnulable
 
         ]);
     }
@@ -403,9 +413,9 @@ class SortiesController extends AbstractController
 
     #[Route(['/app_publier_sortie/{idSortie}'], name: 'app_publier_sortie')]
     #[isGranted("ROLE_USER")]
-    public function indexPublier(string $name, $idSortie, ParticipantRepository $participantRepository, SortieRepository $sortieRepository ): Response
+    public function indexPublier($idSortie, SortieRepository $sortieRepository ): Response
     {
-
+        $sortieRepository->publishSortie($idSortie, "Ouverte");
 
 
 

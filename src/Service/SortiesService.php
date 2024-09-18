@@ -30,6 +30,25 @@ class SortiesService
         return $sortiesOuvertes;
     }
 
+    public function listDesinscription(SortieRepository $sortieRepository, int $userId)
+    {
+        $sorties = $sortieRepository->findBySearchParameters(null, null, null, null, false, true, false, false, $userId);
+        //état = ouvert
+        $sortiesAQuitter = [];
+        foreach ($sorties as $sortie) {
+            // Vérifiez si l'état de la sortie est "ouvert"
+            if ($sortie->getEtat() && (mb_strtolower($sortie->getEtat()->getLibelle()) === 'ouverte' || mb_strtolower($sortie->getEtat()->getLibelle()) === 'clôturée')  && $sortie->getOrganisateur()->getId() !==$userId) {
+                $sortiesAQuitter[] = $sortie;
+            }
+        }
+
+
+
+        return $sortiesAQuitter;
+    }
+
+
+
 
     //affichage du bouton publier
     public function listMySortieCree(SortieRepository $sortieRepository, int $userId)

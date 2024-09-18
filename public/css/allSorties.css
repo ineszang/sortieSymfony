@@ -222,13 +222,8 @@ p {
     padding: 2px;
     margin-left: 15px;
 }
-.buttons {
-    box-sizing: border-box;
-    border: 2px solid black; /* Bordure noire de 2px */
-    border-radius: 4px;
-    padding: 2px;
-    margin-left: 15px;
-}
+
+
 
 h2{
     color: #BF4545;
@@ -239,6 +234,7 @@ h2{
     background-color: #F2811D;
     border: none;
     color: #ffffff;
+    height: 40px;
     padding: 0.5rem 1.5rem;
     border-radius: 0.375rem; /* Arrondi des coins */
     font-size: 1rem; /* Taille du texte */
@@ -259,7 +255,23 @@ h2{
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Ajoutez une ombre pour le focus si souhaité */
 }
 
-.boutonDelete, .boutonModifier, .desinscription, .inscription {
+.boutonPublier {
+    background-color: #000000;
+    color : #ffffff;
+    height: 40px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.8s ease;
+
+}
+
+.boutonDelete, .boutonModifier, .desinscription, .inscription, .BoutonPublier {
     padding: 0.5rem 1.5rem;
     border-radius: 0.375rem; /* Arrondi des coins */
     font-size: 1rem; /* Taille du texte */
@@ -276,6 +288,8 @@ h2{
     color: #ffffff;
     border: none;
 }
+
+
 
 .boutonDelete:hover {
     background-color: #4b5563;
@@ -355,7 +369,7 @@ h2{
 
 .buttons {
     display: inline-block;
-    padding: 10px 15px;
+
     cursor: pointer;
 }
 
@@ -367,6 +381,7 @@ h2{
     border:none;
     background-color: #0056b3;
     color: #ffffff;
+    height: 40px;
 }
 .inscription {
     background-color: rgba(0, 86, 179, 0.78);
@@ -376,6 +391,7 @@ h2{
     border-color: #0056b3;
     background-color: #ffffff;
     color: #0056b3;
+    height: 40px;
     transition: transform 0.3s ease;
 }
 
