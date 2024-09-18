@@ -18,12 +18,8 @@
         {% if sortie is not empty %}
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
-                        <div class="container-img">
+                            <h1 class="card-title">{{ sortie.nomSortie }}</h1>
                             <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
-
-                        </div>
-
                     </div>
 
                     <div class="card-body">
@@ -52,7 +48,7 @@
                             </div>
                         </div>
                         <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
-                        <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
+                        <p><strong>lieu : </strong> {{sortie.lieu}}</p>
                         <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
                         <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
                         <p><strong>Etat : </strong> {{sortie.etat.libelle }}</p>
@@ -76,20 +72,41 @@
                             .bindPopup('Votre sortie est ici !')
                             .openPopup();
                     </script>
+                    <div class="participantsSection">
+                        <h2>LES PARTICIPANTS : </h2>
+                    {% if participants|length > 0 %}
+                        {% if maSortie %}
+                            <form action="{{ path('app_desinscrire_participants') }}" method="post">
+                                <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
+                                <ul>
+                                    {% for participant in participants %}
+                                        <li class="participant-item">
+                                            <input type="checkbox" id="participant_{{ participant.id }}" name="participants[]" value="{{ participant.id }}">
+                                            <label for="participant_{{ participant.id }}">
+                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <button type="submit" class="buttons boutonDeleteParticipants">Désinscrire les participants sélectionnés</button>
 
-                    {% if sortie.etat.libelle == "Ouvert" %}
-                        <p>Les participants : </p>
+                            </form>
+                        {% else %}
+                                <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
+                                <ul>
+                                    {% for participant in participants %}
+                                        <li class="participant-item">
+                                            <label for="participant_{{ participant.id }}">
+                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                        {% endif %}
                     {% else %}
-                        <p>rien</p>
+                        <p>Aucun participant</p>
                     {% endif %}
-
-
-                    {% if sortie.etat.libelle == "Ouvert" %}
-                        <button>S'inscrire</button>
-                    {% else %}
-                        <p>rien</p>
-                    {% endif %}
-
+                    </div>
                 </div>
         {% else %}
             <p>Aucune sortie disponible.</p>

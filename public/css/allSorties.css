@@ -12,7 +12,7 @@ body {
 }
 
 p {
-    color: #9c0b59;
+    color: #304F8C;
 }
 
 /*
@@ -28,7 +28,10 @@ p {
 
 .details-container {
     display: flex;
+    justify-content: center;
+
     flex-direction: column;
+    width: 250px;
 }
 
 /*
@@ -45,8 +48,9 @@ p {
     height: 200px;
 }
 .search-container-part1 {
-    width: 50%;
+    max-width: 800px;
     height: 100%;
+    margin-right: 50px;
 }
 .search-container {
     margin-top: 25px;
@@ -112,12 +116,14 @@ p {
     flex-direction: row;
 
 
+
 }
 .checkbox-container {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    width: 500px;
 }
 .search-button-container{
     display: flex;
@@ -152,8 +158,9 @@ p {
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.15s ease-in-out;
-    max-height: 600px;
+    max-height: 800px;
     background-color: rgb(243 244 246);
+    padding: 15px;
 }
 
 .card-title {
@@ -184,6 +191,7 @@ p {
     display: flex;
     justify-content: center;
     margin-top: 15px;
+    height: 200px;
 }
 
 
@@ -206,4 +214,233 @@ p {
 .reset-button:hover {
     color: #b90000;
 }
+
+.buttons {
+    box-sizing: border-box;
+    border: 2px solid black; /* Bordure noire de 2px */
+    border-radius: 4px;
+    padding: 2px;
+    margin-left: 15px;
+}
+
+
+
+h2{
+    color: #BF4545;
+    text-transform: uppercase;
+}
+
+.boutonModifier {
+    background-color: rgba(242, 129, 29, 0.8);
+    border: none;
+    color: #ffffff;
+    height: 40px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boutonModifier:hover{
+    background-color: #4b5563; /* Couleur au survol, ajustez selon votre besoin */
+}
+
+.boutonCreer:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Ajoutez une ombre pour le focus si souhaité */
+}
+
+.boutonPublier {
+    background-color: #000000;
+    color : #ffffff;
+    height: 40px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.8s ease;
+
+}
+
+.boutonDelete, .boutonModifier, .desinscription, .inscription, .BoutonPublier {
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boutonDelete {
+    background-color: #BF4545;
+    color: #ffffff;
+    border: none;
+}
+
+
+
+.boutonDelete:hover {
+    background-color: #4b5563;
+}
+
+.search-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-button {
+    background-color: #304F8C;
+    color: #FFFFFF;
+    border:none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    outline: none;
+}
+
+.search-button:hover {
+    background-color: #66A3F2;
+}
+
+.btn {
+    position: relative; /* Nécessaire pour positionner le pseudo-élément */
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem; /* Ajuste la taille du texte selon les besoins */
+    text-decoration: none; /* Supprime le soulignement par défaut */
+    color: #007bff; /* Couleur du texte */
+    background: none; /* Pas de fond */
+    border: none; /* Pas de bordure */
+    border-radius: 0.375rem; /* Coins arrondis */
+    transition: color 0.3s ease; /* Transition douce pour la couleur du texte */
+}
+
+.btn::before {
+    content: ''; /* Contenu vide pour le pseudo-élément */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Épaisseur du surlignage */
+    background-color: #007bff; /* Couleur du surlignage */
+    transform: scaleX(0); /* Commence avec une échelle de 0 */
+    transform-origin: bottom right; /* Point d'origine de la transformation */
+    transition: transform 0.3s ease; /* Transition douce pour l'effet de mise à l'échelle */
+}
+
+.btn:hover::before {
+    transform: scaleX(1); /* Étend à la pleine largeur au survol */
+    transform-origin: bottom left; /* Change le point d'origine à gauche pour l'animation */
+}
+
+.btn:hover {
+    color: #0056b3; /* Changer la couleur du texte au survol si désiré */
+}
+
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.buttons {
+    display: inline-block;
+
+    cursor: pointer;
+}
+
+.delete-form {
+    display: inline;
+}
+
+.inscription {
+    border:none;
+    background-color: #0056b3;
+    color: #ffffff;
+    height: 40px;
+}
+.inscription {
+    background-color: rgba(0, 86, 179, 0.78);
+}
+
+.desinscription {
+    border-color: #0056b3;
+    background-color: #ffffff;
+    color: #0056b3;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.desinscription:hover {
+    border-color: rgba(0, 86, 179, 0.44);
+    color: #0056b3;
+}
+/* Masquer la modal par défaut */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.organisateur-link {
+    color: #66A3F2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.organisateur-link:hover {
+    color: #0056b3; /* Couleur légèrement plus sombre au survol */
+}
+
 

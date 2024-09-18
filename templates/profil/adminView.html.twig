@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('css/adminViewSortie.css') }}">
+<section class="text-gray-600 body-font">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-20">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">LES UTILISATEURS</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Les utilisateurs sont inactifs par défault, activez les afin qu'ils puissent accéder à l'intranet.</p>
+        </div>
+        <div class="flex flex-wrap -m-2">
+            {% for participant in participants %}
+            <div class="p-2 lg:w-1/3 md:w-1/2 w-full">
+                <div class="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                    <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="{{ participant.urlPhoto ? asset(participant.urlPhoto) : asset('images/user/default_user_img.webp')}}">
+                    <div class="flex-grow">
+                        <h2 class="text-gray-900 title-font font-medium">{{ participant.pseudo }}</h2>
+                        <p class="text-gray-500">{{ participant.nom }} {{ participant.prenom }} {{ participant.mail }}</p>
+                        <p class="textActif">{{ participant.actif ? 'ACTIF' : 'INACTIF' }}</p>
+                    </div>
+                    {% if participant.administrateur != 1 %}
+                    <div class="button-group">
+                        <form action="{{ path('app_admin_toggle_actif', { id: participant.id }) }}" method="post" style="margin-bottom: 10px;">
+                            <button type="submit" class="boutonActif">{{ participant.actif ? 'Désactiver' : 'Activer' }}</button>
+                        </form>
+                        <form action="{{ path('app_admin_delete_participant', { id: participant.id }) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce participant ?');">
+                            <button type="submit" class="boutonDelete">Supprimer</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

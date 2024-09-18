@@ -96,6 +96,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sorties = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->nom . ' ' . $this->prenom . ', ' ($this->pseudo) . ($this->telephone ? ', ' . $this->mail : '');
+    }
+
     public function getId(): ?int
     {
         return $this->id;

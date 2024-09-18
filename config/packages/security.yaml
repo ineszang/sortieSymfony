@@ -32,6 +32,5 @@ security:
             user_checker: App\Security\UserChecker
 
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profil, roles: ROLE_USER }
+
 

@@ -6,24 +6,19 @@
     flex-direction: column;
 }
 
-body {
-    background-color: #f8f3dc;
+p {
+    color: #304F8C;
 }
 
-p {
-    color: #9c0b59;
+h1 {
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 /*
     PRE CONTAINER
  */
 
-.pre-container {
-    margin-top: 25px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
 
 .details-container {
     display: flex;
@@ -146,8 +141,7 @@ p {
     flex-direction: row;
     border-radius: 0.575rem;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: rgb(243 244 246);
     transition: box-shadow 0.15s ease-in-out;
     min-height: 600px;
     margin-top: 35px;
@@ -164,7 +158,6 @@ p {
 }
 
 .card-header {
-    background-color: #ffffff; /* Couleur de fond du header */
     color: #000000; /* Couleur du texte */
     padding: 10px;
 }
@@ -196,4 +189,86 @@ p {
     border-radius: 4px; /* Coins arrondis de 4px *
     width: 100%; /* Ajuste la largeur à 100% du conteneur, si nécessaire */
 }
+
+h2 {
+    margin-left: 20px;
+    color: #304F8C;
+}
+/* Styles généraux pour les éléments de la liste */
+
+input[type="checkbox"] {
+    display: none;
+    cursor:pointer;
+}
+/* Masquer les cases à cocher */
+input[type="checkbox"] {
+    display: none;
+}
+
+/* PAS TOUCHER SENSIBLE */
+li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    color: #333;
+    position: relative;
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label {
+    background-color: #fdd;
+    border-color: #f88;
+}
+
+input[type="checkbox"]:checked + label::after {
+    content: "✘";
+    color: #f00;
+    font-size: 1.2em;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+ul {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+
+
+.boutonDeleteParticipants{
+    background-color: #BF4545;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem; /* Arrondi des coins */
+    font-size: 1rem; /* Taille du texte */
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.participantsSection {
+    margin-left: 30px;
+}
+
+
+.boutonDeleteParticipants:hover {
+    background-color: #4b5563;
+}
+
+
 
