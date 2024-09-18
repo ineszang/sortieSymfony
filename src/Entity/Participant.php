@@ -53,7 +53,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'telephone', length: 15, nullable: true)]
     private ?string $telephone = null;
 
-    #[Assert\Email(message: 'Cet e-mail{{ value }} n\'est pas un e-mail valide.')]
+    #[Assert\Email(message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.')]
     #[Assert\NotBlank(message: 'L\'adresse e-mail ne peut pas être vide.')]
     #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;

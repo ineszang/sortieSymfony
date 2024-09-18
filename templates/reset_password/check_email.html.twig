@@ -1,6 +1,21 @@
-{% extends 'base.html.twig' %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Réinitialisation du mot de passe{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('images/Bouge tonCampsTransparent.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-{% block title %}Réinitialisation du mot de passe{% endblock %}
+    {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+
 {% block body %}
     <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
         <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">

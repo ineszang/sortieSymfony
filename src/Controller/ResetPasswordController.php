@@ -32,7 +32,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Display & process form to request a password reset.
+     * Affiche & procède au formulaire pour une demande de réinitialisation de mot de passe.
      */
     #[Route('', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
@@ -54,7 +54,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Confirmation page after a user has requested a password reset.
+     * Page de confirmation après la demande de réinitialisation de mot de passe.
      */
     #[Route('/check-email', name: 'app_check_email')]
     public function checkEmail(): Response
@@ -71,7 +71,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Validates and process the reset URL that the user clicked in their email.
+     * Valide et traite l'URL de réinitialisation que l'utilisateur a cliqué dans son email.
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
     public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, ?string $token = null): Response
@@ -129,6 +129,9 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
+    /**
+     * Envoie un email de réinitialisation de mot de passe si l'utilisateur existe.
+     */
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
     {
         $user = $this->entityManager->getRepository(Participant::class)->findOneBy([
@@ -147,11 +150,11 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-             $this->addFlash('reset_password_error', sprintf(
-                 '%s - %s',
-                 $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
-                 $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
-             ));
+          //   $this->addFlash('reset_password_error', sprintf(
+           //      '%s - %s',
+           //      $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
+            //     $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
+             //));
 
             return $this->redirectToRoute('app_check_email');
         }

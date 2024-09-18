@@ -1,28 +1,47 @@
-{% extends 'base.html.twig' %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Réinitialisation du mot de passe{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('images/Bouge tonCampsTransparent.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-{% block title %}Réinitialisation du mot de passe{% endblock %}
+    {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
 
 {% block body %}
     <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
         <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-            <form method="post">
+            {{ form_start(resetForm) }}
                 <h1 class="text-2xl font-bold mb-6 text-center">
                     Réinitialisation du mot de passe</h1>
-                {% if error %}
-                    <div class="alert alert-danger error"></div>
-                {% endif %}
-                <div class="mb-4">
-                    <label for="password" class="block text-gray-700">Mot de passe :</label>
-                    <input type="password" name="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="current-password" required>
+               
+                <div class="error">
+                    {{form_errors(resetForm.plainPassword)}}
                 </div>
-            </form>
-            
+                
+                <div class="mb-4">
+                    {{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe : ', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                    {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg 
+                        focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(resetForm.plainPassword.second,'Confirmez votre mot de passe : ', {'label_attr': {'class': 'block text-gray-700 '}}) }}
+                    {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg 
+                        focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                </div>
+                <button type="submit" class="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 
+                    focus:outline-none focus:ring-2
+                     focus:ring-pink-500 focus:ring-opacity-50">Changer le mot de passe</button>
+            {{ form_end(resetForm) }}
         </div>
     </div>
-    
-
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
 {% endblock %}
