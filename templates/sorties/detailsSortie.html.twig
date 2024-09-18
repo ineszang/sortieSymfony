@@ -6,27 +6,43 @@
 
 
 {% block body %}
-    <button>  <a  class="hoverheaderbuttons text-gray mr-10" href="{{ path('app_allSorties') }}" style="font-size: 20px">Retour</a></button>
+    <a href="{{ path('app_allSorties') }}" class="back-button" title="Retour">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 7l-5 5 5 5V7z" fill="#fff"/>
+        </svg>
+    </a>
     <link rel="stylesheet" href="{{ asset('css/detailsSortie.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
-        #map { height: 400px; width: 400px; }
+        #map {
+            height: 250px; /* Hauteur réduite */
+            width: 100%;   /* Largeur adaptative */
+            max-width: 600px; /* Largeur maximale */
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd; /* Bordure optionnelle pour visualiser les limites de la carte */
+        }
     </style>
 
-        {% if sortie is not empty %}
-                <div class="card">
-                    <div class="card-header">
-                            <h1 class="card-title">{{ sortie.nomSortie }}</h1>
-                            <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
-                    </div>
+{% if sortie is not empty %}
+    <div class="card">
+        <div class="detail-container">
+            <!-- Section de l'image à gauche -->
+            <div class="image-section">
+                <img id="image-sortie" src="{{ sortie.urlPhoto ? asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
+            </div>
 
+            <!-- Section des détails et des participants -->
+            <div class="content-section">
+                <div class="details-and-map">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
+                                <h1 class="card-title">{{ sortie.nomSortie }}</h1>
                                 <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
-                                <p><strong>Durée :</strong> {{ sortie.duree ? sortie.duree ~' heure(s)': 'Non définie' }}</p>
+                                <p><strong>Durée :</strong> {{ sortie.duree ? sortie.duree ~ ' heure(s)' : 'Non définie' }}</p>
                                 <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
                             </div>
                             <div class="col">
@@ -36,44 +52,38 @@
                                         {% set now = "now"|date("Y-m-d H:i") %}
                                         {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
                                         {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
-
                                         {{ diff > 0 ? 'dans ' ~ diff ~ ' jours' : 'Aujourd\'hui' }}
                                         ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
                                     {% else %}
                                         Non définie
                                     {% endif %}
                                 </p>
-
-                                <p><strong>Inscrits/Places : </strong>{{ sortie.nbIncriptionsMax ~ ' place(s)' }} </p>
+                                <p><strong>Inscrits/Places :</strong> {{ sortie.nbIncriptionsMax ~ ' place(s)' }}</p>
                             </div>
                         </div>
-                        <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
-                        <p><strong>lieu : </strong> {{sortie.lieu}}</p>
-                        <p><strong>Organisateur :</strong> {{sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom}}</p>
-                        <p><strong>Site organisateur : </strong> {{sortie.siteOrganisateur.nomSite }}</p>
-                        <p><strong>Etat : </strong> {{sortie.etat.libelle }}</p>
-
+                        <p><strong>État :</strong> {{ sortie.etat.libelle }}</p>
+                        <p><strong>Lieu :</strong> {{ sortie.lieu }}</p>
+                        <p><strong>Organisateur :</strong> {{ sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}</p>
+                        <p><strong>Site organisateur :</strong> {{ sortie.siteOrganisateur.nomSite }}</p>
                     </div>
 
+                    <!-- Carte -->
                     <div id="map"></div>
-                    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
                     <script>
-                        // Initialisation de la carte
-                        var map = L.map('map').setView([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}], 13);
-
-                        // Ajout du fond de carte OpenStreetMap
+                        var map = L.map('map').setView([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}], 13);
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             maxZoom: 19,
                             attribution: '© OpenStreetMap'
                         }).addTo(map);
-
-                        // Ajout d'un marqueur
-                        L.marker([{{ sortie.lieu.latitude  }}, {{ sortie.lieu.longitude }}]).addTo(map)
+                        L.marker([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}]).addTo(map)
                             .bindPopup('Votre sortie est ici !')
                             .openPopup();
                     </script>
-                    <div class="participantsSection">
-                        <h2>LES PARTICIPANTS : </h2>
+                </div>
+
+                <!-- Section des participants -->
+                <div class="participants-section">
+                    <h2>Les Participants :</h2>
                     {% if participants|length > 0 %}
                         {% if maSortie %}
                             <form action="{{ path('app_desinscrire_participants') }}" method="post">
@@ -89,30 +99,22 @@
                                     {% endfor %}
                                 </ul>
                                 <button type="submit" class="buttons boutonDeleteParticipants">Désinscrire les participants sélectionnés</button>
-
                             </form>
                         {% else %}
-                                <input type="hidden" name="sortie_id" value="{{ sortie.id }}">
-                                <ul>
-                                    {% for participant in participants %}
-                                        <li class="participant-item">
-                                            <label for="participant_{{ participant.id }}">
-                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
-                                            </label>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+                            <ul>
+                                {% for participant in participants %}
+                                    <li class="participant-item">{{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})</li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
                     {% else %}
-                        <p>Aucun participant</p>
+                        <p class="ml-5">Aucun participant</p>
                     {% endif %}
-                    </div>
                 </div>
-        {% else %}
-            <p>Aucune sortie disponible.</p>
-        {% endif %}
-
-
-
-
+            </div>
+        </div>
+    </div>
+{% else %}
+    <p>Aucune sortie disponible.</p>
+{% endif %}
 {% endblock %}
