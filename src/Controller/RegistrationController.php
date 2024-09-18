@@ -48,4 +48,6 @@ class RegistrationController extends AbstractController
             'sites' => $sites
         ]);
     }
+
+    
 }
