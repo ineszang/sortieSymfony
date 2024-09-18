@@ -21,9 +21,6 @@ class UserChecker implements UserCheckerInterface
             throw new CustomUserMessageAccountStatusException("Ce compte n'est pas encore actif. Veuillez patienter jusqu'à ce qu'un administrateur l'active.");
         }
         
-        if (!$user-) {
-            throw new CustomUserMessageAccountStatusException("Pseudo ou mot de passe incorrect.");
-        }
     }
 
     public function checkPostAuth(UserInterface $user): void

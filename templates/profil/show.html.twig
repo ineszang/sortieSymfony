@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto flex px-5 py-24 justify-center items-center">
+        {% if user.urlPhoto %}
+            <div class="top-4 left-0 pr-8">
+                <img src='{{ asset(user.urlPhoto) }}'  alt="photo de profil" class="w-44 h-44 rounded-full mx-auto">
+            </div>
+        {% endif %}
+        {% if not user.urlPhoto %}
+            <div class="top-4 left-0 pr-8">
+                <img src='{{ asset('images/user/default_user_img.webp') }}'  alt="default photo" class="w-44 h-44 rounded-full mx-auto">
+            </div>
+        {% endif %}
+        <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">{{ user.pseudo }}</h1>
+                <div class="mb-4 block text-gray-700">
+                    Prénom : {{ user.prenom }}
+                </div>
+
+                <div class="mb-4 block text-gray-700">
+                    Nom : {{ user.nom }}
+                </div>
+
+                <div class="mb-4 block text-gray-700">
+                    Téléphone : {{ user.telephone }}
+                </div>
+
+                <div class="mb-4 block text-gray-700">
+                    E-mail : {{ user.mail }}
+                </div>
+
+                <div class="mb-4 block text-gray-700">
+                    Ville de rattachement : {{ user.site.nomSite }}
+                </div>
+        </div>
+    </div>  
+{% endblock %}

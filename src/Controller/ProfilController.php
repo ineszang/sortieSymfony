@@ -84,4 +84,15 @@ class ProfilController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    #[Route('/profil/{id}', name: 'app_profil_show')]
+    public function show(Participant $participant, EntityManagerInterface $entityManager, 
+        $id): Response
+    {
+        $user = $entityManager->getRepository(Participant::class)->find($id);
+
+        return $this->render('profil/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
 }
