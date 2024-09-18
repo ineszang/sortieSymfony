@@ -59,10 +59,15 @@
                 <div class="error">
                     {{form_errors(registrationForm.telephone)}}  
                 </div>
-                <div class="mb-4">
-                    {{ form_label(registrationForm.telephone, 'Téléphone :', {'label_attr': {'class': 'block text-gray-700'}}) }}
-                    {{ form_widget(registrationForm.telephone, {'attr': {'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
-                </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.telephone, 'Téléphone :', {'label_attr': {'class': 'block text-gray-700'}}) }}
+                {{ form_widget(registrationForm.telephone, {
+                'attr': {
+                'class': 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+                'maxlength': '10'
+                }
+                }) }}
+            </div>
 
                 <div class="error">
                     {{form_errors(registrationForm.mot_de_passe)}}  

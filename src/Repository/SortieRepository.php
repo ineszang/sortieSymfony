@@ -66,7 +66,7 @@ class SortieRepository extends ServiceEntityRepository
             $queryBuilder->leftJoin('s.participants', 'p2')
                 ->andWhere('(p2.id != :userId OR p2.id IS NULL)')
                 ->andWhere('s.organisateur != :userId')
-                ->setParameter('userId', $userId);
+                ->setParameter('userId', $userId);  
         }
 
             // Date limite pour les sorties finies depuis plus d'un mois
@@ -178,14 +178,17 @@ class SortieRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.participants', 'p')
             ->where('p.id = :idUtilisateur')
-            ->andWhere('s.dateHeureDebut < :dateFin')
-            ->andWhere('s.dateHeureFin > :dateDebut')
+            ->andWhere('s.dateHeureFin < :dateFin')
+            ->andWhere('s.dateHeureDebut > :dateDebut')
             ->setParameter('idUtilisateur', $idUtilisateur)
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin);
 
-        // Si on trouve une sortie qui chevauche, on retourne true
-        return (bool) $qb->getQuery()->getResult();
+        // Vérifie s'il y a des résultats
+        $result = $qb->getQuery()->getResult();
+
+        // Retourne true si des chevauchements sont trouvés, sinon false
+        return !empty($result);
     }
 
     public function publishSortie(int $idSortie, $etatLibelle): void

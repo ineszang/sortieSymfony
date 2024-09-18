@@ -123,7 +123,8 @@
                                 </div>
                                 {% if sortie in sortiesSubscrible %}
                                     <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons inscription">REJOINDRE</a>
-                                {% elseif sortie in sortiesSubscription %}
+                                {% endif %}
+                                {% if sortie in sortiesSubscription %}
                                     <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">QUITTER</a>
                                 {% endif %}
 
