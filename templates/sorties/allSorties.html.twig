@@ -7,8 +7,6 @@
 
 {% block body %}
     <link rel="stylesheet" href="{{ asset('css/allSorties.css') }}">
-
-
     <div class="main-container">
         <form method="GET" action="{{ path('app_allSorties') }}">
             <div class="search-container">
@@ -154,6 +152,14 @@
                                         <p class="text-annule" disabled>
                                             <span class="icon-cross">✖</span>
                                             Sortie annulée
+                                        </p>
+                                    </div>
+                                {% endif %}
+                                {% set placesRestantes = sortie.nbIncriptionsMax - sortiesParticipants[sortie.id] %}
+                                {% if placesRestantes == 0 %}
+                                    <div class="plein-container">
+                                        <p class="text-plein">
+                                            Complet
                                         </p>
                                     </div>
                                 {% endif %}

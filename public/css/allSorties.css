@@ -377,3 +377,24 @@ h2 {
     font-size: 20px;
     margin-right: 8px; /* Espace entre l'icône et le texte */
 }
+
+.plein-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #002a5b; /* Contour rouge */
+    border-radius: 10px; /* Coins arrondis */
+    background-color: #b4becc; /* Fond rouge pâle */
+    display: inline-block; /* Adapter la taille à son contenu */
+    width: 100%;
+}
+
+.text-plein {
+    font-size: 18px;
+    color: #002a5b;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0; /* Enlever les marges par défaut du paragraphe */
+}

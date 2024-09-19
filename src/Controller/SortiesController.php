@@ -270,7 +270,8 @@ class SortiesController extends AbstractController
 
         $sortiesAnnulable = array_merge(
             $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Créée"),
-            $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Ouverte")
+            $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Ouverte"),
+            $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Clôturée")
         );
 
         return $this->render('sorties/allSorties.html.twig', [
