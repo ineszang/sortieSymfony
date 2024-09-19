@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="container mx-auto flex px-5 py-24 justify-center items-center">
+
         <div class="top-4 left-0 pr-8">
           <img src="{{ photoProfile ? asset(photoProfile) : asset('images/user/default_user_img.webp')}}"  alt="test" class="rounded-full mx-auto">
         </div>
@@ -79,7 +80,7 @@
                 </div>
 
                 <div class="relative mb-4">
-                    <label for="{{ field_name(ProfilForm.image) }}" class="leading-7 colorChampsForm mb-10">Photo de profil</label>
+                    <label for="{{ field_name(ProfilForm.image) }}" class="block text-gray-700">Photo de profil : </label>
                     <input type="file"
                         id="{{ field_name(ProfilForm.image) }}"
                         name="{{ field_name(ProfilForm.image) }}"

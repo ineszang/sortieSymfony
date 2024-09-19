@@ -77,6 +77,16 @@ class ProfilController extends AbstractController
         ]);
     }
 
+    #[Route('/profil/{id}', name: 'app_profil_show')]
+    public function show(Participant $participant, EntityManagerInterface $entityManager, 
+        $id): Response
+    {
+        $user = $entityManager->getRepository(Participant::class)->find($id);
+
+        return $this->render('profil/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
     #[Route('/adminView', name: 'app_admin_view')]
     #[isGranted("ROLE_ADMIN")]
     public function users(Request $request, ParticipantRepository $participantRepository,

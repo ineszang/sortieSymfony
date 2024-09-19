@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[Vich\Uploadable]
 #[ORM\Table(name: 'participant')]
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields: ['pseudo'], message: 'Nom d\'utilisateur déjà utilisé')]
@@ -55,7 +53,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'telephone', length: 15, nullable: true)]
     private ?string $telephone = null;
 
-    #[Assert\Email(message: 'Cet e-mail{{ value }} n\'est pas un e-mail valide.')]
+    #[Assert\Email(message: 'Cet e-mail {{ value }} n\'est pas un e-mail valide.')]
     #[Assert\NotBlank(message: 'L\'adresse e-mail ne peut pas être vide.')]
     #[ORM\Column(name: 'mail', length: 50)]
     private ?string $mail = null;

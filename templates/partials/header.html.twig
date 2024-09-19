@@ -2,6 +2,7 @@
     <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <img id="logo" class="HEADERlOGO text-white" src="{{ asset('images/Bouge tonCampsTransparent.png') }}" alt="Mon Logo">
+
             <div style="display: flex; flex-direction: column;">
             <span class="titleDateHome ml-3" style="font-size: 20px">
                 {{ app.user.getPseudo() }}
@@ -15,6 +16,7 @@
     {% endif %}
 </span>
             </div>
+
         </a>
         <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
             <a href="{{ path('app_home') }}" class="hoverheaderbuttons  mr-10" style="font-size: 20px">Home</a>
