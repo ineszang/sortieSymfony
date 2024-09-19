@@ -188,7 +188,7 @@ class SortieRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.participants', 'p')
             ->andWhere('s.dateHeureFin < :dateFin')
-            ->orWhere('s.dateHeureDebut > :dateDebut')
+            ->andWhere('s.dateHeureDebut > :dateDebut')
             ->andWhere('s.id != :idSortie') // Exclure la sortie elle-même
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
