@@ -116,7 +116,7 @@
                             <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
                             <p><strong>lieu : </strong> {{sortie.lieu.nomLieu}}</p>
                             <p><strong>Organisateur :</strong>
-                                <a href="#" class="organisateur-link">
+                                <a href="{{ path('app_profil_show', {id: sortie.organisateur.id}) }}" class="organisateur-link">
                                     {{ sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}
                                 </a>
                             </p>

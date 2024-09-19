@@ -348,21 +348,5 @@ h2 {
 .desinscription:hover {
     color: white;
 }
-/* Lien vers l'organisateur */
-.organisateur-link {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
-}
-
-.organisateur-link {
-    color: #66A3F2;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.organisateur-link:hover {
-    color: #0056b3; /* Couleur légèrement plus sombre au survol */
-}
 
 

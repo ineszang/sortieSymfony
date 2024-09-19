@@ -107,3 +107,19 @@ header {
 .container-img-previsualisation {
     width: 20%;
 }
+ .profile-picture {
+     width: 150px;
+     height: 150px;
+     object-fit: cover;
+     border-radius: 50%;
+ }
+
+.organisateur-link {
+    color: #66A3F2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.organisateur-link:hover {
+    color: #0056b3; /* Couleur légèrement plus sombre au survol */
+}
