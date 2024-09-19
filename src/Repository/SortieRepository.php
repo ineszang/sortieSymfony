@@ -187,8 +187,8 @@ class SortieRepository extends ServiceEntityRepository
         // Récupérer toutes les sorties de l'utilisateur et vérifier les chevauchements
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.participants', 'p')
-            ->where('s.dateHeureFin > :dateDebut')
-            ->andWhere('s.dateHeureDebut < :dateFin')
+            ->andWhere('s.dateHeureFin < :dateFin')
+            ->orWhere('s.dateHeureDebut > :dateDebut')
             ->andWhere('s.id != :idSortie') // Exclure la sortie elle-même
             ->setParameter('dateDebut', $dateDebut)
             ->setParameter('dateFin', $dateFin)
