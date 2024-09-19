@@ -258,6 +258,12 @@ class SortiesController extends AbstractController
 
         $sortiesSubscription = $sortiesService->listDesinscription($sortieRepository,$idUtilisateur);
 
+        $sortiesParticipants = [];
+        foreach ($sorties as $sortie) {
+            $nbParticipants = $sortieRepository->getTotalParticipant($sortie->getId());
+            $sortiesParticipants[$sortie->getId()] = $nbParticipants;
+        }
+
 
 
         $sortiesModifiable = $sortieRepository->findBySearchParameters(null, null, null, null, true, false, false, false, $participant->getId(), "Créée");
@@ -284,7 +290,8 @@ class SortiesController extends AbstractController
             'sortiesSubscription' => $sortiesSubscription,
             'mesSortiesCreer' => $mesSortiesCreer,
             'sortiesModifiable' => $sortiesModifiable,
-            'sortiesAnnulable' => $sortiesAnnulable
+            'sortiesAnnulable' => $sortiesAnnulable,
+            'sortiesParticipants' => $sortiesParticipants
 
         ]);
     }
@@ -339,8 +346,10 @@ class SortiesController extends AbstractController
         $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
 
         $participants = $sortieRepository->findParticipantsBySortieId($id);
-        $nbDeParticipants = count($participants);
+        $nbDeParticipants = $sortieRepository->getTotalParticipant($id);
 
+        $nbParticipants = $sortieRepository->getTotalParticipant($sortie->getId());
+        $placeRestante =  $sortie->getNbIncriptionsMax() - $nbParticipants;
         $maSortie = false;
 
         if ($sortie->getOrganisateur()->getId() === $participant->getId()) {
@@ -354,7 +363,8 @@ class SortiesController extends AbstractController
             'sortie' => $sortie,
             'isSubscrible' => $isSubscrible,
             'participants' => $participants,
-            'maSortie' => $maSortie
+            'maSortie' => $maSortie,
+            'placeRestante' => $placeRestante
         ]);
     }
 

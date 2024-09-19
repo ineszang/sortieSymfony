@@ -110,7 +110,7 @@
                                         {% endif %}
                                     </p>
 
-                                    <p><strong>Inscrits/Places : </strong>{{ sortie.nbIncriptionsMax ~ ' place(s)' }} </p>
+                                    <p><strong>Places restantes : </strong>{{ sortie.nbIncriptionsMax - sortiesParticipants[sortie.id] }} place(s) (max : {{ sortie.nbIncriptionsMax }})</p>
                                 </div>
                             </div>
                             <p><strong>État : </strong> {{sortie.etat.libelle}}</p>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="details-button-container">
-                                <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
+                                <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" onclick="window.location.href=this.href; return false;" class="btn btn-outline-primary btn-sm">Voir les détails</a>
                             </div>
                             <div class="button-group">
                                 {% if sortie in sortiesSubscrible %}
@@ -148,6 +148,14 @@
 
                                 {% if sortie in mesSortiesCreer %}
                                     <a href="{{ path('app_publier_sortie', { idSortie: sortie.id }) }}" class="boutonPublier">PUBLIER</a>
+                                {% endif %}
+                                {% if sortie.etat.libelle is same as 'Annulée' %}
+                                    <div class="annuler-container">
+                                        <p class="text-annule" disabled>
+                                            <span class="icon-cross">✖</span>
+                                            Sortie annulée
+                                        </p>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>

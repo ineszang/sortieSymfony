@@ -350,3 +350,30 @@ h2 {
 }
 
 
+
+
+.annuler-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #ab0000; /* Contour rouge */
+    border-radius: 10px; /* Coins arrondis */
+    background-color: #ffe6e6; /* Fond rouge pâle */
+    display: inline-block; /* Adapter la taille à son contenu */
+    width: 100%;
+}
+
+.text-annule {
+    font-size: 18px;
+    color: #ab0000;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0; /* Enlever les marges par défaut du paragraphe */
+}
+
+.icon-cross {
+    font-size: 20px;
+    margin-right: 8px; /* Espace entre l'icône et le texte */
+}
