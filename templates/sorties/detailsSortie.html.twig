@@ -59,7 +59,7 @@
                                         Non définie
                                     {% endif %}
                                 </p>
-                                <p><strong>Inscrits/Places :</strong> {{ sortie.nbIncriptionsMax ~ ' place(s)' }}</p>
+                                <p><strong>Places restantes : </strong>{{ placeRestante }} place(s) (max : {{ sortie.nbIncriptionsMax }})</p>
                             </div>
                         </div>
                         <p><strong>État :</strong> {{ sortie.etat.libelle }}</p>
@@ -74,15 +74,45 @@
 
                     <!-- Carte -->
                     <div id="map"></div>
+
                     <script>
-                        var map = L.map('map').setView([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}], 13);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            maxZoom: 19,
-                            attribution: '© OpenStreetMap'
-                        }).addTo(map);
-                        L.marker([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}]).addTo(map)
-                            .bindPopup('Votre sortie est ici !')
-                            .openPopup();
+                        // Fonction d'initialisation de la carte
+                        function initMap() {
+                            // Vérification des coordonnées
+                            var latitude = {{ sortie.lieu.latitude }};
+                            var longitude = {{ sortie.lieu.longitude }};
+
+                            if (latitude && longitude) {
+                                var map = L.map('map').setView([latitude, longitude], 13);
+
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    maxZoom: 19,
+                                    attribution: '© OpenStreetMap'
+                                }).addTo(map);
+
+                                L.marker([latitude, longitude]).addTo(map)
+                                    .bindPopup('Votre sortie est ici !')
+                                    .openPopup();
+
+                                // Forcer la redimension de la carte après le chargement
+                                setTimeout(function() {
+                                    map.invalidateSize();
+                                }, 100);
+                            } else {
+                                console.error('Les coordonnées de la sortie ne sont pas définies.');
+                            }
+                        }
+
+                        // Exécuter la fonction après le chargement du DOM
+                        document.addEventListener('DOMContentLoaded', function () {
+                            initMap();
+                        });
+
+                        // Si tu utilises une SPA ou une navigation asynchrone, écoute l'événement approprié
+                        // Exemple pour Turbolinks :
+                        document.addEventListener('turbolinks:load', function () {
+                            initMap();
+                        });
                     </script>
                 </div>
 

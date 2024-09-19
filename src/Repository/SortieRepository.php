@@ -86,6 +86,14 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateLimit', $dateLimit);
         }
 
+        // Exclure les sorties avec état "Créée" si l'utilisateur n'est pas l'organisateur
+        if (!$mesSorties) {
+            $queryBuilder->leftJoin('s.etat', 'e')
+                ->andWhere('NOT (e.libelle = :etatCreer AND s.organisateur != :userId)')
+                ->setParameter('etatCreer', 'Créée')
+                ->setParameter('userId', $userId);
+        }
+
         if ($etat) {
             $queryBuilder->join('s.etat', 'e') // Jointure sur l'état de la sortie
             ->andWhere('e.libelle = :etat')
