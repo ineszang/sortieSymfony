@@ -88,7 +88,6 @@ class SortiesController extends AbstractController
 
         $villes = $villeRepository->findAll();
         $errors = $validator->validate($sortie);
-        dump($errors);
 
         return $this->render("sorties/creerSortie.html.twig", [
             'title' => 'Formulaire d\'ajout de sorties',
@@ -346,7 +345,7 @@ class SortiesController extends AbstractController
         $utilisateur = $this->getUser();
         $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
 
-        $participants = $sortieRepository->findParticipantsBySortieId($id);
+        $participants = $sortie->getParticipants();
         $nbDeParticipants = $sortieRepository->getTotalParticipant($id);
 
         $nbParticipants = $sortieRepository->getTotalParticipant($sortie->getId());
@@ -384,7 +383,6 @@ class SortiesController extends AbstractController
         $participant = $participantRepository->findOneByPseudo($utilisateur->getUserIdentifier());
         $idUtilisateur = $participant->getId();
         $sortie = $sortieRepository->findOneBySomeField($idSortie);
-        $chevauchement = false;
         // Vérifier si un chevauchement est détecté
         if ($name === "s'inscrire") {
             // Ajouter l'inscription si pas de chevauchement
