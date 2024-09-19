@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mx-auto flex px-5 py-24 justify-center items-center">
         <div class="top-4 left-0 pr-8">
-          <img src="{{ photoProfile ? asset(photoProfile) : asset('images/user/default_user_img.webp')}}"  alt="test" class="w-44 h-44 rounded-full mx-auto">
+          <img src="{{ photoProfile ? asset(photoProfile) : asset('images/user/default_user_img.webp')}}"  alt="test" class="rounded-full mx-auto">
         </div>
         <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
             <h1 class="text-2xl font-bold mb-6 text-center">Mon profil</h1>
@@ -86,12 +86,12 @@
                         value="{{ field_value(ProfilForm.image) }}"
                     >
                 </div>
-                <button type="submit" class="w-full bg-pink-600 text-white py-2 rounded-lg
-                     hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-25">Modifier</button>
+                <button type="submit" class="w-full bg-gray-600 text-white py-2 rounded-lg
+                     hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-25">Modifier</button>
             {{ form_end(ProfilForm) }} <br>
             <div class="mb-4 content-center ml-16 my-2">
-            <a href="{{ path('app_home') }}" class="w-full  bg-pink-600 text-white px-24 py-2 rounded-lg
-                     hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-25">Annuler</a>
+            <a href="{{ path('app_home') }}" class="w-full  bg-gray-600 text-white px-24 py-2 rounded-lg
+                     hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-25">Annuler</a>
             </div>
         </div>
     </div>

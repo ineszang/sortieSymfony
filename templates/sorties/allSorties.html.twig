@@ -58,9 +58,6 @@
                             Sorties passées
                         </label>
                     </div>
-                    <div class="search-button-container">
-                        <button type="submit" class="search-button">RECHERCHER</button>
-                    </div>
                     <div class="details-container">
                         <p>{{  'Date du jour : ' ~ "now"|date("d/m/Y") }} </p>
                         <p>{{ 'Participant : ' ~ utilisateur }}</p>
@@ -68,17 +65,18 @@
                 </div>
             </div>
             <a href="{{ path('app_allSorties') }}" class="reset-button">RÉINITIALISER</a>
+            <button type="submit" class="search-button">RECHERCHER</button>
         </form>
         <div class="cards-container">
             {% if sorties is not empty %}
                 {% for sortie in sorties %}
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title">{{ sortie.nomSortie }}</h2>
                             <div class="container-img">
                                 <img id="image-sortie" class="img-sortie " src="{{ sortie.urlPhoto ?  asset(sortie.urlPhoto) : asset('images/image-base.png') }}" alt="{{ 'image sortie ' ~ sortie.nomSortie }}">
                             </div>
                             </div>
+                        <h2 class="card-title">{{ sortie.nomSortie }}</h2>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
@@ -90,22 +88,13 @@
                                     <p>
                                         <strong>Clôture :</strong>
                                         {% if sortie.dateClotureInscription %}
-                                            {% set now = "now"|date('U') %}
-                                            {% set closureDate = sortie.dateClotureInscription|date('U') %}
-                                            {% set diffSeconds = closureDate - now %}
-                                            {% set diffDays = (diffSeconds // 86400) %}
-                                            {% set diffHours = (diffSeconds % 86400) // 3600 %}
-                                            {% set diffMinutes = (diffSeconds % 3600) // 60 %}
+                                            {% set now = "now"|date("Y-m-d H:i") %}
+                                            {% set closureDate = sortie.dateClotureInscription|date("Y-m-d H:i") %}
+                                            {% set diff = (closureDate|date("U") - now|date("U")) // 86400 %}
 
-                                            {% if diffDays > 0 %}
-                                                dans {{ diffDays }} jours
-                                            {% elseif diffDays == 0 and diffHours > 0 %}
-                                                Dans {{ diffHours }} heures et {{ diffMinutes }} minutes
-                                            {% elseif diffDays == 0 and diffHours == 0 and diffMinutes > 0 %}
-                                                Dans {{ diffMinutes }} minutes
-                                            {% else %}
-                                                fini depuis {{ diffDays|abs }} jours
-                                            {% endif %}
+                                            {{ diff > 0 ? 'dans ' ~ diff ~ ' jours'  }}
+                                            {{ diff == 0 ? 'Aujourd\'hui' }}
+                                            {{ diff < 0 ? 'fini depuis ' ~  diff|abs ~ ' jours' }}
                                             ({{ sortie.dateClotureInscription|date('Y-m-d H:i') }})
                                         {% else %}
                                             Non définie
@@ -126,33 +115,34 @@
 
 
                             </div>
-                            <div class="bouton-container">
-                                <div class="card-footer">
-                                    <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
-                                </div>
+                        <div class="card-footer">
+                            <div class="details-button-container">
+                                <a href="{{ path('app_details_sorties', {id: sortie.id}) }}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
+                            </div>
+                            <div class="button-group">
                                 {% if sortie in sortiesSubscrible %}
-                                    <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="buttons inscription">REJOINDRE</a>
-                                {% endif %}
-                                {% if sortie in sortiesSubscription %}
-                                    <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="buttons desinscription">QUITTER</a>
+                                    <a href="{{ path('app_inscription', {name: 's\'inscrire', idSortie: sortie.id })  }}" class="inscription">S'INSCRIRE</a>
+                                {% elseif sortie in sortiesSubscription %}
+                                    <a href="{{ path('app_inscription', {name: 'se desinscrire', idSortie: sortie.id }) }}" class="desinscription">SE DESISTER</a>
                                 {% endif %}
 
                                 {% if sortie in sortiesModifiable %}
-                                <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
+                                    <a href="{{ path('app_modifier_sortie', {id: sortie.id}) }}" class="boutonModifier">MODIFIER</a>
                                 {% endif %}
 
-                                    {% if sortie.dateHeureDebut > now %}
-                                        {% if sortie in sortiesAnnulable %}
-                                            <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
-                                                <button type="submit" class="buttons boutonDelete">ANNULER</button>
-                                            </form>
-                                        {% endif %}
+                                {% if sortie.dateHeureDebut > now %}
+                                    {% if sortie in sortiesAnnulable %}
+                                        <form action="{{ path('app_annuler_sortie', {id: sortie.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');" class="delete-form">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ sortie.id) }}">
+                                            <button type="submit" class="boutonDelete">ANNULER</button>
+                                        </form>
                                     {% endif %}
-                            {% if sortie in mesSortiesCreer %}
-                            <a href="{{ path('app_publier_sortie', { idSortie: sortie.id })  }}" class="buttons boutonPublier">PUBLIER</a>
-                            {% endif %}
+                                {% endif %}
 
+                                {% if sortie in mesSortiesCreer %}
+                                    <a href="{{ path('app_publier_sortie', { idSortie: sortie.id }) }}" class="boutonPublier">PUBLIER</a>
+                                {% endif %}
+                            </div>
                         </div>
 
                         <div id="organisateurModal" class="modal">
