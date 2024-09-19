@@ -24,7 +24,8 @@
                     Réinitialisation du mot de passe</h1>
                
                 <div class="error">
-                    {{form_errors(resetForm.plainPassword)}}
+                    {{form_errors(resetForm.plainPassword.first)}}
+                    {{form_errors(resetForm.plainPassword.second)}}
                 </div>
                 
                 <div class="mb-4">
