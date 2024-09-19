@@ -28,7 +28,7 @@ class SortiesController extends AbstractController
     #[Route("/sortieAjoutForm", name: "sortie_form")]
     #[isGranted("ROLE_USER")]
     public function create(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager, FileUploaderService $fileUploaderService,
-                           SluggerInterface $slugger, Security $security, ValidatorInterface $validator, VilleRepository $villeRepository): Response
+                           Security $security, ValidatorInterface $validator, VilleRepository $villeRepository): Response
     {
         $sortie = new Sortie();
 
@@ -321,7 +321,7 @@ class SortiesController extends AbstractController
             $this->addFlash('error', 'Aucun participant sélectionné pour la désinscription.');
         }
 
-        return $this->redirectToRoute('app_details_sorties' . $sortieId );
+        return $this->redirectToRoute('app_details_sorties', ['id' => $sortieId]);
     }
 
 

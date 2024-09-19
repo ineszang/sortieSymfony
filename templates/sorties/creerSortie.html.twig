@@ -198,15 +198,14 @@
     </section>
     <script>
         document.querySelector('button[type="reset"]').addEventListener('click', function () {
-            // Réinitialiser les champs calculés
             document.getElementById('{{ field_name(sortieForm.dateHeureFin) }}').value = '';
-            document.getElementById('lieu-results').innerHTML = '';  // Vider les suggestions de lieu
-            document.getElementById('coordinates').innerHTML = '';  // Réinitialiser l'affichage des coordonnées
-            document.getElementById('search-lieu').value = ''; // Effacer la recherche de lieu
+            document.getElementById('lieu-results').innerHTML = '';
+            document.getElementById('coordinates').innerHTML = '';
+            document.getElementById('search-lieu').value = '';
 
-            // Réinitialiser le champ du lieu caché
             document.getElementById('{{ field_name(sortieForm.lieu) }}').value = '';
         });
+
         function calculateEndDate() {
             const startDate = document.getElementById('{{ field_name(sortieForm.dateHeureDebut) }}').value;
             const duration = document.getElementById('{{ field_name(sortieForm.duree) }}').value;
