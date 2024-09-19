@@ -300,9 +300,6 @@ class SortiesController extends AbstractController
         $sortieId = $postData['sortie_id'] ?? null;
         $participantIds = $postData['participants'] ?? [];
 
-        dump($sortieId);
-        dump($participantIds);
-
         $sortie = $sortieRepository->find($sortieId);
         if (!$sortie) {
             $this->addFlash('error', 'Sortie non trouvée.');
@@ -324,7 +321,7 @@ class SortiesController extends AbstractController
             $this->addFlash('error', 'Aucun participant sélectionné pour la désinscription.');
         }
 
-        return $this->redirectToRoute('app_allSorties');
+        return $this->redirectToRoute('app_details_sorties' . $sortieId );
     }
 
 

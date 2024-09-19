@@ -6,7 +6,7 @@
     <div class="container mx-auto flex px-5 py-24 justify-center items-center">
         {% if user.urlPhoto %}
             <div class="top-4 left-0 pr-8">
-                <img src='{{ asset(user.urlPhoto) }}'  alt="photo de profil" class="w-44 h-44 rounded-full mx-auto">
+                <img src='{{ asset(user.urlPhoto) }}'  alt="photo de profil"  class="profile-picture rounded-full">
             </div>
         {% endif %}
         {% if not user.urlPhoto %}

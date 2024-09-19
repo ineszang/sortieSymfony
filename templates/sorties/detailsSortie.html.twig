@@ -17,12 +17,12 @@
 
     <style>
         #map {
-            height: 250px; /* Hauteur réduite */
-            width: 100%;   /* Largeur adaptative */
-            max-width: 600px; /* Largeur maximale */
+            height: 250px;
+            width: 100%;
+            max-width: 600px;
             margin-top: 20px;
             margin-bottom: 10px;
-            border: 1px solid #ddd; /* Bordure optionnelle pour visualiser les limites de la carte */
+            border: 1px solid #ddd;
         }
     </style>
 
@@ -41,6 +41,7 @@
                         <div class="row">
                             <div class="col">
                                 <h1 class="card-title">{{ sortie.nomSortie }}</h1>
+                                <p><strong>Description :</strong> {{ sortie.infosSortie }}</p>
                                 <p><strong>Date de début :</strong> {{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : 'Non définie' }}</p>
                                 <p><strong>Durée :</strong> {{ sortie.duree ? sortie.duree ~ ' heure(s)' : 'Non définie' }}</p>
                                 <p><strong>Date de fin :</strong> {{ sortie.dateHeureFin ? sortie.dateHeureFin|date('Y-m-d H:i') : 'Non définie' }}</p>
@@ -63,7 +64,11 @@
                         </div>
                         <p><strong>État :</strong> {{ sortie.etat.libelle }}</p>
                         <p><strong>Lieu :</strong> {{ sortie.lieu }}</p>
-                        <p><strong>Organisateur :</strong> {{ sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}</p>
+                        <p><strong>Organisateur :</strong>
+                            <a href="{{ path('app_profil_show', {id: sortie.organisateur.id}) }}" class="organisateur-link">
+                                {{ sortie.organisateur.nom ~ ' ' ~ sortie.organisateur.prenom }}
+                            </a>
+                        </p>
                         <p><strong>Site organisateur :</strong> {{ sortie.siteOrganisateur.nomSite }}</p>
                     </div>
 
@@ -93,7 +98,7 @@
                                         <li class="participant-item">
                                             <input type="checkbox" id="participant_{{ participant.id }}" name="participants[]" value="{{ participant.id }}">
                                             <label for="participant_{{ participant.id }}">
-                                                {{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})
+                                                {{ participant.nom }} {{ participant.prenom }} (<a href="{{ path('app_profil_show', {id: participant.id}) }}" class="organisateur-link">{{ participant.pseudo }}</a>)
                                             </label>
                                         </li>
                                     {% endfor %}
@@ -103,7 +108,7 @@
                         {% else %}
                             <ul>
                                 {% for participant in participants %}
-                                    <li class="participant-item">{{ participant.nom }} {{ participant.prenom }} ({{ participant.pseudo }})</li>
+                                    <li class="participant-item">{{ participant.nom }} {{ participant.prenom }} (<a href="{{ path('app_profil_show', {id: participant.id}) }}" class="organisateur-link">{{ participant.pseudo }}</a>)</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
@@ -115,6 +120,6 @@
         </div>
     </div>
 {% else %}
-    <p>Aucune sortie disponible.</p>
+    <p>Aucune sortie disponible.</p><
 {% endif %}
 {% endblock %}
