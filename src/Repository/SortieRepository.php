@@ -194,6 +194,11 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('dateFin', $dateFin)
             ->setParameter('idSortie', $idSortie);
 
+        if ($idUtilisateur !== null) {
+            $qb->andWhere('p.id = :idUtilisateur')
+                ->setParameter('idUtilisateur', $idUtilisateur);
+        }
+
 
 
         // Récupère les sorties chevauchantes
