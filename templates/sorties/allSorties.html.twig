@@ -86,12 +86,12 @@
                                     <p>
                                         <strong>Clôture :</strong>
                                         {% if sortie.dateClotureInscription %}
-                                            {% set now = "now"|date('U') %}
-                                            {% set closureDate = sortie.dateClotureInscription|date('U') %}
+                                            {% set now = "now"|date("U") %}
+                                            {% set closureDate = sortie.dateClotureInscription|date("U") %}
                                             {% set diffSeconds = closureDate - now %}
                                             {% set diffDays = (diffSeconds // 86400) %}
-                                            {% set diffHours = (diffSeconds % 86400) // 3600 %}
-                                            {% set diffMinutes = (diffSeconds % 3600) // 60 %}
+                                            {% set diffHours = ((diffSeconds % 86400) // 3600) - 2 %}
+                                            {% set diffMinutes = ((diffSeconds % 3600) // 60) - 120 %}
 
                                             {% if diffDays > 0 %}
                                                 dans {{ diffDays }} jours
